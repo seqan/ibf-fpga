@@ -1,5 +1,5 @@
-#include <CL/sycl/INTEL/fpga_extensions.hpp>
-#include <CL/sycl/INTEL/ac_types/ac_int.hpp>
+#include <sycl/ext/intel/fpga_extensions.hpp>
+#include <sycl/ext/intel/ac_types/ac_int.hpp>
 
 #include "kernel.hpp"
 
@@ -56,7 +56,7 @@ using QueryIndex = ac_int<25, true>;
 using Minimizer = struct
 {
 	Hash hash;
-	uchar position;
+	unsigned char position;
 };
 
 using Chunk = ac_int<CHUNK_BITS, false>;
@@ -79,7 +79,7 @@ Hash inline extractHash(const char* buffer)
 	Hash kmerComplement = 0;
 
 	#pragma unroll
-	for (uchar elementIndex = 0; elementIndex < K; ++elementIndex)
+	for (unsigned char elementIndex = 0; elementIndex < K; ++elementIndex)
 	{
 		const Element value = translateCharacterToElement(buffer[elementIndex]);
 
@@ -100,7 +100,7 @@ Minimizer inline findMinimizer(const Hash* hashBuffer)
 	#pragma unroll
 	for (ushort kmerIndex = 0; kmerIndex < NUMBER_OF_KMERS_PER_WINDOW; ++kmerIndex)
 	{
-		const Minimizer current = {hashBuffer[kmerIndex], kmerIndex};
+		const Minimizer current = {hashBuffer[kmerIndex], static_cast<unsigned char>(kmerIndex)};
 
 		if (current.hash < minimizer.hash)
 			minimizer = current;
@@ -121,11 +121,11 @@ inline HostSizeType mapTo(const HostHash hash, const HostSizeType binSize)
 }
 
 inline HostSizeType calculateBinIndex(HostHash hash,
-	const uchar seedIndex, const HostSizeType hashShift, const HostSizeType binSize)
+	const unsigned char seedIndex, const HostSizeType hashShift, const HostSizeType binSize)
 {
 	hash *= seeds[seedIndex];
 	hash ^= hash >> hashShift;
-	hash *= 11400714819323198485;
+	hash *= 11400714819323198485u;
 
 	return mapTo(hash, binSize);
 }
@@ -133,7 +133,7 @@ inline HostSizeType calculateBinIndex(HostHash hash,
 inline Counter getThreshold(const HostSizeType numberOfHashes,
 	const HostSizeType minimalNumberOfMinimizers,
 	const HostSizeType maximalNumberOfMinimizers,
-	__global HostSizeType* restrict thresholds)
+	HostSizeType* thresholds) //__global HostSizeType* restrict thresholds
 {
 	const HostSizeType maximalIndex = maximalNumberOfMinimizers - minimalNumberOfMinimizers;
 
@@ -141,14 +141,14 @@ inline Counter getThreshold(const HostSizeType numberOfHashes,
 		0 : numberOfHashes - minimalNumberOfMinimizers;
 	index = index < maximalIndex? index : maximalIndex;
 
-	return thresholds[index] + 2;
+	return (thresholds[index] + 2).to_uint();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Main kernels
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class Minimizer;
+//class Minimizer;
 class IBF;
 
 void RunKernel(sycl::queue& queue,
@@ -207,7 +207,7 @@ void RunKernel(sycl::queue& queue,
 						// Shift register: Query buffer
 
 						#pragma unroll
-						for (uchar i = 0; i < K - 1; ++i)
+						for (unsigned char i = 0; i < K - 1; ++i)
 							queryBuffer[i] = queryBuffer[i + 1];
 
 						// Query as long as elements are left, then only do calculations (end phase)
@@ -247,7 +247,7 @@ void RunKernel(sycl::queue& queue,
 					}
 				}
 			});
-		}
+		});
 
 		queue.submit([&](sycl::handler &handler)
 		{
@@ -297,7 +297,7 @@ void RunKernel(sycl::queue& queue,
 						HostSizeType binOffsets[HASH_COUNT];
 
 						#pragma unroll
-						for (uchar seedIndex = 0; seedIndex < HASH_COUNT; ++seedIndex)
+						for (unsigned char seedIndex = 0; seedIndex < HASH_COUNT; ++seedIndex)
 							binOffsets[seedIndex] = calculateBinIndex(data.hash,
 								seedIndex, hashShift, binSize) * CHUNKS_PER_BIN;
 
@@ -308,7 +308,7 @@ void RunKernel(sycl::queue& queue,
 
 							// Unroll: Burst-coalesced over chunks per seed
 							#pragma unroll
-							for (uchar seedIndex = 0; seedIndex < HASH_COUNT; ++seedIndex)
+							for (unsigned char seedIndex = 0; seedIndex < HASH_COUNT; ++seedIndex)
 								bitvector &= //__burst_coalesced_cached_load(
 									/*&*/ibfData[binOffsets[seedIndex] + chunkIndex];//,
 									//1048576); // 1 MiB = 8 megabit
@@ -339,6 +339,6 @@ void RunKernel(sycl::queue& queue,
 					while(!data.isLastElement);
 				}
 			});
-		}
-	}
+		});
+	});
 }
