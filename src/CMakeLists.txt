@@ -1,5 +1,5 @@
-set(DEVICE_SOURCE_FILE kernel.cpp)
-set(KERNEL_HEADER_FILE kernel.hpp)
+set(DEVICE_SOURCE_FILE kernel/kernel.cpp)
+set(KERNEL_HEADER_FILE kernel/kernel.hpp)
 set(HOST_SOURCE_FILE host.cpp)
 set(TARGET_NAME fast_recompile)
 set(EMULATOR_TARGET ${TARGET_NAME}.fpga_emu)
@@ -34,11 +34,11 @@ set(HARDWARE_LINK_FLAGS "-fsycl -fintelfpga -Xshardware -Xstarget=${FPGA_DEVICE}
 ### FPGA Emulator
 ###############################################################################
 # To compile in a single command:
-#    icpx -fsycl -fintelfpga -DFPGA_EMULATOR host.cpp kernel.cpp -o fast_recompile.fpga_emu
+#    icpx -fsycl -fintelfpga -DFPGA_EMULATOR host.cpp kernel/kernel.cpp -o fast_recompile.fpga_emu
 # CMake executes:
 #    [compile] icpx -fsycl -fintelfpga -DFPGA_EMULATOR -o host.cpp.o -c host.cpp
-#    [compile] icpx -fsycl -fintelfpga -DFPGA_EMULATOR -o kernel.cpp.o -c kernel.cpp
-#    [link]    icpx -fsycl -fintelfpga host.cpp.o kernel.cpp.o -o fast_recompile.fpga_emu
+#    [compile] icpx -fsycl -fintelfpga -DFPGA_EMULATOR -o kernel/kernel.cpp.o -c kernel/kernel.cpp
+#    [link]    icpx -fsycl -fintelfpga host.cpp.o kernel/kernel.cpp.o -o fast_recompile.fpga_emu
 add_executable(${EMULATOR_TARGET} ${HOST_SOURCE_FILE} ${DEVICE_SOURCE_FILE})
 target_include_directories(${EMULATOR_TARGET} PRIVATE ../include)
 set_target_properties(${EMULATOR_TARGET} PROPERTIES COMPILE_FLAGS "${EMULATOR_COMPILE_FLAGS}")
@@ -49,7 +49,7 @@ add_custom_target(fpga_emu DEPENDS ${EMULATOR_TARGET})
 ### Generate Report
 ###############################################################################
 # To compile manually:
-#   icpx -fsycl -fintelfpga -Xshardware -Xstarget=<FPGA_DEVICE> -fsycl-link=early host.cpp kernel.cpp -o fast_compile_report.a
+#   icpx -fsycl -fintelfpga -Xshardware -Xstarget=<FPGA_DEVICE> -fsycl-link=early host.cpp kernel/kernel.cpp -o fast_compile_report.a
 set(FPGA_EARLY_IMAGE ${TARGET_NAME}_report.a)
 # The compile output is not an executable, but an intermediate compilation result unique to SYCL.
 add_executable(${FPGA_EARLY_IMAGE} ${HOST_SOURCE_FILE} ${DEVICE_SOURCE_FILE})
@@ -65,7 +65,7 @@ set_target_properties(${FPGA_EARLY_IMAGE} PROPERTIES LINK_FLAGS "${HARDWARE_LINK
 ###############################################################################
 # To compile manually:
 #   icpx -fsycl -fintelfpga -c host.cpp -o host.o
-#   icpx -fsycl -fintelfpga -Xshardware -Xstarget=<FPGA_DEVICE> -fsycl-link=image kernel.cpp -o dev_image.a
+#   icpx -fsycl -fintelfpga -Xshardware -Xstarget=<FPGA_DEVICE> -fsycl-link=image kernel/kernel.cpp -o dev_image.a
 #   icpx -fsycl -fintelfpga host.o dev_image.a -o fast_recompile.fpga
 
 if(WIN32)
