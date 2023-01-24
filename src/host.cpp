@@ -1,9 +1,3 @@
-//==============================================================
-// Copyright Intel Corporation
-//
-// SPDX-License-Identifier: MIT
-// =============================================================
-
 #include <iostream>
 #include <vector>
 
@@ -23,22 +17,11 @@
 
 using namespace sycl;
 
-// the tolerance used in floating point comparisons
-constexpr float kTol = 0.001;
-
-// the array size of vectors a, b and c
-constexpr size_t kArraySize = 32;
-
 int main() {
-  std::vector<float> vec_a(kArraySize);
-  std::vector<float> vec_b(kArraySize);
-  std::vector<float> vec_r(kArraySize);
-
-  // Fill vectors a and b with random float values
-  for (size_t i = 0; i < kArraySize; i++) {
-    vec_a[i] = rand() / (float)RAND_MAX;
-    vec_b[i] = rand() / (float)RAND_MAX;
-  }
+  size_t binSize;
+  size_t hashShift; // The number of bits to shift the hash value before doing multiplicative hashing.
+  size_t minimalNumberOfMinimizers;
+  size_t maximalNumberOfMinimizers;
 
   // Select either the FPGA emulator or FPGA device
 #if defined(FPGA_EMULATOR)
@@ -54,13 +37,27 @@ int main() {
     queue q(device_selector, fpga_tools::exception_handler);
 
     // create the device buffers
-    buffer device_a(vec_a);
-    buffer device_b(vec_b);
-    buffer device_r(vec_r);
+    buffer queries_buffer();    // <char, 1>
+    buffer querySizes_buffer(); // <HostSizeType, 1>
+    buffer ibfData_buffer();    // <Chunk, 1>
+    buffer thresholds_buffer(); // <HostSizeType, 1>
+    buffer result_buffer();     // <Chunk, 1>
 
     // The definition of this function is in a different compilation unit,
     // so host and device code can be separately compiled.
-    RunKernel(q, device_a, device_b, device_r, kArraySize);
+    RunKernel(q,
+      queries_buffer,
+      const HostSizeType queriesOffset,
+      querySizes_buffer,
+      const HostSizeType querySizesOffset,
+      const HostSizeType numberOfQueries,
+      ibfData_buffer,
+      binSize,
+      hashShift,
+      minimalNumberOfMinimizers,
+      maximalNumberOfMinimizers,
+      thresholds_buffer,
+      result_buffer);
 
   } catch (exception const &e) {
     // Catches exceptions in the host code
@@ -78,24 +75,8 @@ int main() {
   }
 
   // At this point, the device buffers have gone out of scope and the kernel
-  // has been synchronized. Therefore, the output data (vec_r) has been updated
+  // has been synchronized. Therefore, the output data has been updated
   // with the results of the kernel and is safely accesible by the host CPU.
 
-  // Test the results
-  size_t correct = 0;
-  for (size_t i = 0; i < kArraySize; i++) {
-    float tmp = vec_a[i] + vec_b[i] - vec_r[i];
-    if (tmp * tmp < kTol * kTol) {
-      correct++;
-    }
-  }
-
-  // Summarize results
-  if (correct == kArraySize) {
-    std::cout << "PASSED: results are correct\n";
-  } else {
-    std::cout << "FAILED: results are incorrect\n";
-  }
-
-  return !(correct == kArraySize);
+  return EXIT_SUCCESS;
 }
