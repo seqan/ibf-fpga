@@ -154,11 +154,11 @@ inline Counter getThreshold(const HostSizeType numberOfHashes,
 //class IBF;
 
 void RunKernel(sycl::queue& queue,
-	sycl::buffer<char, 1>& querys_buffer,
+	sycl::buffer<char, 1>& queries_buffer,
 	const HostSizeType queriesOffset,
 	sycl::buffer<HostSizeType, 1>& querySizes_buffer,
 	const HostSizeType querySizesOffset,
-	const HostSizeType numberOfQuerys,
+	const HostSizeType numberOfQueries,
 	sycl::buffer<Chunk, 1>& ibfData_buffer,
 	const HostSizeType binSize,
 	const HostSizeType hashShift,
@@ -180,14 +180,14 @@ void RunKernel(sycl::queue& queue,
 	{
 		queue.submit([&](sycl::handler &handler)
 		{
-			sycl::accessor querys(querys_buffer, handler, sycl::read_only);
+			sycl::accessor queries(queries_buffer, handler, sycl::read_only);
 			sycl::accessor querySizes(querySizes_buffer, handler, sycl::read_only);
 
 			h.single_task<Minimizer>([=]() [[intel::kernel_args_restrict]]
 			{
 				QueryIndex queryOffset = queriesOffset;
 
-				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQuerys; queryIndex++)
+				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
 					const QueryIndex querySize = __prefetching_load(&querySizes[querySizesOffset + queryIndex]);
 
@@ -214,7 +214,7 @@ void RunKernel(sycl::queue& queue,
 
 						// Query as long as elements are left, then only do calculations (end phase)
 						if (iteration < querySize)
-							queryBuffer[K - 1] = __prefetching_load(&querys[localQueryOffset + iteration]);
+							queryBuffer[K - 1] = __prefetching_load(&queries[localQueryOffset + iteration]);
 
 						// Shift register: hash buffer
 
@@ -259,7 +259,7 @@ void RunKernel(sycl::queue& queue,
 
 			h.single_task<IBF>([=]() [[intel::kernel_args_restrict]]
 			{
-				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQuerys; queryIndex++)
+				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
 					#define UNSAFELEN 9 // LD singlepump pump (7) + Arithmetic (1) + Store (1)
 					#define II (UNSAFELEN - CHUNKS)

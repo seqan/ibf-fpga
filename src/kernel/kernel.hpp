@@ -53,11 +53,11 @@ static const HostHash seeds[5] = {
 using namespace sycl;
 
 void RunKernel(sycl::queue& queue,
-	sycl::buffer<char, 1>& querys_buffer,
+	sycl::buffer<char, 1>& queries_buffer,
 	const HostSizeType queriesOffset,
 	sycl::buffer<HostSizeType, 1>& querySizes_buffer,
 	const HostSizeType querySizesOffset,
-	const HostSizeType numberOfQuerys,
+	const HostSizeType numberOfQueries,
 	sycl::buffer<Chunk, 1>& ibfData_buffer,
 	const HostSizeType binSize,
 	const HostSizeType hashShift,
