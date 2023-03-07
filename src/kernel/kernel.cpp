@@ -9,8 +9,7 @@
 
 static_assert(WINDOW_SIZE >= K, "Window size needs to be greater or equal K-mer size");
 
-static_assert(sizeof(seeds) / sizeof(HostHash) >= HASH_COUNT,
-	"The number of hash functions must be smaller or equal the number of seeds");
+static_assert(sizeof(seeds) / sizeof(HostHash) >= HASH_COUNT, "The number of hash functions must be smaller or equal the number of seeds");
 
 static_assert(sizeof(HostHash) >= sizeof(MINIMIZER_SEED), "Minimizer seed doesn't fit Hash type");
 static_assert(sizeof(HostHash) * 8 >= 2 * K, "K-mer doesn't fit Hash type");
@@ -38,9 +37,7 @@ constexpr auto CHUNK_BITS = TECHNICAL_BIN_COUNT > MAX_BUS_WIDTH? MAX_BUS_WIDTH :
 constexpr auto CHUNKS = TECHNICAL_BIN_COUNT > MAX_BUS_WIDTH? INTEGER_DIVISION_CEIL(TECHNICAL_BIN_COUNT, MAX_BUS_WIDTH) : 1;
 constexpr auto CHUNKS_PER_BIN = INTEGER_DIVISION_CEIL(TECHNICAL_BIN_COUNT, MAX_BUS_WIDTH);
 
-static_assert((bool)(TECHNICAL_BIN_COUNT < MAX_BUS_WIDTH)
-	|| (TECHNICAL_BIN_COUNT % MAX_BUS_WIDTH == 0),
-	"Bin count needs to be less or a multiple of max bus width");
+static_assert((bool)(TECHNICAL_BIN_COUNT < MAX_BUS_WIDTH) || (TECHNICAL_BIN_COUNT % MAX_BUS_WIDTH == 0), "Bin count needs to be less or a multiple of max bus width");
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Types & Conversions
@@ -149,9 +146,8 @@ inline Counter getThreshold(const HostSizeType numberOfHashes,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Forward declation of the kernel names. FPGA best practice to reduce compiler name mangling in the optimization reports.
-// Disabled for now.
-//class Minimizer;
-//class IBF;
+class Minimizer;
+class IBF;
 
 void RunKernel(sycl::queue& queue,
 	sycl::buffer<char, 1>& queries_buffer,
@@ -183,7 +179,7 @@ void RunKernel(sycl::queue& queue,
 			sycl::accessor queries(queries_buffer, handler, sycl::read_only);
 			sycl::accessor querySizes(querySizes_buffer, handler, sycl::read_only);
 
-			h.single_task<Minimizer>([=]() [[intel::kernel_args_restrict]]
+			handler.single_task<Minimizer>([=]() [[intel::kernel_args_restrict]]
 			{
 				QueryIndex queryOffset = queriesOffset;
 
@@ -207,7 +203,6 @@ void RunKernel(sycl::queue& queue,
 					for (QueryIndex iteration = 0; iteration <= iterations; iteration++)
 					{
 						// Shift register: Query buffer
-
 						#pragma unroll
 						for (unsigned char i = 0; i < K - 1; ++i)
 							queryBuffer[i] = queryBuffer[i + 1];
@@ -217,7 +212,6 @@ void RunKernel(sycl::queue& queue,
 							queryBuffer[K - 1] = __prefetching_load(&queries[localQueryOffset + iteration]);
 
 						// Shift register: hash buffer
-
 						#pragma unroll
 						for (ushort i = 0; i < NUMBER_OF_KMERS_PER_WINDOW - 1; ++i)
 							hashBuffer[i] = hashBuffer[i + 1];
@@ -257,7 +251,7 @@ void RunKernel(sycl::queue& queue,
 			sycl::accessor thresholds(thresholds_buffer, handler, sycl::read_only);
 			sycl::accessor result(result_buffer, handler, sycl::write_only);
 
-			h.single_task<IBF>([=]() [[intel::kernel_args_restrict]]
+			handler.single_task<IBF>([=]() [[intel::kernel_args_restrict]]
 			{
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
