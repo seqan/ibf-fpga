@@ -18,10 +18,18 @@
 using namespace sycl;
 
 int main() {
-  size_t binSize;
-  size_t hashShift; // The number of bits to shift the hash value before doing multiplicative hashing.
-  size_t minimalNumberOfMinimizers;
-  size_t maximalNumberOfMinimizers;
+
+  size_t const window_size;
+  size_t const kmer_size;
+  size_t const pattern_size;
+
+  size_t const kmers_per_window = window_size - kmer_size + 1;
+  size_t const kmers_per_pattern = pattern_size - kmer_size + 1;
+
+  size_t const binSize; // The size of each bin in bits.
+  size_t const hashShift; // The number of bits to shift the hash value before doing multiplicative hashing.
+  size_t const minimalNumberOfMinimizers = kmers_per_window == 1 ? kmers_per_pattern	: std::ceil(kmers_per_pattern / static_cast<double>(kmers_per_window));
+  size_t const maximalNumberOfMinimizers = pattern_size - window_size + 1;
 
   // Select either the FPGA emulator or FPGA device
 #if defined(FPGA_EMULATOR)
