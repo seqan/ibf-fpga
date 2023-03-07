@@ -1,6 +1,8 @@
 #include <sycl/ext/intel/fpga_extensions.hpp>
 #include <sycl/ext/intel/ac_types/ac_int.hpp>
 
+#include "pipe_utils.hpp"
+
 #include "kernel.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,7 +171,6 @@ void RunKernel(sycl::queue& queue,
 		Hash hash;
 	};
 
-	// TODO: Add headers from https://github.com/oneapi-src/oneAPI-samples/tree/master/DirectProgramming/DPC%2B%2BFPGA/Tutorials/DesignPatterns/pipe_array
 	using MinimizerToIBFPipes = PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
 
 	Unroller<0, NUMBER_OF_KERNELS>::Step([&](auto id)
