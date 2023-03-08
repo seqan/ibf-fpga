@@ -13,23 +13,47 @@
 //  - kernel.cpp contains almost exclusively code that executes on the device.
 //  - kernel.hpp contains only the forward declaration of a function containing
 //    the device code.
-#include "kernel.hpp"
+#include "kernel/kernel.hpp"
 
 using namespace sycl;
 
 int main() {
 
-  size_t const window_size;
-  size_t const kmer_size;
-  size_t const pattern_size;
+  static_assert(sizeof(size_t) == 8);
+
+  size_t const window_size = 23;
+  size_t const kmer_size = 19;
+  size_t const pattern_size = 0; // TODO
 
   size_t const kmers_per_window = window_size - kmer_size + 1;
   size_t const kmers_per_pattern = pattern_size - kmer_size + 1;
 
-  size_t const binSize; // The size of each bin in bits.
-  size_t const hashShift; // The number of bits to shift the hash value before doing multiplicative hashing.
-  size_t const minimalNumberOfMinimizers = kmers_per_window == 1 ? kmers_per_pattern	: std::ceil(kmers_per_pattern / static_cast<double>(kmers_per_window));
+  size_t const binSize = 0; // TODO The size of each bin in bits.
+  size_t const hashShift = 0; // TODO The number of bits to shift the hash value before doing multiplicative hashing.
+  size_t const minimalNumberOfMinimizers = kmers_per_window == 1 ? kmers_per_pattern	: std::ceil(static_cast<double>(kmers_per_pattern) / static_cast<double>(kmers_per_window));
   size_t const maximalNumberOfMinimizers = pattern_size - window_size + 1;
+
+  size_t const numberOfQueries = 1;
+  size_t const sequenceSize = 65; // querySize
+  size_t const queriesOffset = 0;
+  size_t const querySizesOffset = 0;
+
+  std::string queries = "ACGATCGACTAGGAGCGATTACGACTGACTACATCTAGCTAGCTAGAGATTCTTCAGAGCTTAGC";
+  //std::array<char, sequenceSize * numberOfQueries + 1> queries;
+  std::array<size_t, numberOfQueries> querySizes = {sequenceSize};
+
+  std::stringstream ibf_filename_ss;
+  ibf_filename_ss << "raptor_" << window_size << "_" << kmer_size << ".index";
+  std::string ibf_filename = ibf_filename_ss.str();
+
+  size_t ibf_filesize = 8253;
+  std::vector<char> ibfData; // raptor uses cereal::BinaryInputArchive to read and sdsl::bit_vector to store, propably doesn't work
+  std::ifstream ibfData_ifs{ibf_filename, std::ios::binary};
+  ibfData_ifs.read(ibfData.data(), ibf_filesize);
+
+  std::vector<size_t> thresholds; // TODO
+
+  std::vector<uint64_t> result;
 
   // Select either the FPGA emulator or FPGA device
 #if defined(FPGA_EMULATOR)
@@ -45,20 +69,20 @@ int main() {
     queue q(device_selector, fpga_tools::exception_handler);
 
     // create the device buffers
-    buffer queries_buffer();    // <char, 1>
-    buffer querySizes_buffer(); // <HostSizeType, 1>
-    buffer ibfData_buffer();    // <Chunk, 1>
-    buffer thresholds_buffer(); // <HostSizeType, 1>
-    buffer result_buffer();     // <Chunk, 1>
+    buffer queries_buffer(queries);
+    buffer querySizes_buffer(querySizes);
+    buffer ibfData_buffer(ibfData);
+    buffer thresholds_buffer(thresholds);
+    buffer result_buffer(result);
 
     // The definition of this function is in a different compilation unit,
     // so host and device code can be separately compiled.
     RunKernel(q,
       queries_buffer,
-      const HostSizeType queriesOffset,
+      queriesOffset,
       querySizes_buffer,
-      const HostSizeType querySizesOffset,
-      const HostSizeType numberOfQueries,
+      querySizesOffset,
+      numberOfQueries,
       ibfData_buffer,
       binSize,
       hashShift,
