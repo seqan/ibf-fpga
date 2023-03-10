@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <iostream>
 #include <vector>
 
@@ -40,20 +41,35 @@ int main() {
 
   std::string queries = "ACGATCGACTAGGAGCGATTACGACTGACTACATCTAGCTAGCTAGAGATTCTTCAGAGCTTAGC";
   //std::array<char, sequenceSize * numberOfQueries + 1> queries;
-  std::array<size_t, numberOfQueries> querySizes = {sequenceSize};
+  std::array<ac_int<64, false>, numberOfQueries> querySizes = {sequenceSize};
 
-  std::stringstream ibf_filename_ss;
-  ibf_filename_ss << "raptor_" << window_size << "_" << kmer_size << ".index";
-  std::string ibf_filename = ibf_filename_ss.str();
+  size_t file_size, bytes_read, bytes_to_read;
 
-  size_t ibf_filesize = 8253;
-  std::vector<char> ibfData; // raptor uses cereal::BinaryInputArchive to read and sdsl::bit_vector to store, propably doesn't work
-  std::ifstream ibfData_ifs{ibf_filename, std::ios::binary};
-  ibfData_ifs.read(ibfData.data(), ibf_filesize);
+  std::vector<ac_int<CHUNK_BITS, false>> ibfData;
+  std::ifstream ibf_ifs("ibfdata.bin", std::ios::binary);
+  ac_int<CHUNK_BITS, false> chunk;
+  file_size = std::filesystem::file_size("ibfdata.bin");
+  bytes_read = 0;
+  do {
+    bytes_to_read = std::min(file_size - bytes_read, sizeof(chunk));
+    ibf_ifs.read(reinterpret_cast<char*>(&chunk), bytes_to_read);
+    ibfData.push_back(chunk);
+    bytes_read += bytes_to_read;
+  } while (bytes_read < file_size);
 
-  std::vector<size_t> thresholds; // TODO
+  std::vector<ac_int<HOST_SIZE_TYPE_BITS, false>> thresholds;
+  std::ifstream th_ifs("thresholds.bin", std::ios::binary);
+  ac_int<HOST_SIZE_TYPE_BITS, false> threshold;
+  file_size = std::filesystem::file_size("thresholds.bin");
+  bytes_read = 0;
+  do {
+    bytes_to_read = std::min(file_size - bytes_read, sizeof(chunk));
+    th_ifs.read(reinterpret_cast<char*>(&threshold), bytes_to_read);
+    thresholds.push_back(chunk);
+    bytes_read += bytes_to_read;
+  } while (bytes_read < file_size);
 
-  std::vector<uint64_t> result;
+  std::vector<ac_int<HOST_SIZE_TYPE_BITS, false>> result;
 
   // Select either the FPGA emulator or FPGA device
 #if defined(FPGA_EMULATOR)
