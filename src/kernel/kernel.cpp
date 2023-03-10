@@ -1,9 +1,11 @@
+#include <sycl/sycl.hpp>
 #include <sycl/ext/intel/fpga_extensions.hpp>
 #include <sycl/ext/intel/ac_types/ac_int.hpp>
 
 #include "pipe_utils.hpp"
 
 #include "kernel.hpp"
+#include "unroller.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Minimizer
@@ -42,9 +44,9 @@ Minimizer inline findMinimizer(const Hash* hashBuffer)
 	Minimizer minimizer = {~(Hash)0, 0};
 
 	#pragma unroll
-	for (ushort kmerIndex = 0; kmerIndex < NUMBER_OF_KMERS_PER_WINDOW; ++kmerIndex)
+	for (unsigned char kmerIndex = 0; kmerIndex < NUMBER_OF_KMERS_PER_WINDOW; ++kmerIndex)
 	{
-		const Minimizer current = {hashBuffer[kmerIndex], static_cast<unsigned char>(kmerIndex)};
+		const Minimizer current = {hashBuffer[kmerIndex], kmerIndex};
 
 		if (current.hash < minimizer.hash)
 			minimizer = current;
@@ -72,7 +74,7 @@ inline HostSizeType calculateBinIndex(HostHash hash,
 	hash *= 11400714819323198485u;
 
 	return mapTo(hash, binSize);
-}VectorAdd
+}//VectorAdd
 
 inline Counter getThreshold(const HostSizeType numberOfHashes,
 	const HostSizeType minimalNumberOfMinimizers,
@@ -93,8 +95,8 @@ inline Counter getThreshold(const HostSizeType numberOfHashes,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Forward declation of the kernel names. FPGA best practice to reduce compiler name mangling in the optimization reports.
-class Minimizer;
-class IBF;
+//class Minimizer;
+//class IBF;
 
 void RunKernel(sycl::queue& queue,
 	sycl::buffer<char, 1>& queries_buffer,
@@ -116,7 +118,7 @@ void RunKernel(sycl::queue& queue,
 		Hash hash;
 	};
 
-	using MinimizerToIBFPipes = PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
+	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
 
 	Unroller<0, NUMBER_OF_KERNELS>::Step([&](auto id)
 	{
@@ -125,13 +127,13 @@ void RunKernel(sycl::queue& queue,
 			sycl::accessor queries(queries_buffer, handler, sycl::read_only);
 			sycl::accessor querySizes(querySizes_buffer, handler, sycl::read_only);
 
-			handler.single_task<Minimizer>([=]() [[intel::kernel_args_restrict]]
+			handler.single_task([=]() [[intel::kernel_args_restrict]] // <Minimizer>
 			{
 				QueryIndex queryOffset = queriesOffset;
 
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
-					const QueryIndex querySize = __prefetching_load(&querySizes[querySizesOffset + queryIndex]);
+					const QueryIndex querySize = querySizes[static_cast<size_t>(querySizesOffset) + static_cast<size_t>(queryIndex)]; //__prefetching_load(&
 
 					const QueryIndex localQueryOffset = queryOffset;
 					queryOffset += querySize;
@@ -155,7 +157,7 @@ void RunKernel(sycl::queue& queue,
 
 						// Query as long as elements are left, then only do calculations (end phase)
 						if (iteration < querySize)
-							queryBuffer[K - 1] = __prefetching_load(&queries[localQueryOffset + iteration]);
+							queryBuffer[K - 1] = queries[static_cast<size_t>(localQueryOffset + iteration)]; //__prefetching_load(&
 
 						// Shift register: hash buffer
 						#pragma unroll
@@ -180,7 +182,7 @@ void RunKernel(sycl::queue& queue,
 							// Send the lastMinimizer when a new one is found or the last element is reached
 							&& (!skipMinimizer || lastElement))
 						{
-							Data data;
+							MinimizerToIBFData data;
 							data.isLastElement = lastElement;
 							data.hash = localLastMinimizer.hash;
 
@@ -197,7 +199,7 @@ void RunKernel(sycl::queue& queue,
 			sycl::accessor thresholds(thresholds_buffer, handler, sycl::read_only);
 			sycl::accessor result(result_buffer, handler, sycl::write_only);
 
-			handler.single_task<IBF>([=]() [[intel::kernel_args_restrict]]
+			handler.single_task([=]() [[intel::kernel_args_restrict]] // <IBF>
 			{
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
@@ -205,7 +207,7 @@ void RunKernel(sycl::queue& queue,
 					#define II (UNSAFELEN - CHUNKS)
 
 					#if II > 1
-						Counter __attribute__((register)) counters[CHUNKS][CHUNK_BITS];
+						Counter counters[CHUNKS][CHUNK_BITS]; // __attribute__((register)) 
 					#else
 						Counter __attribute__((
 								memory,
@@ -219,7 +221,7 @@ void RunKernel(sycl::queue& queue,
 
 					QueryIndex numberOfHashes = 1;
 
-					Data data;
+					MinimizerToIBFData data;
 
 					#if II <= 1
 						#pragma ivdep array(counters)
@@ -232,9 +234,16 @@ void RunKernel(sycl::queue& queue,
 
 						Counter threshold;
 
-						if (data.isLastElement)
-							threshold = getThreshold(localNumberOfHashes,
-								minimalNumberOfMinimizers, maximalNumberOfMinimizers, thresholds);
+						if (data.isLastElement) {
+								//threshold = getThreshold(localNumberOfHashes, minimalNumberOfMinimizers, maximalNumberOfMinimizers, thresholds);
+								// manual inline of getThreshold() because of thresholds accessor
+								const HostSizeType maximalIndex = maximalNumberOfMinimizers - minimalNumberOfMinimizers;
+
+								HostSizeType index = localNumberOfHashes < minimalNumberOfMinimizers? 0 : localNumberOfHashes - minimalNumberOfMinimizers;
+								index = index < maximalIndex? index : maximalIndex;
+
+								threshold = (thresholds[static_cast<size_t>(index)] + 2).to_uint();
+						}
 
 						HostSizeType binOffsets[HASH_COUNT];
 
@@ -243,7 +252,7 @@ void RunKernel(sycl::queue& queue,
 							binOffsets[seedIndex] = calculateBinIndex(data.hash,
 								seedIndex, hashShift, binSize) * CHUNKS_PER_BIN;
 
-						for (char chunkIndex = 0; chunkIndex < CHUNKS; chunkIndex++)
+						for (unsigned char chunkIndex = 0; chunkIndex < CHUNKS; chunkIndex++)
 						{
 							Chunk bitvector = ~(Chunk)0;
 							Chunk localResult = 0;
@@ -252,7 +261,7 @@ void RunKernel(sycl::queue& queue,
 							#pragma unroll
 							for (unsigned char seedIndex = 0; seedIndex < HASH_COUNT; ++seedIndex)
 								bitvector &= //__burst_coalesced_cached_load(
-									/*&*/ibfData[binOffsets[seedIndex] + chunkIndex];//,
+									/*&*/ibfData[static_cast<size_t>(binOffsets[seedIndex]) + chunkIndex];//,
 									//1048576); // 1 MiB = 8 megabit
 									//65536); // 65536 byte = 512 kilobit (default)
 
@@ -273,7 +282,7 @@ void RunKernel(sycl::queue& queue,
 							}
 
 							if (data.isLastElement)
-								result[queryIndex * CHUNKS + chunkIndex] = localResult;
+								result[static_cast<size_t>(queryIndex * CHUNKS + chunkIndex)] = localResult;
 						}
 
 						countersInitialized = 1;

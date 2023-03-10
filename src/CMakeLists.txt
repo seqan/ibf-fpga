@@ -1,5 +1,5 @@
 set(DEVICE_SOURCE_FILE kernel/kernel.cpp)
-set(KERNEL_HEADER_FILES kernel/kernel.hpp kernel/pipe_utils.hpp)
+set(KERNEL_HEADER_FILES kernel/kernel.hpp kernel/pipe_utils.hpp kernel/unroller.hpp)
 set(HOST_SOURCE_FILE host.cpp)
 set(TARGET_NAME min-ibf-fpga-oneapi)
 set(EMULATOR_TARGET ${TARGET_NAME}.fpga_emu)
