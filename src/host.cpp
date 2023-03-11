@@ -49,6 +49,7 @@ int main() {
   std::ifstream ibf_ifs("ibfdata.bin", std::ios::binary);
   ac_int<CHUNK_BITS, false> chunk;
   file_size = std::filesystem::file_size("ibfdata.bin");
+  assert(file_size > 0);
   bytes_read = 0;
   do {
     bytes_to_read = std::min(file_size - bytes_read, sizeof(chunk));
@@ -61,11 +62,12 @@ int main() {
   std::ifstream th_ifs("thresholds.bin", std::ios::binary);
   ac_int<HOST_SIZE_TYPE_BITS, false> threshold;
   file_size = std::filesystem::file_size("thresholds.bin");
+  assert(file_size > 0);
   bytes_read = 0;
   do {
-    bytes_to_read = std::min(file_size - bytes_read, sizeof(chunk));
+    bytes_to_read = std::min(file_size - bytes_read, sizeof(threshold));
     th_ifs.read(reinterpret_cast<char*>(&threshold), bytes_to_read);
-    thresholds.push_back(chunk);
+    thresholds.push_back(threshold);
     bytes_read += bytes_to_read;
   } while (bytes_read < file_size);
 
