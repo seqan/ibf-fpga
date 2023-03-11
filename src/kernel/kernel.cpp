@@ -5,7 +5,7 @@
 #include "pipe_utils.hpp"
 
 #include "kernel.hpp"
-#include "unroller.hpp"
+#include "unrolled_loop.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Minimizer
@@ -95,8 +95,8 @@ inline Counter getThreshold(const HostSizeType numberOfHashes,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Forward declation of the kernel names. FPGA best practice to reduce compiler name mangling in the optimization reports.
-//class Minimizer;
-//class IBF;
+class Minimizer_kernel;
+class IBF_kernel;
 
 void RunKernel(sycl::queue& queue,
 	sycl::buffer<char, 1>& queries_buffer,
@@ -120,14 +120,14 @@ void RunKernel(sycl::queue& queue,
 
 	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
 
-	Unroller<0, NUMBER_OF_KERNELS>::Step([&](auto id)
+	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
 	{
 		queue.submit([&](sycl::handler &handler)
 		{
 			sycl::accessor queries(queries_buffer, handler, sycl::read_only);
 			sycl::accessor querySizes(querySizes_buffer, handler, sycl::read_only);
 
-			handler.single_task([=]() [[intel::kernel_args_restrict]] // <Minimizer>
+			handler.single_task<Minimizer_kernel>([=]() [[intel::kernel_args_restrict]]
 			{
 				QueryIndex queryOffset = queriesOffset;
 
@@ -199,7 +199,7 @@ void RunKernel(sycl::queue& queue,
 			sycl::accessor thresholds(thresholds_buffer, handler, sycl::read_only);
 			sycl::accessor result(result_buffer, handler, sycl::write_only);
 
-			handler.single_task([=]() [[intel::kernel_args_restrict]] // <IBF>
+			handler.single_task<IBF_kernel>([=]() [[intel::kernel_args_restrict]]
 			{
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
