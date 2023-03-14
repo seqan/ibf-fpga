@@ -2,9 +2,8 @@
 #include <sycl/ext/intel/fpga_extensions.hpp>
 #include <sycl/ext/intel/ac_types/ac_int.hpp>
 
-#include "pipe_utils.hpp"
-
 #include "kernel.hpp"
+#include "pipe_utils.hpp"
 #include "unrolled_loop.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,5 @@
 set(DEVICE_SOURCE_FILE kernel/kernel.cpp)
-set(KERNEL_HEADER_FILES kernel/kernel.hpp kernel/pipe_utils.hpp kernel/unroller.hpp)
+set(KERNEL_HEADER_FILE kernel/kernel.hpp)
 set(HOST_SOURCE_FILE host.cpp)
 set(TARGET_NAME min-ibf-fpga-oneapi)
 set(EMULATOR_TARGET ${TARGET_NAME}.fpga_emu)
@@ -91,11 +91,11 @@ separate_arguments(HARDWARE_LINK_FLAGS_LIST)
 
 add_custom_command(OUTPUT ${HOST_OBJ}
                    COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS_LIST} ${HARDWARE_COMPILE_FLAGS_LIST} -c ${CMAKE_CURRENT_SOURCE_DIR}/${HOST_SOURCE_FILE} -o ${HOST_OBJ} -I${CMAKE_CURRENT_LIST_DIR}/../include
-                   DEPENDS ${HOST_SOURCE_FILE} ${KERNEL_HEADER_FILES})
+                   DEPENDS ${HOST_SOURCE_FILE} ${KERNEL_HEADER_FILE})
 
 add_custom_command(OUTPUT ${DEVICE_IMAGE_OBJ}
                    COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS_LIST} ${HARDWARE_LINK_FLAGS_LIST} -fsycl-link=image ${CMAKE_CURRENT_SOURCE_DIR}/${DEVICE_SOURCE_FILE} -o ${DEVICE_IMAGE_OBJ} -I${CMAKE_CURRENT_LIST_DIR}/../include
-                   DEPENDS ${DEVICE_SOURCE_FILE} ${KERNEL_HEADER_FILES})
+                   DEPENDS ${DEVICE_SOURCE_FILE} ${KERNEL_HEADER_FILE})
 
 add_custom_command(OUTPUT ${FPGA_TARGET}
                    COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS_LIST} -fsycl -fintelfpga ${AC_TYPES_FLAG} ${HOST_OBJ} ${DEVICE_IMAGE_OBJ} -o ${CMAKE_BINARY_DIR}/${FPGA_TARGET} -I${CMAKE_CURRENT_LIST_DIR}/../include
