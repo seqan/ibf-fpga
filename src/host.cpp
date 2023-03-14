@@ -24,24 +24,22 @@ int main() {
 
   size_t const window_size = 23;
   size_t const kmer_size = 19;
-  size_t const pattern_size = 0; // TODO
+  size_t const pattern_size = 65;
 
   size_t const kmers_per_window = window_size - kmer_size + 1;
   size_t const kmers_per_pattern = pattern_size - kmer_size + 1;
 
-  size_t const binSize = 0; // TODO The size of each bin in bits.
-  size_t const hashShift = 0; // TODO The number of bits to shift the hash value before doing multiplicative hashing.
+  size_t const binSize = 1024; // The size of each bin in bits.
+  size_t const hashShift = 53; // The number of bits to shift the hash value before doing multiplicative hashing.
   size_t const minimalNumberOfMinimizers = kmers_per_window == 1 ? kmers_per_pattern	: std::ceil(static_cast<double>(kmers_per_pattern) / static_cast<double>(kmers_per_window));
   size_t const maximalNumberOfMinimizers = pattern_size - window_size + 1;
 
   size_t const numberOfQueries = 1;
-  size_t const sequenceSize = 65; // querySize
   size_t const queriesOffset = 0;
   size_t const querySizesOffset = 0;
 
   std::string queries = "ACGATCGACTAGGAGCGATTACGACTGACTACATCTAGCTAGCTAGAGATTCTTCAGAGCTTAGC";
-  //std::array<char, sequenceSize * numberOfQueries + 1> queries;
-  std::array<ac_int<64, false>, numberOfQueries> querySizes = {sequenceSize};
+  std::array<ac_int<64, false>, numberOfQueries> querySizes = {queries.size()};
 
   size_t file_size, bytes_read, bytes_to_read;
 
@@ -71,7 +69,7 @@ int main() {
     bytes_read += bytes_to_read;
   } while (bytes_read < file_size);
 
-  std::vector<ac_int<HOST_SIZE_TYPE_BITS, false>> result;
+  std::array<ac_int<HOST_SIZE_TYPE_BITS, false>, numberOfQueries> result;
 
   // Select either the FPGA emulator or FPGA device
 #if defined(FPGA_EMULATOR)
@@ -92,6 +90,8 @@ int main() {
     buffer ibfData_buffer(ibfData);
     buffer thresholds_buffer(thresholds);
     buffer result_buffer(result);
+
+    std::clog << "Launching kernel ..." << std::endl;
 
     // The definition of this function is in a different compilation unit,
     // so host and device code can be separately compiled.
