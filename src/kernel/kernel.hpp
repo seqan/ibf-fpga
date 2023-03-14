@@ -102,12 +102,15 @@ using Minimizer = struct
 
 using Chunk = ac_int<CHUNK_BITS, false>;
 
+using MinimizerToIBFData = struct //__attribute__((__packed__))
+{
+	bool isLastElement;
+	Hash hash;
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Function declarations
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-using namespace sycl;
 
 void RunKernel(sycl::queue& queue,
 	sycl::buffer<char, 1>& queries_buffer,

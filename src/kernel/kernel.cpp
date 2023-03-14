@@ -111,12 +111,6 @@ void RunKernel(sycl::queue& queue,
 	sycl::buffer<HostSizeType, 1>& thresholds_buffer,
 	sycl::buffer<Chunk, 1>& result_buffer)
 {
-	using MinimizerToIBFData = struct //__attribute__((__packed__))
-	{
-		bool isLastElement;
-		Hash hash;
-	};
-
 	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
 
 	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
