@@ -16,8 +16,6 @@
 //    the device code.
 #include "kernel/kernel.hpp"
 
-using namespace sycl;
-
 int main() {
 
   static_assert(sizeof(size_t) == 8);
@@ -31,21 +29,24 @@ int main() {
 
   size_t const binSize = 1024; // The size of each bin in bits.
   size_t const hashShift = 53; // The number of bits to shift the hash value before doing multiplicative hashing.
-  size_t const minimalNumberOfMinimizers = kmers_per_window == 1 ? kmers_per_pattern	: std::ceil(static_cast<double>(kmers_per_pattern) / static_cast<double>(kmers_per_window));
+  size_t const minimalNumberOfMinimizers = kmers_per_window == 1 ? kmers_per_pattern : std::ceil(static_cast<double>(kmers_per_pattern) / static_cast<double>(kmers_per_window));
   size_t const maximalNumberOfMinimizers = pattern_size - window_size + 1;
 
   size_t const numberOfQueries = 1;
   size_t const queriesOffset = 0;
   size_t const querySizesOffset = 0;
 
-  std::string queries = "ACGATCGACTAGGAGCGATTACGACTGACTACATCTAGCTAGCTAGAGATTCTTCAGAGCTTAGC";
-  std::array<ac_int<64, false>, numberOfQueries> querySizes = {queries.size()};
+  std::string queries_string = "ACGATCGACTAGGAGCGATTACGACTGACTACATCTAGCTAGCTAGAGATTCTTCAGAGCTTAGC";
+  std::vector<char> queries;
+  queries.insert(queries.end(), queries_string.begin(), queries_string.end());
+  std::vector<HostSizeType> querySizes;
+  querySizes.push_back(65);
 
   size_t file_size, bytes_read, bytes_to_read;
 
-  std::vector<ac_int<CHUNK_BITS, false>> ibfData;
+  std::vector<Chunk> ibfData;
   std::ifstream ibf_ifs("ibfdata.bin", std::ios::binary);
-  ac_int<CHUNK_BITS, false> chunk;
+  Chunk chunk;
   file_size = std::filesystem::file_size("ibfdata.bin");
   assert(file_size > 0);
   bytes_read = 0;
@@ -56,9 +57,9 @@ int main() {
     bytes_read += bytes_to_read;
   } while (bytes_read < file_size);
 
-  std::vector<ac_int<HOST_SIZE_TYPE_BITS, false>> thresholds;
+  std::vector<HostSizeType> thresholds;
   std::ifstream th_ifs("thresholds.bin", std::ios::binary);
-  ac_int<HOST_SIZE_TYPE_BITS, false> threshold;
+  HostSizeType threshold;
   file_size = std::filesystem::file_size("thresholds.bin");
   assert(file_size > 0);
   bytes_read = 0;
@@ -69,29 +70,29 @@ int main() {
     bytes_read += bytes_to_read;
   } while (bytes_read < file_size);
 
-  std::array<ac_int<HOST_SIZE_TYPE_BITS, false>, numberOfQueries> result;
+  std::vector<Chunk> result;
+  result.resize(numberOfQueries);
 
   // Select either the FPGA emulator or FPGA device
 #if defined(FPGA_EMULATOR)
-  ext::intel::fpga_emulator_selector device_selector;
+  sycl::ext::intel::fpga_emulator_selector device_selector;
 #else
-  ext::intel::fpga_selector device_selector;
+  sycl::ext::intel::fpga_selector device_selector;
 #endif
 
-  try {
+  //try {
 
     // Create a queue bound to the chosen device.
     // If the device is unavailable, a SYCL runtime exception is thrown.
-    queue q(device_selector, fpga_tools::exception_handler);
+    sycl::queue q(device_selector, fpga_tools::exception_handler);
 
     // create the device buffers
-    buffer queries_buffer(queries);
-    buffer querySizes_buffer(querySizes);
-    buffer ibfData_buffer(ibfData);
-    buffer thresholds_buffer(thresholds);
-    buffer result_buffer(result);
-
-    std::clog << "Launching kernel ..." << std::endl;
+    sycl::buffer queries_buffer(queries);
+    sycl::buffer querySizes_buffer(querySizes);
+    sycl::buffer ibfData_buffer(ibfData);
+    sycl::buffer thresholds_buffer(thresholds);
+    sycl::buffer minimizerToIbf_buffer(minimizerToIbf);
+    sycl::buffer result_buffer(result);
 
     // The definition of this function is in a different compilation unit,
     // so host and device code can be separately compiled.
@@ -109,7 +110,7 @@ int main() {
       thresholds_buffer,
       result_buffer);
 
-  } catch (exception const &e) {
+  /*} catch (sycl::exception const &e) {
     // Catches exceptions in the host code
     std::cerr << "Caught a SYCL host exception:\n" << e.what() << "\n";
 
@@ -122,7 +123,7 @@ int main() {
                    "-DFPGA_EMULATOR.\n";
     }
     std::terminate();
-  }
+  }*/
 
   // At this point, the device buffers have gone out of scope and the kernel
   // has been synchronized. Therefore, the output data has been updated

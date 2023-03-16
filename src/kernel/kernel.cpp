@@ -73,7 +73,7 @@ inline HostSizeType calculateBinIndex(HostHash hash,
 	hash *= 11400714819323198485u;
 
 	return mapTo(hash, binSize);
-}//VectorAdd
+}
 
 inline Counter getThreshold(const HostSizeType numberOfHashes,
 	const HostSizeType minimalNumberOfMinimizers,
@@ -135,8 +135,8 @@ void RunKernel(sycl::queue& queue,
 						INITIALIZATION_ITERATIONS // Fill query and hash buffer initially
 						+ querySize - WINDOW_SIZE + 1;
 
-					char queryBuffer[K];
-					Hash hashBuffer[NUMBER_OF_KMERS_PER_WINDOW];
+					char queryBuffer[K]{};
+					Hash hashBuffer[NUMBER_OF_KMERS_PER_WINDOW]{};
 
 					// Set inital element's position to 0, so the first real element will never be skipped
 					Minimizer lastMinimizer = {0, 0};
@@ -228,14 +228,14 @@ void RunKernel(sycl::queue& queue,
 						Counter threshold;
 
 						if (data.isLastElement) {
-								//threshold = getThreshold(localNumberOfHashes, minimalNumberOfMinimizers, maximalNumberOfMinimizers, thresholds);
-								// manual inline of getThreshold() because of thresholds accessor
-								const HostSizeType maximalIndex = maximalNumberOfMinimizers - minimalNumberOfMinimizers;
+							//threshold = getThreshold(localNumberOfHashes, minimalNumberOfMinimizers, maximalNumberOfMinimizers, thresholds);
+							// manual inline of getThreshold() because of thresholds accessor
+							const HostSizeType maximalIndex = maximalNumberOfMinimizers - minimalNumberOfMinimizers;
 
-								HostSizeType index = localNumberOfHashes < minimalNumberOfMinimizers? 0 : localNumberOfHashes - minimalNumberOfMinimizers;
-								index = index < maximalIndex? index : maximalIndex;
+							HostSizeType index = localNumberOfHashes < minimalNumberOfMinimizers? 0 : localNumberOfHashes - minimalNumberOfMinimizers;
+							index = index < maximalIndex? index : maximalIndex;
 
-								threshold = (thresholds[static_cast<size_t>(index)] + 2).to_uint();
+							threshold = (thresholds[static_cast<size_t>(index)] + 2).to_uint();
 						}
 
 						HostSizeType binOffsets[HASH_COUNT];
