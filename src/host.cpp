@@ -27,8 +27,8 @@ int main() {
   size_t const kmers_per_window = window_size - kmer_size + 1;
   size_t const kmers_per_pattern = pattern_size - kmer_size + 1;
 
-  size_t const binSize = 1024; // The size of each bin in bits.
-  size_t const hashShift = 53; // The number of bits to shift the hash value before doing multiplicative hashing.
+  size_t const bin_size = 1024; // The size of each bin in bits.
+  size_t const hash_shift = 53; // The number of bits to shift the hash value before doing multiplicative hashing.
   size_t const minimalNumberOfMinimizers = kmers_per_window == 1 ? kmers_per_pattern : std::ceil(static_cast<double>(kmers_per_pattern) / static_cast<double>(kmers_per_window));
   size_t const maximalNumberOfMinimizers = pattern_size - window_size + 1;
 
@@ -70,8 +70,9 @@ int main() {
     bytes_read += bytes_to_read;
   } while (bytes_read < file_size);
 
-  std::vector<Chunk> result;
-  result.resize(numberOfQueries);
+  std::vector<Chunk> results;
+  results.resize(numberOfQueries);
+  assert(numberOfQueries == querySizes.size());
 
   // Select either the FPGA emulator or FPGA device
 #if defined(FPGA_EMULATOR)
@@ -80,19 +81,23 @@ int main() {
   sycl::ext::intel::fpga_selector device_selector;
 #endif
 
-  //try {
+#ifdef DEBUG
+  {
+#else
+  try {
+#endif
 
     // Create a queue bound to the chosen device.
     // If the device is unavailable, a SYCL runtime exception is thrown.
     sycl::queue q(device_selector, fpga_tools::exception_handler);
 
-    // create the device buffers
+    // Create the device buffers
     sycl::buffer queries_buffer(queries);
     sycl::buffer querySizes_buffer(querySizes);
     sycl::buffer ibfData_buffer(ibfData);
     sycl::buffer thresholds_buffer(thresholds);
     sycl::buffer minimizerToIbf_buffer(minimizerToIbf);
-    sycl::buffer result_buffer(result);
+    sycl::buffer results_buffer(results);
 
     // The definition of this function is in a different compilation unit,
     // so host and device code can be separately compiled.
@@ -103,14 +108,17 @@ int main() {
       querySizesOffset,
       numberOfQueries,
       ibfData_buffer,
-      binSize,
-      hashShift,
+      bin_size,
+      hash_shift,
       minimalNumberOfMinimizers,
       maximalNumberOfMinimizers,
       thresholds_buffer,
-      result_buffer);
+      results_buffer);
 
-  /*} catch (sycl::exception const &e) {
+#ifdef DEBUG
+  }
+#else
+  } catch (sycl::exception const &e) {
     // Catches exceptions in the host code
     std::cerr << "Caught a SYCL host exception:\n" << e.what() << "\n";
 
@@ -123,11 +131,30 @@ int main() {
                    "-DFPGA_EMULATOR.\n";
     }
     std::terminate();
-  }*/
+  }
+#endif
 
   // At this point, the device buffers have gone out of scope and the kernel
   // has been synchronized. Therefore, the output data has been updated
   // with the results of the kernel and is safely accesible by the host CPU.
+
+  // Dump results to binary file
+  std::ofstream ostrm("results.bin", std::ios::binary);
+  ostrm.write(reinterpret_cast<char*>(results.data()), results.size() * sizeof(size_t));
+
+  // Print results
+  uint64_t result = results[0];
+
+  for (size_t byteOffset = 0; byteOffset < sizeof(uint64_t); ++byteOffset) {
+    uint8_t& value = ((uint8_t*)&result)[byteOffset];
+
+    for (size_t bitOffset = 0; bitOffset < 8; ++bitOffset) {
+      if (value & (1 << 7))
+        std::clog << byteOffset * 8 + bitOffset << ",";
+      value <<= 1;
+    }
+  }
+  std::clog << std::endl;
 
   return EXIT_SUCCESS;
 }
