@@ -21,7 +21,7 @@ typedef ushort Counter;
 #endif
 
 #ifndef K
-	#define K 20
+	#define K 19
 #endif
 
 #ifndef HASH_COUNT
