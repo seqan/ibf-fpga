@@ -44,10 +44,11 @@ int main() {
 
   size_t file_size, bytes_read, bytes_to_read;
 
+  std::string ibfData_filename = "ibfdata.bin";
   std::vector<Chunk> ibfData;
-  std::ifstream ibf_ifs("ibfdata.bin", std::ios::binary);
+  std::ifstream ibf_ifs(ibfData_filename, std::ios::binary);
   Chunk chunk;
-  file_size = std::filesystem::file_size("ibfdata.bin");
+  file_size = std::filesystem::file_size(ibfData_filename);
   assert(file_size > 0);
   bytes_read = 0;
   do {
@@ -57,10 +58,11 @@ int main() {
     bytes_read += bytes_to_read;
   } while (bytes_read < file_size);
 
+  std::string thresholds_filename = "thresholds_1e.bin";
   std::vector<HostSizeType> thresholds;
-  std::ifstream th_ifs("thresholds.bin", std::ios::binary);
+  std::ifstream th_ifs(thresholds_filename, std::ios::binary);
   HostSizeType threshold;
-  file_size = std::filesystem::file_size("thresholds.bin");
+  file_size = std::filesystem::file_size(thresholds_filename);
   assert(file_size > 0);
   bytes_read = 0;
   do {
@@ -89,6 +91,7 @@ int main() {
 
     // Create a queue bound to the chosen device.
     // If the device is unavailable, a SYCL runtime exception is thrown.
+    // Note: SYCL queues are out of order by default
     sycl::queue q(device_selector, fpga_tools::exception_handler);
 
     // Create the device buffers

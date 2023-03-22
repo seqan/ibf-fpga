@@ -135,8 +135,8 @@ void RunKernel(sycl::queue& queue,
 						INITIALIZATION_ITERATIONS // Fill query and hash buffer initially
 						+ querySize - WINDOW_SIZE + 1;
 
-					char queryBuffer[K]{};
-					Hash hashBuffer[NUMBER_OF_KMERS_PER_WINDOW]{};
+					char queryBuffer[K] = {0};
+					Hash hashBuffer[NUMBER_OF_KMERS_PER_WINDOW] = {0};
 
 					// Set inital element's position to 0, so the first real element will never be skipped
 					Minimizer lastMinimizer = {0, 0};
