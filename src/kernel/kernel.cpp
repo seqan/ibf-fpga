@@ -29,7 +29,7 @@ Hash inline extractHash(const char* buffer)
 		const Element value = translateCharacterToElement(buffer[elementIndex]);
 
 		kmer |= (Hash)(value) << (2 * (K - 1) - elementIndex * 2);
-		kmerComplement |= (Hash)(~value) << elementIndex * 2;
+		kmerComplement |= (Hash)((Element)~value) << elementIndex * 2;
 	}
 
 	kmer ^= (Hash)MINIMIZER_SEED_ADJUSTED;
