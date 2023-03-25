@@ -32,15 +32,23 @@ int main() {
   size_t const minimalNumberOfMinimizers = kmers_per_window == 1 ? kmers_per_pattern : std::ceil(static_cast<double>(kmers_per_pattern) / static_cast<double>(kmers_per_window));
   size_t const maximalNumberOfMinimizers = pattern_size - window_size + 1;
 
-  size_t const numberOfQueries = 1;
   size_t const queriesOffset = 0;
   size_t const querySizesOffset = 0;
 
-  std::string queries_string = "ACGATCGACTAGGAGCGATTACGACTGACTACATCTAGCTAGCTAGAGATTCTTCAGAGCTTAGC";
+  std::string queries_filename = "query.fq";
+  std::string query, id;
+  std::vector<std::string> ids;
   std::vector<char> queries;
-  queries.insert(queries.end(), queries_string.begin(), queries_string.end());
   std::vector<HostSizeType> querySizes;
-  querySizes.push_back(65);
+  std::ifstream queries_ifs(queries_filename, std::ios::binary);
+  while (std::getline(queries_ifs, id)) {
+    ids.push_back(id);
+    std::getline(queries_ifs, query);
+    queries.insert(queries.end(), query.begin(), query.end());
+    querySizes.push_back(query.size());
+    std::getline(queries_ifs, query); // ignore seperator
+    std::getline(queries_ifs, query); // ignore quality
+  }
 
   size_t file_size, bytes_read, bytes_to_read;
 
@@ -73,8 +81,7 @@ int main() {
   } while (bytes_read < file_size);
 
   std::vector<Chunk> results;
-  results.resize(numberOfQueries);
-  assert(numberOfQueries == querySizes.size());
+  results.resize(querySizes.size()); // numberOfQueries
 
   // Select either the FPGA emulator or FPGA device
 #if defined(FPGA_EMULATOR)
@@ -109,7 +116,7 @@ int main() {
       queriesOffset,
       querySizes_buffer,
       querySizesOffset,
-      numberOfQueries,
+      querySizes.size(), // numberOfQueries
       ibfData_buffer,
       bin_size,
       hash_shift,
@@ -146,18 +153,20 @@ int main() {
   ostrm.write(reinterpret_cast<char*>(results.data()), results.size() * sizeof(size_t));
 
   // Print results
-  uint64_t result = results[0];
+  for (size_t i = 0; i < ids.size(); i++) {
+    std::clog << ids[i].substr(1, std::string::npos) << "\t";
+    uint64_t result = results[i];
 
-  for (size_t byteOffset = 0; byteOffset < sizeof(uint64_t); ++byteOffset) {
-    uint8_t& value = ((uint8_t*)&result)[byteOffset];
+    for (size_t byteOffset = 0; byteOffset < sizeof(uint64_t); ++byteOffset) {
+      uint8_t& value = ((uint8_t*)&result)[byteOffset];
 
-    for (size_t bitOffset = 0; bitOffset < 8; ++bitOffset) {
-      if (value & (1 << 7))
-        std::clog << byteOffset * 8 + bitOffset << ",";
-      value <<= 1;
+      for (size_t bitOffset = 0; bitOffset < 8; ++bitOffset) {
+        if (value & (1 << 7))
+          std::clog << byteOffset * 8 + bitOffset << ",";
+        value <<= 1;
+      }
     }
+    std::clog << std::endl;
   }
-  std::clog << std::endl;
-
   return EXIT_SUCCESS;
 }
