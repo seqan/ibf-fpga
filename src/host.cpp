@@ -106,7 +106,6 @@ int main() {
     sycl::buffer querySizes_buffer(querySizes);
     sycl::buffer ibfData_buffer(ibfData);
     sycl::buffer thresholds_buffer(thresholds);
-    sycl::buffer minimizerToIbf_buffer(minimizerToIbf);
     sycl::buffer results_buffer(results);
 
     // The definition of this function is in a different compilation unit,
