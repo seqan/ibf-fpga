@@ -1,0 +1,14 @@
+
+if (OPENCL_FOUND)
+    add_executable(minimizer_opencl_test minimizer_opencl_test.cpp)
+    target_link_libraries(minimizer_opencl_test ibf_fpga_test "OpenCL::OpenCL")
+    target_compile_features(minimizer_opencl_test PUBLIC cxx_std_17)
+    add_test(NAME minimizer_opencl_test COMMAND minimizer_opencl_test)
+endif ()
+
+if (SEQAN3_FOUND AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_executable(minimizer_seqan3_test minimizer_seqan3_test.cpp)
+    target_link_libraries(minimizer_seqan3_test ibf_fpga_test "seqan3::seqan3")
+    target_compile_features(minimizer_seqan3_test PUBLIC cxx_std_17)
+    add_test(NAME minimizer_seqan3_test COMMAND minimizer_seqan3_test)
+endif()
