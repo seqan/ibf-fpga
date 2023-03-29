@@ -7,6 +7,7 @@ enable_testing()
 add_library(ibf_fpga_test INTERFACE)
 target_include_directories(ibf_fpga_test INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/../include")
 target_include_directories(ibf_fpga_test INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_compile_features(ibf_fpga_test INTERFACE cxx_std_17)
 
 # Note: Our OpenCL installation will not be found by standard search paths. We therefore search first the OpenCL FPGA installation and then set the environment variable OCL_ROOT to
 find_path (OpenCL_FGPA_INCLUDE_DIR NAMES CL/cl.h HINTS "/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga/host/include/")
