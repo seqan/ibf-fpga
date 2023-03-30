@@ -3,8 +3,8 @@
 #include "minimizer_test_fixture.hpp"
 
 minimizer_test_fixture minimizer_w23_k19_query4_test{
-    .w{23},
-    .k{19},
+    .w = 23,
+    .k = 19,
     .query{"AGCGTAGCGATACGTCTCAAATATTATAACGGCATTACGAGTCAGCTGACTGACATCGTAGCCGT"},
     .minimizer{
         21580775587,
