@@ -1,6 +1,6 @@
 
-project (ibf_fpga_test)
 cmake_minimum_required(VERSION 3.16)
+project (ibf_fpga_test)
 
 enable_testing()
 
