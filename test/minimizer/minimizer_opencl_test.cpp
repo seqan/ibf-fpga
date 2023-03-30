@@ -8,11 +8,11 @@
 
 // #include "CL/cl_ext_intelfpga.h"
 
-typedef struct //__attribute__((__packed__))
+struct minimizer_pipe_t//__attribute__((__packed__))
 {
     bool isLastElement{false};
     uint64_t hash{};
-} minimizer_pipe_t;
+};
 
 void opencl_test(cl::Program const & program, cl::Context const & context, std::vector<cl::Device> const & selected_devices, minimizer_test_fixture test)
 {
