@@ -20,8 +20,8 @@ int main() {
 
   static_assert(sizeof(size_t) == 8);
 
-  size_t const window_size = 23;
-  size_t const kmer_size = 19;
+  size_t const window_size = WINDOW_SIZE;
+  size_t const kmer_size = K;
   size_t const pattern_size = 65;
 
   size_t const kmers_per_window = window_size - kmer_size + 1;
