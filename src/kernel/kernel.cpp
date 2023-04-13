@@ -93,7 +93,7 @@ inline Counter getThreshold(const HostSizeType numberOfHashes,
 // Main kernels
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Forward declation of the kernel names. FPGA best practice to reduce compiler name mangling in the optimization reports.
+// Forward declaration of the kernel names. FPGA best practice to reduce compiler name mangling in the optimization reports.
 class Minimizer_kernel;
 class IBF_kernel;
 
@@ -138,7 +138,7 @@ void RunKernel(sycl::queue& queue,
 					char queryBuffer[K] = {0};
 					Hash hashBuffer[NUMBER_OF_KMERS_PER_WINDOW] = {0};
 
-					// Set inital element's position to 0, so the first real element will never be skipped
+					// Set initial element's position to 0, so the first real element will never be skipped
 					Minimizer lastMinimizer = {0, 0};
 
 					for (QueryIndex iteration = 0; iteration <= iterations; iteration++)

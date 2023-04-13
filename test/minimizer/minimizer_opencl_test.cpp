@@ -19,20 +19,20 @@ void opencl_test(cl::Program const & program, cl::Context const & context, std::
     cl::CommandQueue minimizer_kernel_queue{context, selected_devices.at(0), 0};
     cl::CommandQueue minimizer_kernel_test_queue{context, selected_devices.at(0), 0};
 
-    char const * querys = test.query.c_str();
+    char const * queries = test.query.c_str();
     size_t const queriesOffset = 0;
     size_t const querySizes[] = {test.query.size()};
     size_t const querySizesOffset = 0;
-    size_t const numberOfQuerys = 1;
+    size_t const numberOfQueries = 1;
     std::vector<minimizer_pipe_t> pipe_results(test.query.size(), minimizer_pipe_t{});
     std::vector<uint64_t> minimizer{};
 
     cl::Kernel minimizer_kernel(program, "minimizer0");
-    minimizer_kernel.setArg(0, querys);
+    minimizer_kernel.setArg(0, queries);
     minimizer_kernel.setArg(1, queriesOffset);
     minimizer_kernel.setArg(2, (size_t const *) querySizes);
     minimizer_kernel.setArg(3, querySizesOffset);
-    minimizer_kernel.setArg(4, numberOfQuerys);
+    minimizer_kernel.setArg(4, numberOfQueries);
 
     cl::Kernel minimizer_test_kernel(program, "minimizer0_test");
     minimizer_test_kernel.setArg(0, pipe_results.data());

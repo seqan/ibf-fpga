@@ -9,7 +9,7 @@ set(FPGA_TARGET ${TARGET_NAME}.fpga)
 if(NOT DEFINED FPGA_DEVICE)
     set(FPGA_DEVICE "intel_s10sx_pac:pac_s10_usm")
     message(STATUS "FPGA_DEVICE was not specified.\
-                    \nConfiguring the design to run on the default FPGA board ${FPGA_DEVICE}. \
+                    \nConfiguring the design to run on the default FPGA board ${FPGA_DEVICE}.\
                     \nPlease refer to the README for information on board selection.")
 else()
     message(STATUS "Configuring the design to run on FPGA board ${FPGA_DEVICE}")
