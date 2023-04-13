@@ -113,6 +113,8 @@ void RunKernel(sycl::queue& queue,
 {
 	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
 
+	using PrefetchingLSU = sycl::ext::intel::lsu<sycl::ext::intel::prefetch<true>, sycl::ext::intel::statically_coalesce<false>>;
+
 	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
 	{
 		queue.submit([&](sycl::handler &handler)
@@ -122,11 +124,15 @@ void RunKernel(sycl::queue& queue,
 
 			handler.single_task<Minimizer_kernel>([=]() [[intel::kernel_args_restrict]]
 			{
+				// Prefetching requires pointer
+				auto querySizes_ptr = querySizes.get_pointer();
+				auto queries_ptr = queries.get_pointer();
+
 				QueryIndex queryOffset = queriesOffset;
 
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
-					const QueryIndex querySize = querySizes[static_cast<size_t>(querySizesOffset) + static_cast<size_t>(queryIndex)]; //__prefetching_load(&
+					const QueryIndex querySize = PrefetchingLSU::load(querySizes_ptr + static_cast<size_t>(querySizesOffset) + static_cast<size_t>(queryIndex));
 
 					const QueryIndex localQueryOffset = queryOffset;
 					queryOffset += querySize;
@@ -150,7 +156,7 @@ void RunKernel(sycl::queue& queue,
 
 						// Query as long as elements are left, then only do calculations (end phase)
 						if (iteration < querySize)
-							queryBuffer[K - 1] = queries[static_cast<size_t>(localQueryOffset + iteration)]; //__prefetching_load(&
+							queryBuffer[K - 1] = PrefetchingLSU::load(queries_ptr + static_cast<size_t>(localQueryOffset + iteration));
 
 						// Shift register: hash buffer
 						#pragma unroll
