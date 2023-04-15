@@ -5,15 +5,11 @@
 #include <sycl/sycl.hpp>
 #include <sycl/ext/intel/fpga_extensions.hpp>
 
-#include "exception_handler.hpp"
+#include <ibf_fpga/sycl/exception_handler.hpp>
 
-// This code sample demonstrates how to split the host and FPGA kernel code into
-// separate compilation units so that they can be separately recompiled.
-// Consult the README for a detailed discussion.
-//  - host.cpp (this file) contains exclusively code that executes on the host.
-//  - kernel.cpp contains almost exclusively code that executes on the device.
-//  - kernel.hpp contains only the forward declaration of a function containing
-//    the device code.
+// TODO: use <ibf_fpga/sycl/commen.hpp>
+// - commen.hpp does not contain function declarations
+// - simply adding function declarations to commen.hpp will disable fast_recompile
 #include "kernel/kernel.hpp"
 
 int main() {
