@@ -1,3 +1,10 @@
+set(CMAKE_CXX_COMPILER icpx)
+add_executable(minimizer_sycl_test minimizer_sycl_test.cpp)
+target_link_libraries(minimizer_sycl_test ibf_fpga_test)
+set_target_properties(minimizer_sycl_test PROPERTIES COMPILE_FLAGS "-Wall -fsycl -fintelfpga -qactypes -DFPGA_EMULATOR")
+set_target_properties(minimizer_sycl_test PROPERTIES LINK_FLAGS "-fsycl -fintelfpga -qactypes")
+target_compile_features(minimizer_sycl_test PUBLIC cxx_std_17)
+add_test(NAME minimizer_sycl_test COMMAND minimizer_sycl_test)
 
 if (OPENCL_FOUND)
     add_executable(minimizer_opencl_test minimizer_opencl_test.cpp)
