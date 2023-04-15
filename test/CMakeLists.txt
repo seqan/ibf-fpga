@@ -13,7 +13,7 @@ find_path (OpenCL_FGPA_INCLUDE_DIR NAMES CL/cl.h HINTS "/opt/intel/oneapi/compil
 if (OpenCL_FGPA_INCLUDE_DIR AND NOT DEFINED ENV{OCL_ROOT})
     set(ENV{OCL_ROOT} "${OpenCL_FGPA_INCLUDE_DIR}")
 endif ()
-find_package(OpenCL REQUIRED)
+find_package(OpenCL)
 
 # SeqAn3 only works with gcc
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
