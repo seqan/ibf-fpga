@@ -6,14 +6,14 @@
 #include <sycl/ext/intel/fpga_extensions.hpp>
 #include <sycl/ext/intel/ac_types/ac_int.hpp>
 
-#include <min_ibf/test/assert_equal.hpp>
+#include <min_ibf_fpga/test/assert_equal.hpp>
 #include <min_ibf_fpga/backend_sycl/kernel_minimizer.hpp>
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
 
 void sycl_test(minimizer_test_fixture test)
 {
-    min_ibf::test::assert_equal(test.w, static_cast<size_t>(WINDOW_SIZE), "window size not supported");
-    min_ibf::test::assert_equal(test.k, static_cast<size_t>(K), "k not supported");
+    min_ibf_fpga::test::assert_equal(test.w, static_cast<size_t>(WINDOW_SIZE), "window size not supported");
+    min_ibf_fpga::test::assert_equal(test.k, static_cast<size_t>(K), "k not supported");
 
 #if defined(FPGA_EMULATOR)
     sycl::ext::intel::fpga_emulator_selector device_selector;
