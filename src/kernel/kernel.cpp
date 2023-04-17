@@ -2,8 +2,8 @@
 #include <sycl/ext/intel/fpga_extensions.hpp>
 #include <sycl/ext/intel/ac_types/ac_int.hpp>
 
-#include <ibf_fpga/sycl/pipe_utils.hpp>
-#include <ibf_fpga/sycl/unrolled_loop.hpp>
+#include <min_ibf_fpga/backend_sycl/pipe_utils.hpp>
+#include <min_ibf_fpga/backend_sycl/unrolled_loop.hpp>
 
 // TODO: use <ibf_fpga/sycl/commen.hpp>
 // - commen.hpp does not contain function declarations

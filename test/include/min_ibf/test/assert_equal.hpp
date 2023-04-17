@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 
-namespace ibf::test
+namespace min_ibf::test
 {
 
 template <typename value_t>
@@ -22,4 +22,4 @@ static auto assert_equal(value_t const & actual, value_t const & expected, std::
     return false;
 };
 
-} // namespace ibf::test
+} // namespace min_ibf::test

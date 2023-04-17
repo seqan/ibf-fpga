@@ -1,6 +1,9 @@
 #include <sycl/sycl.hpp>
 #include <sycl/ext/intel/ac_types/ac_int.hpp>
 
+namespace min_ibf_fpga::backend_sycl
+{
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Types
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,3 +110,5 @@ using MinimizerToIBFData = struct //__attribute__((__packed__))
 	bool isLastElement;
 	Hash hash;
 };
+
+} // namespace min_ibf_fpga::backend_sycl

@@ -4,9 +4,9 @@
 #include <iostream>
 #include <filesystem>
 
-#include <ibf_fpga/opencl/opencl.hpp>
+#include <min_ibf_fpga/backend_opencl/opencl.hpp>
 
-namespace ibf_fpga::opencl
+namespace min_ibf_fpga::backend_opencl
 {
 
 struct kernel_loader
@@ -31,4 +31,4 @@ struct kernel_loader
     }
 };
 
-} // namespace ibf_fpga::opencl
+} // namespace min_ibf_fpga::backend_opencl

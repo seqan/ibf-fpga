@@ -6,14 +6,14 @@
 #include <sycl/ext/intel/fpga_extensions.hpp>
 #include <sycl/ext/intel/ac_types/ac_int.hpp>
 
-#include <ibf_fpga/test/assert_equal.hpp>
-#include <ibf_fpga/sycl/kernel_minimizer.hpp>
-#include <ibf_fpga/sycl/exception_handler.hpp>
+#include <min_ibf/test/assert_equal.hpp>
+#include <min_ibf_fpga/backend_sycl/kernel_minimizer.hpp>
+#include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
 
 void sycl_test(minimizer_test_fixture test)
 {
-    ibf::test::assert_equal(test.w, static_cast<size_t>(WINDOW_SIZE), "window size not supported");
-    ibf::test::assert_equal(test.k, static_cast<size_t>(K), "k not supported");
+    min_ibf::test::assert_equal(test.w, static_cast<size_t>(WINDOW_SIZE), "window size not supported");
+    min_ibf::test::assert_equal(test.k, static_cast<size_t>(K), "k not supported");
 
 #if defined(FPGA_EMULATOR)
     sycl::ext::intel::fpga_emulator_selector device_selector;
@@ -26,13 +26,13 @@ void sycl_test(minimizer_test_fixture test)
     for(char c : test.query)
         queries.push_back(c);
 
-    std::vector<HostSizeType> querySizes;
+    std::vector<min_ibf_fpga::backend_sycl::HostSizeType> querySizes;
     querySizes.push_back(test.query.size());
 
     size_t const queriesOffset = 0;
     size_t const querySizesOffset = 0;
     size_t const numberOfQueries = 1;
-    std::vector<MinimizerToIBFData> pipe_results(test.query.size(), MinimizerToIBFData{});
+    std::vector<min_ibf_fpga::backend_sycl::MinimizerToIBFData> pipe_results(test.query.size(), min_ibf_fpga::backend_sycl::MinimizerToIBFData{});
     std::vector<uint64_t> minimizer{};
 
     { // device buffer scope
@@ -40,7 +40,7 @@ void sycl_test(minimizer_test_fixture test)
         sycl::buffer querySizes_buffer(querySizes);
         sycl::buffer minimizerToIbf_buffer(pipe_results);
 
-        RunMinimizerKernel(q,
+        min_ibf_fpga::backend_sycl::RunMinimizerKernel(q,
                 queries_buffer,
                 queriesOffset,
                 querySizes_buffer,
@@ -49,7 +49,7 @@ void sycl_test(minimizer_test_fixture test)
                 minimizerToIbf_buffer);
     } // device buffer scope
 
-    MinimizerToIBFData pipe_result{};
+    min_ibf_fpga::backend_sycl::MinimizerToIBFData pipe_result{};
     for (int i = 0; i < pipe_results.size() && !pipe_result.isLastElement; ++i)
     {
         pipe_result = pipe_results[i];

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include <ibf_fpga/test/assert_equal.hpp>
+#include <min_ibf/test/assert_equal.hpp>
 
 struct minimizer_test_fixture
 {
@@ -15,10 +15,10 @@ struct minimizer_test_fixture
 
     bool compare_minimizer(std::vector<uint64_t> const & result)
     {
-        ibf::test::assert_equal(result.size(), minimizer.size(), "Sizes mismatch");
+        min_ibf::test::assert_equal(result.size(), minimizer.size(), "Sizes mismatch");
         for (int i = 0; i < result.size(); ++i)
         {
-            ibf::test::assert_equal(result[i], minimizer[i], "Elements[i: " + std::to_string(i) + "] mismatch");
+            min_ibf::test::assert_equal(result[i], minimizer[i], "Elements[i: " + std::to_string(i) + "] mismatch");
         }
         return true;
     }

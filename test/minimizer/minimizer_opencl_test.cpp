@@ -2,9 +2,9 @@
 
 #include "fixtures/all.hpp"
 
-#include <ibf_fpga/opencl/opencl.hpp>
-#include <ibf_fpga/opencl/device_selector.hpp>
-#include <ibf_fpga/opencl/kernel_loader.hpp>
+#include <min_ibf_fpga/backend_opencl/opencl.hpp>
+#include <min_ibf_fpga/backend_opencl/device_selector.hpp>
+#include <min_ibf_fpga/backend_opencl/kernel_loader.hpp>
 
 // #include "CL/cl_ext_intelfpga.h"
 
@@ -64,14 +64,14 @@ void opencl_test(cl::Program const & program, cl::Context const & context, std::
 
 int main()
 {
-    std::vector<cl::Device> all_devices = ibf_fpga::opencl::device_selector::select_devices();
+    std::vector<cl::Device> all_devices = min_ibf_fpga::backend_opencl::device_selector::select_devices();
     std::vector<cl::Device> selected_devices{{all_devices.at(0)}};
     cl::Context context{selected_devices};
     cl::CommandQueue utilitiesQueue{context, selected_devices.at(0), 0};
     cl::CommandQueue::setDefault(utilitiesQueue);
 
     std::filesystem::path program_w23_k19_file{"ibf_w23_k19_h2_b64.aocx"};
-    cl::Program program_w23_k19 = ibf_fpga::opencl::kernel_loader::load(program_w23_k19_file, context, selected_devices);
+    cl::Program program_w23_k19 = min_ibf_fpga::backend_opencl::kernel_loader::load(program_w23_k19_file, context, selected_devices);
 
     opencl_test(program_w23_k19, context, selected_devices, minimizer_w23_k19_query0_test);
     opencl_test(program_w23_k19, context, selected_devices, minimizer_w23_k19_query1_test);
@@ -80,7 +80,7 @@ int main()
     opencl_test(program_w23_k19, context, selected_devices, minimizer_w23_k19_query4_test);
 
     std::filesystem::path program_w19_k19_file{"ibf_w19_k19_h2_b64.aocx"};
-    cl::Program program_w19_k19 = ibf_fpga::opencl::kernel_loader::load(program_w19_k19_file, context, selected_devices);
+    cl::Program program_w19_k19 = min_ibf_fpga::backend_opencl::kernel_loader::load(program_w19_k19_file, context, selected_devices);
 
     opencl_test(program_w19_k19, context, selected_devices, minimizer_w19_k19_query0_test);
     opencl_test(program_w19_k19, context, selected_devices, minimizer_w19_k19_query1_test);

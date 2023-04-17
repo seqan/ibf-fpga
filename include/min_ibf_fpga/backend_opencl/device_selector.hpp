@@ -3,9 +3,9 @@
 #include <iostream>
 #include <vector>
 
-#include <ibf_fpga/opencl/opencl.hpp>
+#include <min_ibf_fpga/backend_opencl/opencl.hpp>
 
-namespace ibf_fpga::opencl
+namespace min_ibf_fpga::backend_opencl
 {
 
 struct device_selector
@@ -57,4 +57,4 @@ struct device_selector
     }
 };
 
-} // namespace ibf_fpga::opencl
+} // namespace min_ibf_fpga::backend_opencl

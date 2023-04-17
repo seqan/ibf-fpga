@@ -5,7 +5,7 @@
 #include <sycl/sycl.hpp>
 #include <sycl/ext/intel/fpga_extensions.hpp>
 
-#include <ibf_fpga/sycl/exception_handler.hpp>
+#include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
 
 // TODO: use <ibf_fpga/sycl/commen.hpp>
 // - commen.hpp does not contain function declarations

@@ -6,6 +6,9 @@
 #include "pipe_utils.hpp"
 #include "unrolled_loop.hpp"
 
+namespace min_ibf_fpga::backend_sycl
+{
+
 Element inline translateCharacterToElement(const char character)
 {
 	return character == 'A'? 0
@@ -193,3 +196,5 @@ void RunMinimizerKernel(sycl::queue& queue,
 		});
 	});
 }
+
+} // namespace min_ibf_fpga::backend_sycl
