@@ -21,6 +21,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 find_package(SeqAn3)
 endif ()
 
+add_subdirectory(ibf)
 add_subdirectory(minimizer)
 add_subdirectory(test)
 add_subdirectory(threshold)
