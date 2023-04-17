@@ -22,3 +22,4 @@ find_package(SeqAn3)
 endif ()
 
 add_subdirectory(minimizer)
+add_subdirectory(test)
