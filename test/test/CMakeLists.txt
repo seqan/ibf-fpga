@@ -2,3 +2,7 @@
 add_executable(assert_equal_test assert_equal_test.cpp)
 add_test(NAME assert_equal_test COMMAND assert_equal_test)
 target_link_libraries(assert_equal_test min_ibf_fpga_test)
+
+add_executable(minimizer_range_t_test minimizer_range_t_test.cpp)
+add_test(NAME minimizer_range_t_test COMMAND minimizer_range_t_test)
+target_link_libraries(minimizer_range_t_test min_ibf_fpga_test)
