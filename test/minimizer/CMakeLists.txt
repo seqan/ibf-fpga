@@ -1,7 +1,7 @@
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
     add_executable(minimizer_sycl_test minimizer_sycl_test.cpp)
-    target_link_libraries(minimizer_sycl_test ibf_fpga_test)
+    target_link_libraries(minimizer_sycl_test PUBLIC min_ibf_fpga_test)
     set_target_properties(minimizer_sycl_test PROPERTIES COMPILE_FLAGS "-Wall -fsycl -fintelfpga -qactypes -DFPGA_EMULATOR")
     set_target_properties(minimizer_sycl_test PROPERTIES LINK_FLAGS "-fsycl -fintelfpga -qactypes")
     add_test(NAME minimizer_sycl_test COMMAND minimizer_sycl_test)
@@ -9,12 +9,12 @@ endif ()
 
 if (OPENCL_FOUND)
     add_executable(minimizer_opencl_test minimizer_opencl_test.cpp)
-    target_link_libraries(minimizer_opencl_test ibf_fpga_test "OpenCL::OpenCL")
+    target_link_libraries(minimizer_opencl_test PUBLIC min_ibf_fpga_test "OpenCL::OpenCL")
     add_test(NAME minimizer_opencl_test COMMAND minimizer_opencl_test)
 endif()
 
 if (SEQAN3_FOUND AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     add_executable(minimizer_seqan3_test minimizer_seqan3_test.cpp)
-    target_link_libraries(minimizer_seqan3_test ibf_fpga_test "seqan3::seqan3")
+    target_link_libraries(minimizer_seqan3_test PUBLIC min_ibf_fpga_test "seqan3::seqan3")
     add_test(NAME minimizer_seqan3_test COMMAND minimizer_seqan3_test)
 endif()
