@@ -1,0 +1,4 @@
+
+add_executable(assert_equal_test assert_equal_test.cpp)
+add_test(NAME assert_equal_test COMMAND assert_equal_test)
+target_link_libraries(assert_equal_test min_ibf_fpga_test)
