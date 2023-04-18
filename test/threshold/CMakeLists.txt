@@ -1,0 +1,4 @@
+
+add_executable(threshold_test threshold_test.cpp)
+add_test(NAME threshold_test COMMAND threshold_test)
+target_link_libraries(threshold_test min_ibf_fpga_test)

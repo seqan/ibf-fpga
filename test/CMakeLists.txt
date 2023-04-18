@@ -23,3 +23,4 @@ endif ()
 
 add_subdirectory(minimizer)
 add_subdirectory(test)
+add_subdirectory(threshold)
