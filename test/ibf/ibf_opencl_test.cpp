@@ -1,4 +1,5 @@
 
+
 #include "fixtures/all.hpp"
 
 #include <min_ibf_fpga/backend_opencl/opencl.hpp>
@@ -24,11 +25,11 @@ void opencl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
     {
         size_t const binSize = ibf_meta.bin_size();
         size_t const hashShift = ibf_meta.hash_shift();
-        size_t const numberOfQuerys = 1;
+        size_t const numberOfQueries = 1;
         size_t const minimalNumberOfMinimizers = test.minimizer_range.minimal;
         size_t const maximalNumberOfMinimizers = test.minimizer_range.maximal;
         min_ibf_fpga::threshold::threshold_table thresholds = test.threshold_table_per_error[errors];
-        std::vector<size_t> result(numberOfQuerys, 0);
+        std::vector<size_t> result(numberOfQueries, 0);
         size_t ibfDataSize = -1;
 
         cl::Kernel ibf_test_provider_kernel(program, "ibf0_test_provider");
@@ -39,7 +40,7 @@ void opencl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
         ibf_kernel.setArg(0, ibfData);
         ibf_kernel.setArg(1, binSize);
         ibf_kernel.setArg(2, hashShift);
-        ibf_kernel.setArg(3, numberOfQuerys);
+        ibf_kernel.setArg(3, numberOfQueries);
         ibf_kernel.setArg(4, minimalNumberOfMinimizers);
         ibf_kernel.setArg(5, maximalNumberOfMinimizers);
         ibf_kernel.setArg(6, thresholds.table);
