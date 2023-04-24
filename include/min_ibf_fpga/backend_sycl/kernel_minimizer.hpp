@@ -23,31 +23,31 @@ Hash inline extractHash(const char* buffer) //, sycl::stream out) // DEBUG
 	Hash kmerComplement = 0;
 
 	#pragma unroll
-	for (unsigned char elementIndex = 0; elementIndex < K; ++elementIndex)
+	for (unsigned char elementIndex = 0; elementIndex < MIN_IBF_K; ++elementIndex)
 	{
 		const Element value = translateCharacterToElement(buffer[elementIndex]);
 
 		//out << elementIndex << ": " << static_cast<unsigned>(kmer) << " - " << static_cast<unsigned>(kmerComplement) << sycl::endl;
 		//	out << elementIndex << ": ";
-		//for (unsigned i = 0; i < 2*K; i++)
+		//for (unsigned i = 0; i < 2*MIN_IBF_K; i++)
 		//	out << (unsigned)kmer[i];
 		//out << " - ";
-		//for (unsigned i = 0; i < 2*K; i++)
+		//for (unsigned i = 0; i < 2*MIN_IBF_K; i++)
 		//	out << (unsigned)kmerComplement[i];
 		//out << sycl::endl;
 
 		//out << "char " << static_cast<unsigned>(buffer[elementIndex]) << " value " << static_cast<unsigned>(value) << " ~value " << static_cast<unsigned>((Element)~value) << sycl::endl;
 
-		kmer           |= (Hash)(value) << (2 * (K - 1) - elementIndex * 2);
+		kmer           |= (Hash)(value) << (2 * (MIN_IBF_K - 1) - elementIndex * 2);
 		kmerComplement |= (Hash)((Element)~value) << elementIndex * 2;
 	}
 
 	//out << "Extracted Hash " << static_cast<unsigned>(kmer) << " Complement " << static_cast<unsigned>(kmerComplement) << sycl::endl;
 	//out << "XH ";
-	//for (unsigned i = 0; i < 2*K; i++)
+	//for (unsigned i = 0; i < 2*MIN_IBF_K; i++)
 	//	out << (unsigned)kmer[i];
 	//out << " C ";
-	//for (unsigned i = 0; i < 2*K; i++)
+	//for (unsigned i = 0; i < 2*MIN_IBF_K; i++)
 	//	out << (unsigned)kmerComplement[i];
 	//out << sycl::endl;
 
@@ -98,7 +98,7 @@ void RunMinimizerKernel(sycl::queue& queue,
 			sycl::accessor queries(queries_buffer, handler, sycl::read_only);
 			sycl::accessor querySizes(querySizes_buffer, handler, sycl::read_only);
 
-			sycl::stream out(65536, 256, handler);
+			sycl::stream out(65536, 256, handler); // DEBUG
 			handler.single_task<MinimizerKernel>([=]() [[intel::kernel_args_restrict]]
 			{
 				QueryIndex queryOffset = queriesOffset;
@@ -116,7 +116,7 @@ void RunMinimizerKernel(sycl::queue& queue,
 						INITIALIZATION_ITERATIONS // Fill query and hash buffer initially
 						+ querySize - WINDOW_SIZE + 1;
 
-					char queryBuffer[K] = {0};
+					char queryBuffer[MIN_IBF_K] = {0};
 					Hash hashBuffer[NUMBER_OF_KMERS_PER_WINDOW] = {0};
 
 					// Set initial element's position to 0, so the first real element will never be skipped
@@ -126,7 +126,7 @@ void RunMinimizerKernel(sycl::queue& queue,
 					{
 						// DEBUG
 						//out << static_cast<unsigned>(iteration) << ": " << queryBuffer << " - ";
-						//for (size_t i = 0; i < K; i++)
+						//for (size_t i = 0; i < MIN_IBF_K; i++)
 						//	out << queryBuffer[i];
 						//out << " - ";
 						//for (size_t i = 0; i < NUMBER_OF_KMERS_PER_WINDOW; i++)
@@ -135,12 +135,12 @@ void RunMinimizerKernel(sycl::queue& queue,
 
 						// Shift register: Query buffer
 						#pragma unroll
-						for (unsigned char i = 0; i < K - 1; ++i)
+						for (unsigned char i = 0; i < MIN_IBF_K - 1; ++i)
 							queryBuffer[i] = queryBuffer[i + 1];
 
 						// Query as long as elements are left, then only do calculations (end phase)
 						if (iteration < querySize)
-							queryBuffer[K - 1] = queries[static_cast<size_t>(localQueryOffset + iteration)]; //__prefetching_load(&
+							queryBuffer[MIN_IBF_K - 1] = queries[static_cast<size_t>(localQueryOffset + iteration)]; //__prefetching_load(&
 
 						// Shift register: hash buffer
 						#pragma unroll
@@ -156,7 +156,8 @@ void RunMinimizerKernel(sycl::queue& queue,
 							// Update the lastMinimizer every time, because it is either new or the same anyways
 							lastMinimizer = minimizer;
 
-						const bool skipMinimizer = localLastMinimizer.position != 0 && localLastMinimizer.hash == minimizer.hash;
+						const bool skipMinimizer = localLastMinimizer.position != 0
+							&& localLastMinimizer.hash == minimizer.hash;
 						const bool lastElement = iteration > iterations - 1;
 
 						if (// Skip the first element (> instead of >=), as lastMinimizer is not initialized yet
@@ -181,6 +182,7 @@ void RunMinimizerKernel(sycl::queue& queue,
 		queue.submit([&](sycl::handler &handler)
 		{
 			sycl::accessor minimizerToIbf(minimizerToIbf_buffer, handler, sycl::write_only);
+
 			handler.single_task<PipeToHostKernel>([=]() [[intel::kernel_args_restrict]]
 			{
 				size_t numberofMinimizersFound = 0;

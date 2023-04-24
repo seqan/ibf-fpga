@@ -23,8 +23,8 @@ typedef ushort Counter;
 	#define WINDOW_SIZE 23
 #endif
 
-#ifndef K
-	#define K 19
+#ifndef MIN_IBF_K
+	#define MIN_IBF_K 19
 #endif
 
 #ifndef HASH_COUNT
@@ -54,12 +54,12 @@ static const HostHash seeds[5] = {
 // Asserts
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static_assert(WINDOW_SIZE >= K, "Window size needs to be greater or equal K-mer size");
+static_assert(WINDOW_SIZE >= MIN_IBF_K, "Window size needs to be greater or equal K-mer size");
 
 static_assert(sizeof(seeds) / sizeof(HostHash) >= HASH_COUNT, "The number of hash functions must be smaller or equal the number of seeds");
 
 static_assert(sizeof(HostHash) >= sizeof(MINIMIZER_SEED), "Minimizer seed doesn't fit Hash type");
-static_assert(sizeof(HostHash) * 8 >= 2 * K, "K-mer doesn't fit Hash type");
+static_assert(sizeof(HostHash) * 8 >= 2 * MIN_IBF_K, "K-mer doesn't fit Hash type");
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Static Helper
@@ -71,11 +71,11 @@ constexpr auto INTEGER_DIVISION_CEIL(const LHS lhs, const RHS rhs)
 	return (lhs + rhs - 1) / rhs;
 }
 
-constexpr auto NUMBER_OF_KMERS_PER_WINDOW = WINDOW_SIZE - K + 1;
+constexpr auto NUMBER_OF_KMERS_PER_WINDOW = WINDOW_SIZE - MIN_IBF_K + 1;
 
-constexpr auto INITIALIZATION_ITERATIONS = (K - 1) + (NUMBER_OF_KMERS_PER_WINDOW - 1);
+constexpr auto INITIALIZATION_ITERATIONS = (MIN_IBF_K - 1) + (NUMBER_OF_KMERS_PER_WINDOW - 1);
 
-constexpr auto MINIMIZER_SEED_ADJUSTED = MINIMIZER_SEED >> (64 - 2 * K);
+constexpr auto MINIMIZER_SEED_ADJUSTED = MINIMIZER_SEED >> (64 - 2 * MIN_IBF_K);
 
 constexpr auto TECHNICAL_BIN_COUNT_WORDS = INTEGER_DIVISION_CEIL(BIN_COUNT, HOST_SIZE_TYPE_BITS);
 constexpr auto TECHNICAL_BIN_COUNT = TECHNICAL_BIN_COUNT_WORDS * HOST_SIZE_TYPE_BITS;
@@ -93,7 +93,7 @@ static_assert((bool)(TECHNICAL_BIN_COUNT < MAX_BUS_WIDTH) || (TECHNICAL_BIN_COUN
 using HostSizeType = ac_int<HOST_SIZE_TYPE_BITS, false>;
 
 using Element = ac_int<2, false>;
-using Hash = ac_int<2 * K, false>;
+using Hash = ac_int<2 * MIN_IBF_K, false>;
 
 using QueryIndex = ac_int<25, true>;
 
