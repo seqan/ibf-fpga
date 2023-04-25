@@ -2,6 +2,15 @@
 find_path(SDSL_INCLUDE_DIR NAMES sdsl/bit_vectors.hpp HINTS "${SEQAN3_SUBMODULES_DIR}/submodules/sdsl-lite/include")
 find_path(CEREAL_INCLUDE_DIR NAMES cereal/archives/binary.hpp HINTS "${SEQAN3_SUBMODULES_DIR}/submodules/cereal/include")
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM" AND SDSL_INCLUDE_DIR AND CEREAL_INCLUDE_DIR)
+    add_executable(ibf_sycl_test ibf_sycl_test.cpp)
+    target_link_libraries(ibf_sycl_test PUBLIC min_ibf_fpga_test)
+    target_include_directories(ibf_sycl_test PUBLIC ${SDSL_INCLUDE_DIR} ${CEREAL_INCLUDE_DIR})
+    set_target_properties(ibf_sycl_test PROPERTIES COMPILE_FLAGS "-Wall -fsycl -fintelfpga -qactypes -DFPGA_EMULATOR")
+    set_target_properties(ibf_sycl_test PROPERTIES LINK_FLAGS "-fsycl -fintelfpga -qactypes")
+    add_test(NAME ibf_sycl_test COMMAND ibf_sycl_test)
+endif ()
+
 if (OPENCL_FOUND AND SDSL_INCLUDE_DIR AND CEREAL_INCLUDE_DIR)
     add_executable(ibf_opencl_test ibf_opencl_test.cpp)
     target_link_libraries(ibf_opencl_test PUBLIC min_ibf_fpga_test "OpenCL::OpenCL")
