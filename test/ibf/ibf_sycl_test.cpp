@@ -17,11 +17,14 @@
 
 void sycl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpga::index::ibf_data const & ibf, ibf_test_fixture const & test)
 {
-#if defined(FPGA_EMULATOR)
-    sycl::ext::intel::fpga_emulator_selector device_selector;
-#else
-    sycl::ext::intel::fpga_selector device_selector;
+#if FPGA_SIMULATOR
+  auto device_selector = sycl::ext::intel::fpga_simulator_selector_v;
+#elif FPGA_HARDWARE
+  auto device_selector = sycl::ext::intel::fpga_selector_v;
+#else  // #if FPGA_EMULATOR
+  auto device_selector = sycl::ext::intel::fpga_emulator_selector_v;
 #endif
+
     sycl::queue q(device_selector, fpga_tools::exception_handler);
 
     std::vector<uint64_t> minimizer = test.minimizer();

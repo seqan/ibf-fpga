@@ -15,11 +15,14 @@ void sycl_test(minimizer_test_fixture test)
     min_ibf_fpga::test::assert_equal(test.w, static_cast<size_t>(WINDOW_SIZE), "window size not supported");
     min_ibf_fpga::test::assert_equal(test.k, static_cast<size_t>(MIN_IBF_K), "k not supported");
 
-#if defined(FPGA_EMULATOR)
-    sycl::ext::intel::fpga_emulator_selector device_selector;
-#else
-    sycl::ext::intel::fpga_selector device_selector;
+#if FPGA_SIMULATOR
+  auto device_selector = sycl::ext::intel::fpga_simulator_selector_v;
+#elif FPGA_HARDWARE
+  auto device_selector = sycl::ext::intel::fpga_selector_v;
+#else  // #if FPGA_EMULATOR
+  auto device_selector = sycl::ext::intel::fpga_emulator_selector_v;
 #endif
+
     sycl::queue q(device_selector, fpga_tools::exception_handler);
 
     std::vector<char> queries;
