@@ -30,7 +30,6 @@ void opencl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
         size_t const maximalNumberOfMinimizers = test.minimizer_range.maximal;
         min_ibf_fpga::threshold::threshold_table thresholds = test.threshold_table_per_error[errors];
         std::vector<size_t> result(numberOfQueries, 0);
-        size_t ibfDataSize = -1;
 
         cl::Kernel ibf_test_provider_kernel(program, "ibf0_test_provider");
         ibf_test_provider_kernel.setArg(0, minimizer.size());
@@ -45,7 +44,6 @@ void opencl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
         ibf_kernel.setArg(5, maximalNumberOfMinimizers);
         ibf_kernel.setArg(6, thresholds.table);
         ibf_kernel.setArg(7, result);
-        ibf_kernel.setArg(8, ibfDataSize);
 
         cl::Event ibf_test_provider_kernel_event;
         ibf_test_provider_kernel_queue.enqueueNDRangeKernel(
