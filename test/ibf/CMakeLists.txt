@@ -23,3 +23,8 @@ if (SEQAN3_FOUND AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_link_libraries(ibf_seqan3_test PUBLIC min_ibf_fpga_test "seqan3::seqan3")
     add_test(NAME ibf_seqan3_test COMMAND ibf_seqan3_test)
 endif()
+
+set(INDEX_LIST "raptor_19_19;raptor_23_19")
+foreach(INDEX ${INDEX_LIST})
+    execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/../data/${INDEX}.index ${CMAKE_CURRENT_BINARY_DIR}/${INDEX}.index)
+endforeach()
