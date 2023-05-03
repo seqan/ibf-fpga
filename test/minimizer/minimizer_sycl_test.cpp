@@ -7,7 +7,7 @@
 #include <sycl/ext/intel/ac_types/ac_int.hpp>
 
 #include <min_ibf_fpga/test/assert_equal.hpp>
-#include <min_ibf_fpga/backend_sycl/kernel_minimizer.hpp>
+#include <min_ibf_fpga/backend_sycl/kernel_minimizer_test.cpp>
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
 
 void sycl_test(minimizer_test_fixture test)
