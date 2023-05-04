@@ -4,7 +4,7 @@
 			sycl::accessor thresholds(thresholds_buffer, handler, sycl::read_only);
 			sycl::accessor result(result_buffer, handler, sycl::write_only);
 
-			handler.single_task<IBFkernel>([=]() [[intel::kernel_args_restrict]]
+			handler.single_task<IbfKernel>([=]() [[intel::kernel_args_restrict]]
 			{
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
