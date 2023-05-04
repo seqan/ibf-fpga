@@ -83,4 +83,22 @@ using QueryIndex = ac_int<25, true>;
 
 using Chunk = ac_int<CHUNK_BITS, false>;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Function declarations
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void RunKernel(sycl::queue& queue,
+       sycl::buffer<char, 1>& queries_buffer,
+       const HostSizeType queriesOffset,
+       sycl::buffer<HostSizeType, 1>& querySizes_buffer,
+       const HostSizeType querySizesOffset,
+       const HostSizeType numberOfQueries,
+       sycl::buffer<Chunk, 1>& ibfData_buffer,
+       const HostSizeType binSize,
+       const HostSizeType hashShift,
+       const HostSizeType minimalNumberOfMinimizers,
+       const HostSizeType maximalNumberOfMinimizers,
+       sycl::buffer<HostSizeType, 1>& thresholds_buffer,
+       sycl::buffer<Chunk, 1>& result_buffer);
+
 } // namespace min_ibf_fpga::backend_sycl
