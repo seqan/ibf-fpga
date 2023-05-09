@@ -1,6 +1,3 @@
-include ("../cmake/add_library_sycl_fpga.cmake")
-include ("../cmake/sycl_fpga_report_of.cmake")
-
 set(TARGET_NAME host_device_split_code)
 
 # FPGA board selection
@@ -31,13 +28,13 @@ target_link_options(intel_fpga INTERFACE -fsycl -fintelfpga)
 ###############################################################################
 ### FPGA Emulator
 ###############################################################################
-add_library_sycl_fpga(run_min_ibf_fpga_w16_k8.fpga_emu_kernel OBJECT FPGA_BOARD "EMULATOR" "sycl/run_min_ibf_fpga_w16_k8.cpp")
+add_library_sycl_fpga(run_min_ibf_fpga_w16_k8.fpga_emu_kernel OBJECT FPGA_BOARD "EMULATOR" "" "" "sycl/run_min_ibf_fpga_w16_k8.cpp")
 target_link_libraries(run_min_ibf_fpga_w16_k8.fpga_emu_kernel_device_image PUBLIC fpga_compilation_base)
 
-add_library_sycl_fpga(run_min_ibf_fpga_w16_k6.fpga_emu_kernel STATIC FPGA_BOARD "EMULATOR" "sycl/run_min_ibf_fpga_w16_k6.cpp")
+add_library_sycl_fpga(run_min_ibf_fpga_w16_k6.fpga_emu_kernel STATIC FPGA_BOARD "EMULATOR" "" "" "sycl/run_min_ibf_fpga_w16_k6.cpp")
 target_link_libraries(run_min_ibf_fpga_w16_k6.fpga_emu_kernel_device_image PUBLIC fpga_compilation_base)
 
-add_library_sycl_fpga(run_min_ibf_fpga_w18_k6.fpga_emu_kernel SHARED FPGA_BOARD "EMULATOR" "sycl/run_min_ibf_fpga_w18_k6.cpp")
+add_library_sycl_fpga(run_min_ibf_fpga_w18_k6.fpga_emu_kernel SHARED FPGA_BOARD "EMULATOR" "" "" "sycl/run_min_ibf_fpga_w18_k6.cpp")
 target_link_libraries(run_min_ibf_fpga_w18_k6.fpga_emu_kernel_device_image PUBLIC fpga_compilation_base)
 
 add_executable(${TARGET_NAME}.fpga_emu host.cpp)
@@ -51,13 +48,13 @@ target_compile_definitions(${TARGET_NAME}.fpga_emu PUBLIC -DFPGA_EMULATOR)
 ###############################################################################
 ### FPGA Hardware
 ###############################################################################
-add_library_sycl_fpga(run_min_ibf_fpga_w16_k8.fpga_kernel STATIC FPGA_BOARD "${FPGA_BOARD}" "sycl/run_min_ibf_fpga_w16_k8.cpp")
+add_library_sycl_fpga(run_min_ibf_fpga_w16_k8.fpga_kernel STATIC FPGA_BOARD "${FPGA_BOARD}" "" "" "sycl/run_min_ibf_fpga_w16_k8.cpp")
 target_link_libraries(run_min_ibf_fpga_w16_k8.fpga_kernel PUBLIC fpga_compilation_base)
 
-add_library_sycl_fpga(run_min_ibf_fpga_w16_k6.fpga_kernel STATIC FPGA_BOARD "${FPGA_BOARD}" "sycl/run_min_ibf_fpga_w16_k6.cpp")
+add_library_sycl_fpga(run_min_ibf_fpga_w16_k6.fpga_kernel STATIC FPGA_BOARD "${FPGA_BOARD}" "" "" "sycl/run_min_ibf_fpga_w16_k6.cpp")
 target_link_libraries(run_min_ibf_fpga_w16_k6.fpga_kernel PUBLIC fpga_compilation_base)
 
-add_library_sycl_fpga(run_min_ibf_fpga_w18_k6.fpga_kernel STATIC FPGA_BOARD "${FPGA_BOARD}" "sycl/run_min_ibf_fpga_w18_k6.cpp")
+add_library_sycl_fpga(run_min_ibf_fpga_w18_k6.fpga_kernel STATIC FPGA_BOARD "${FPGA_BOARD}" "" "" "sycl/run_min_ibf_fpga_w18_k6.cpp")
 target_link_libraries(run_min_ibf_fpga_w18_k6.fpga_kernel PUBLIC fpga_compilation_base)
 
 add_executable(${TARGET_NAME}.fpga host.cpp)
