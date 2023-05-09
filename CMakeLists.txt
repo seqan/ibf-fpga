@@ -14,5 +14,5 @@ cmake_minimum_required (VERSION 3.4)
 project(MinIBFFPGAoneAPI CXX)
 
 add_subdirectory(src)
-
+add_subdirectory(min_example/host_device_split_code)
 add_subdirectory(test)

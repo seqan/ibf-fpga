@@ -13,7 +13,7 @@ macro(sycl_fpga_report_of TARGET_NAME)
     ### Generate Report
     ###############################################################################
     # To compile manually:
-    #   dpcpp -fintelfpga -Xshardware -Xsboard=<FPGA_BOARD> -fsycl-link=early host.cpp kernel.cpp -o fast_compile_report.a
+    #   dpcpp -fsycl -fintelfpga -Xshardware -Xsboard=<FPGA_BOARD> -fsycl-link=early host.cpp kernel.cpp -o fast_compile_report.a
     # A DPC++ ahead-of-time (AoT) compile processes the device code in two stages.
     # 1. The "compile" stage compiles the device code to an intermediate representation (SPIR-V).
     # 2. The "link" stage invokes the compiler's FPGA backend before linking.
@@ -35,8 +35,8 @@ macro(sycl_fpga_report_of TARGET_NAME)
     # The compile output is not an executable, but an intermediate compilation result unique to DPC++.
     add_executable(${REPORT_NAME} EXCLUDE_FROM_ALL ${_source})
     set_target_properties(${REPORT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "CMakeFiles/")
-    target_compile_options(${REPORT_NAME} PUBLIC -fintelfpga $<TARGET_PROPERTY:${TARGET_NAME},COMPILE_OPTIONS>)
-    target_link_options(${REPORT_NAME} PUBLIC -fintelfpga -Xshardware -Xsboard=${_board} -fsycl-link=early)
+    target_compile_options(${REPORT_NAME} PUBLIC -fsycl -fintelfpga $<TARGET_PROPERTY:${TARGET_NAME},COMPILE_OPTIONS>)
+    target_link_options(${REPORT_NAME} PUBLIC -fsycl -fintelfpga -Xshardware -Xsboard=${_board} -fsycl-link=early)
     # fsycl-link=early stops the compiler after RTL generation, before invoking Quartus®
 
     set(report_html_full_path "$<TARGET_FILE_DIR:${REPORT_NAME}>/$<TARGET_FILE_BASE_NAME:${REPORT_NAME}>.prj/reports/report.html")

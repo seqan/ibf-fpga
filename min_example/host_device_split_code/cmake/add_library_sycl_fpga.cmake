@@ -19,15 +19,15 @@ macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_BOARD_KEYWORD FPGA_BOA
         ### FPGA Emulator
         ###############################################################################
         # To compile in a single command:
-        #    dpcpp -fintelfpga -DFPGA_EMULATOR host.cpp kernel.cpp -o fast_recompile.fpga_emu
+        #    dpcpp -fsycl -fintelfpga -DFPGA_EMULATOR host.cpp kernel.cpp -o fast_recompile.fpga_emu
         # CMake executes:
-        #    [compile] dpcpp -fintelfpga -DFPGA_EMULATOR -o host.cpp.o -c host.cpp
-        #    [compile] dpcpp -fintelfpga -DFPGA_EMULATOR -o kernel.cpp.o -c kernel.cpp
-        #    [link]    dpcpp -fintelfpga host.cpp.o kernel.cpp.o -o fast_recompile.fpga_emu
+        #    [compile] dpcpp -fsycl -fintelfpga -DFPGA_EMULATOR -o host.cpp.o -c host.cpp
+        #    [compile] dpcpp -fsycl -fintelfpga -DFPGA_EMULATOR -o kernel.cpp.o -c kernel.cpp
+        #    [link]    dpcpp -fsycl -fintelfpga host.cpp.o kernel.cpp.o -o fast_recompile.fpga_emu
 
         add_library("${TARGET_NAME}_device_image" OBJECT "${SOURCE1}")
-        target_compile_options("${TARGET_NAME}_device_image" PRIVATE -fintelfpga)
-        target_link_options("${TARGET_NAME}_device_image" PRIVATE -fintelfpga)
+        target_compile_options("${TARGET_NAME}_device_image" PRIVATE -fsycl -fintelfpga)
+        target_link_options("${TARGET_NAME}_device_image" PRIVATE -fsycl -fintelfpga)
 
         if ("${LIBRARY_TYPE_UPPER}" STREQUAL "SHARED")
             set_target_properties ("${TARGET_NAME}_device_image" PROPERTIES POSITION_INDEPENDENT_CODE ON)
@@ -39,22 +39,22 @@ macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_BOARD_KEYWORD FPGA_BOA
         else ()
             target_link_libraries("${TARGET_NAME}" PRIVATE "${TARGET_NAME}_device_image")
         endif ()
-        target_compile_options("${TARGET_NAME}" PRIVATE -fintelfpga)
-        target_link_options("${TARGET_NAME}" PRIVATE -fintelfpga)
+        target_compile_options("${TARGET_NAME}" PRIVATE -fsycl -fintelfpga)
+        target_link_options("${TARGET_NAME}" PRIVATE -fsycl -fintelfpga)
     else ()
         ###############################################################################
         ### FPGA Hardware
         ###############################################################################
         # To compile manually:
-        #   dpcpp -fintelfpga -c host.cpp -o host.o
-        #   dpcpp -fintelfpga -Xshardware -Xsboard=<FPGA_BOARD> -fsycl-link=image kernel.cpp -o dev_image.a
-        #   dpcpp -fintelfpga host.o dev_image.a -o fast_recompile.fpga
+        #   dpcpp -fsycl -fintelfpga -c host.cpp -o host.o
+        #   dpcpp -fsycl -fintelfpga -Xshardware -Xsboard=<FPGA_BOARD> -fsycl-link=image kernel.cpp -o dev_image.a
+        #   dpcpp -fsycl -fintelfpga host.o dev_image.a -o fast_recompile.fpga
 
         set(CMAKE_CXX_FLAGS_LIST "${CMAKE_CXX_FLAGS}")
         separate_arguments(CMAKE_CXX_FLAGS_LIST)
 
         # Compiler Flags needed to invoke `Intel(R) Quartus(R) Prime`
-        set (HARDWARE_COMPILE_FLAGS "-fintelfpga;-Xshardware;-Xsboard=${FPGA_BOARD};-fsycl-link=image")
+        set (HARDWARE_COMPILE_FLAGS "-fsycl;-fintelfpga;-Xshardware;-Xsboard=${FPGA_BOARD};-fsycl-link=image")
 
         # Comment this out to debug cmake dependencies and build steps (this will compile the object file the traditional way and skips the synthesis)
         # set (HARDWARE_COMPILE_FLAGS "-c")
@@ -82,8 +82,8 @@ macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_BOARD_KEYWORD FPGA_BOA
         else ()
             target_link_libraries("${TARGET_NAME}" PRIVATE "${TARGET_NAME}_device_image")
         endif ()
-        target_compile_options("${TARGET_NAME}" PRIVATE -fintelfpga)
-        target_link_options("${TARGET_NAME}" PRIVATE -fintelfpga)
+        target_compile_options("${TARGET_NAME}" PRIVATE -fsycl -fintelfpga)
+        target_link_options("${TARGET_NAME}" PRIVATE -fsycl -fintelfpga)
     endif ()
 
     set_property(TARGET "${TARGET_NAME}" PROPERTY SYCL_FPGA_SOURCE "${SOURCE1}")
