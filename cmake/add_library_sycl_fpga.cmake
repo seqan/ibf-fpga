@@ -1,5 +1,5 @@
 # add_library_sycl_fpga(<name> [OBJECT | STATIC | SHARED | MODULE]
-#                       FPGA_BOARD [EMULATOR | <FPGA_BOARD>]
+#                       FPGA_DEVICE [EMULATOR | <FPGA_DEVICE>]
 #                       source1 [source2 ...])
 #
 # Note: Use `target_compile_options(<name>_device_image [PUBLIC|PRIVATE] -flag1 -flag2)` to add flags to
@@ -7,14 +7,14 @@
 
 set(_ADD_LIBRARY_SYCL_FPGA_BASE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
-macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_BOARD_KEYWORD FPGA_BOARD W K SOURCE1)
-    if (NOT "${FPGA_BOARD_KEYWORD}" STREQUAL "FPGA_BOARD")
-        message (FATAL_ERROR "EXPECTED Keyword 'FPGA_BOARD', got '${FPGA_BOARD_KEYWORD}'")
+macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_DEVICE_KEYWORD FPGA_DEVICE W K SOURCE1)
+    if (NOT "${FPGA_DEVICE_KEYWORD}" STREQUAL "FPGA_DEVICE")
+        message (FATAL_ERROR "EXPECTED Keyword 'FPGA_DEVICE', got '${FPGA_DEVICE_KEYWORD}'")
     endif ()
 
-    string(TOLOWER "${FPGA_BOARD}" FPGA_BOARD_LOWER)
+    string(TOLOWER "${FPGA_DEVICE}" FPGA_DEVICE_LOWER)
     string(TOUPPER "${LIBRARY_TYPE}" LIBRARY_TYPE_UPPER)
-    if (FPGA_BOARD_LOWER STREQUAL "emulator")
+    if (FPGA_DEVICE_LOWER STREQUAL "emulator")
         ###############################################################################
         ### FPGA Emulator
         ###############################################################################
@@ -47,14 +47,14 @@ macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_BOARD_KEYWORD FPGA_BOA
         ###############################################################################
         # To compile manually:
         #   dpcpp -fsycl -fintelfpga -c host.cpp -o host.o
-        #   dpcpp -fsycl -fintelfpga -Xshardware -Xsboard=<FPGA_BOARD> -fsycl-link=image kernel.cpp -o dev_image.a
+        #   dpcpp -fsycl -fintelfpga -Xshardware -Xsboard=<FPGA_DEVICE> -fsycl-link=image kernel.cpp -o dev_image.a
         #   dpcpp -fsycl -fintelfpga host.o dev_image.a -o fast_recompile.fpga
 
         set(CMAKE_CXX_FLAGS_LIST "${CMAKE_CXX_FLAGS}")
         separate_arguments(CMAKE_CXX_FLAGS_LIST)
 
         # Compiler Flags needed to invoke `Intel(R) Quartus(R) Prime`
-        set (HARDWARE_COMPILE_FLAGS "-fsycl;-fintelfpga;-Xshardware;-Xsboard=${FPGA_BOARD};-fsycl-link=image")
+        set (HARDWARE_COMPILE_FLAGS "-fsycl;-fintelfpga;-Xshardware;-Xsboard=${FPGA_DEVICE};-fsycl-link=image")
 
         # Comment this out to debug cmake dependencies and build steps (this will compile the object file the traditional way and skips the synthesis)
         # set (HARDWARE_COMPILE_FLAGS "-c")
@@ -87,5 +87,5 @@ macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_BOARD_KEYWORD FPGA_BOA
     endif ()
 
     set_property(TARGET "${TARGET_NAME}" PROPERTY SYCL_FPGA_SOURCE "${SOURCE1}")
-    set_property(TARGET "${TARGET_NAME}" PROPERTY SYCL_FPGA_BOARD "${FPGA_BOARD}")
+    set_property(TARGET "${TARGET_NAME}" PROPERTY SYCL_FPGA_DEVICE "${FPGA_DEVICE}")
 endmacro()

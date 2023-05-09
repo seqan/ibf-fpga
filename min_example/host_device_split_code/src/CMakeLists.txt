@@ -1,13 +1,13 @@
 set(TARGET_NAME host_device_split_code)
 
 # FPGA board selection
-if(NOT DEFINED FPGA_BOARD)
-    set(FPGA_BOARD "intel_a10gx_pac:pac_a10")
-    message(STATUS "FPGA_BOARD was not specified.\
-                    \nConfiguring the design to run on the default FPGA board ${FPGA_BOARD} (Intel(R) PAC with Intel Arria(R) 10 GX FPGA). \
+if(NOT DEFINED FPGA_DEVICE)
+    set(FPGA_DEVICE "intel_a10gx_pac:pac_a10")
+    message(STATUS "FPGA_DEVICE was not specified.\
+                    \nConfiguring the design to run on the default FPGA board ${FPGA_DEVICE} (Intel(R) PAC with Intel Arria(R) 10 GX FPGA). \
                     \nPlease refer to the README for information on board selection.")
 else()
-    message(STATUS "Configuring the design to run on FPGA board ${FPGA_BOARD}")
+    message(STATUS "Configuring the design to run on FPGA board ${FPGA_DEVICE}")
 endif()
 
 # Common Compilation Flags of host and device code
@@ -28,13 +28,13 @@ target_link_options(intel_fpga INTERFACE -fsycl -fintelfpga)
 ###############################################################################
 ### FPGA Emulator
 ###############################################################################
-add_library_sycl_fpga(run_min_ibf_fpga_w16_k8.fpga_emu_kernel OBJECT FPGA_BOARD "EMULATOR" "" "" "sycl/run_min_ibf_fpga_w16_k8.cpp")
+add_library_sycl_fpga(run_min_ibf_fpga_w16_k8.fpga_emu_kernel OBJECT FPGA_DEVICE "EMULATOR" "" "" "sycl/run_min_ibf_fpga_w16_k8.cpp")
 target_link_libraries(run_min_ibf_fpga_w16_k8.fpga_emu_kernel_device_image PUBLIC fpga_compilation_base)
 
-add_library_sycl_fpga(run_min_ibf_fpga_w16_k6.fpga_emu_kernel STATIC FPGA_BOARD "EMULATOR" "" "" "sycl/run_min_ibf_fpga_w16_k6.cpp")
+add_library_sycl_fpga(run_min_ibf_fpga_w16_k6.fpga_emu_kernel STATIC FPGA_DEVICE "EMULATOR" "" "" "sycl/run_min_ibf_fpga_w16_k6.cpp")
 target_link_libraries(run_min_ibf_fpga_w16_k6.fpga_emu_kernel_device_image PUBLIC fpga_compilation_base)
 
-add_library_sycl_fpga(run_min_ibf_fpga_w18_k6.fpga_emu_kernel SHARED FPGA_BOARD "EMULATOR" "" "" "sycl/run_min_ibf_fpga_w18_k6.cpp")
+add_library_sycl_fpga(run_min_ibf_fpga_w18_k6.fpga_emu_kernel SHARED FPGA_DEVICE "EMULATOR" "" "" "sycl/run_min_ibf_fpga_w18_k6.cpp")
 target_link_libraries(run_min_ibf_fpga_w18_k6.fpga_emu_kernel_device_image PUBLIC fpga_compilation_base)
 
 add_executable(${TARGET_NAME}.fpga_emu host.cpp)
@@ -48,13 +48,13 @@ target_compile_definitions(${TARGET_NAME}.fpga_emu PUBLIC -DFPGA_EMULATOR)
 ###############################################################################
 ### FPGA Hardware
 ###############################################################################
-add_library_sycl_fpga(run_min_ibf_fpga_w16_k8.fpga_kernel STATIC FPGA_BOARD "${FPGA_BOARD}" "" "" "sycl/run_min_ibf_fpga_w16_k8.cpp")
+add_library_sycl_fpga(run_min_ibf_fpga_w16_k8.fpga_kernel STATIC FPGA_DEVICE "${FPGA_DEVICE}" "" "" "sycl/run_min_ibf_fpga_w16_k8.cpp")
 target_link_libraries(run_min_ibf_fpga_w16_k8.fpga_kernel PUBLIC fpga_compilation_base)
 
-add_library_sycl_fpga(run_min_ibf_fpga_w16_k6.fpga_kernel STATIC FPGA_BOARD "${FPGA_BOARD}" "" "" "sycl/run_min_ibf_fpga_w16_k6.cpp")
+add_library_sycl_fpga(run_min_ibf_fpga_w16_k6.fpga_kernel STATIC FPGA_DEVICE "${FPGA_DEVICE}" "" "" "sycl/run_min_ibf_fpga_w16_k6.cpp")
 target_link_libraries(run_min_ibf_fpga_w16_k6.fpga_kernel PUBLIC fpga_compilation_base)
 
-add_library_sycl_fpga(run_min_ibf_fpga_w18_k6.fpga_kernel STATIC FPGA_BOARD "${FPGA_BOARD}" "" "" "sycl/run_min_ibf_fpga_w18_k6.cpp")
+add_library_sycl_fpga(run_min_ibf_fpga_w18_k6.fpga_kernel STATIC FPGA_DEVICE "${FPGA_DEVICE}" "" "" "sycl/run_min_ibf_fpga_w18_k6.cpp")
 target_link_libraries(run_min_ibf_fpga_w18_k6.fpga_kernel PUBLIC fpga_compilation_base)
 
 add_executable(${TARGET_NAME}.fpga host.cpp)

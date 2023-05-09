@@ -13,7 +13,7 @@ macro(sycl_fpga_report_of TARGET_NAME)
     ### Generate Report
     ###############################################################################
     # To compile manually:
-    #   dpcpp -fsycl -fintelfpga -Xshardware -Xsboard=<FPGA_BOARD> -fsycl-link=early host.cpp kernel.cpp -o fast_compile_report.a
+    #   dpcpp -fsycl -fintelfpga -Xshardware -Xsboard=<FPGA_DEVICE> -fsycl-link=early host.cpp kernel.cpp -o fast_compile_report.a
     # A DPC++ ahead-of-time (AoT) compile processes the device code in two stages.
     # 1. The "compile" stage compiles the device code to an intermediate representation (SPIR-V).
     # 2. The "link" stage invokes the compiler's FPGA backend before linking.
@@ -21,14 +21,14 @@ macro(sycl_fpga_report_of TARGET_NAME)
     set(REPORT_NAME "${TARGET_NAME}.report")
 
     get_property(_source TARGET "${TARGET_NAME}" PROPERTY SYCL_FPGA_SOURCE)
-    get_property(_board TARGET "${TARGET_NAME}" PROPERTY SYCL_FPGA_BOARD)
+    get_property(_board TARGET "${TARGET_NAME}" PROPERTY SYCL_FPGA_DEVICE)
 
     if (NOT _source OR NOT _board)
         message(FATAL_ERROR "sycl_fpga_report_of: target `${TARGET_NAME}` was not created by add_library_sycl_fpga")
     endif ()
 
     string(TOLOWER "${_board}" _board_lower)
-    if (FPGA_BOARD_LOWER STREQUAL "emulator")
+    if (FPGA_DEVICE_LOWER STREQUAL "emulator")
         message(FATAL_ERROR "sycl_fpga_report_of: can't create report of emulator target `${TARGET_NAME}`")
     endif ()
 
