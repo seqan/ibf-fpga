@@ -11,16 +11,6 @@ set(FPGA_TARGET ${TARGET_NAME}.fpga)
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/query.fq ${CMAKE_CURRENT_BINARY_DIR}/../query.fq)
 
-# FPGA board selection
-if(NOT DEFINED FPGA_DEVICE)
-    set(FPGA_DEVICE "intel_s10sx_pac:pac_s10_usm")
-    message(STATUS "FPGA_DEVICE was not specified.\
-                    \nConfiguring the design to run on the default FPGA board ${FPGA_DEVICE}.\
-                    \nPlease refer to the README for information on board selection.")
-else()
-    message(STATUS "Configuring the design to run on FPGA board ${FPGA_DEVICE}")
-endif()
-
 # These are Windows-specific flags:
 # 1. /EHsc This is a Windows-specific flag that enables exception handling in host code
 # 2. /Qactypes Include ac_types headers and link against ac_types emulation libraries

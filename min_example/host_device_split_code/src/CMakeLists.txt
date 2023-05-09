@@ -1,15 +1,5 @@
 set(TARGET_NAME host_device_split_code)
 
-# FPGA board selection
-if(NOT DEFINED FPGA_DEVICE)
-    set(FPGA_DEVICE "intel_a10gx_pac:pac_a10")
-    message(STATUS "FPGA_DEVICE was not specified.\
-                    \nConfiguring the design to run on the default FPGA board ${FPGA_DEVICE} (Intel(R) PAC with Intel Arria(R) 10 GX FPGA). \
-                    \nPlease refer to the README for information on board selection.")
-else()
-    message(STATUS "Configuring the design to run on FPGA board ${FPGA_DEVICE}")
-endif()
-
 # Common Compilation Flags of host and device code
 # This is a Windows-specific flag that enables exception handling in host code
 if(WIN32)
