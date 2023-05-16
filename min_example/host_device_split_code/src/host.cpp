@@ -60,12 +60,14 @@ bool execute_and_test(kernel_fn_t && kernel_fn)
     vec_b[i] = rand() / (float)RAND_MAX;
   }
 
-  // Select either the FPGA emulator or FPGA device
-#if defined(FPGA_EMULATOR)
-  sycl::ext::intel::fpga_emulator_selector device_selector;
-#else
-  sycl::ext::intel::fpga_selector device_selector;
+#if FPGA_SIMULATOR
+  auto device_selector = sycl::ext::intel::fpga_simulator_selector_v;
+#elif FPGA_HARDWARE
+  auto device_selector = sycl::ext::intel::fpga_selector_v;
+#else  // #if FPGA_EMULATOR
+  auto device_selector = sycl::ext::intel::fpga_emulator_selector_v;
 #endif
+
 
   try {
 
