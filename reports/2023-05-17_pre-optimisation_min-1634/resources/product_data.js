@@ -1,0 +1,1 @@
+var infoJSON={"compileInfo":{"nodes":[{"family":"Stratix 10, 1SX280HN2F43E2VG, intel_s10sx_pac:pac_s10_usm","id":1,"name":"min-ibf-fpga-oneapi_report","product":"SYCL","quartus":"","time":"Thu May 18 16:14:52 2023","version":"2023.1.0 Build 232097a6b03b7c02055623c6eb99ac83ec7cd8a2"}]}};

@@ -1,0 +1,581 @@
+{
+  "bottlenecks":
+  [
+    {
+      "name":"'res,a'"
+      , "id":1117
+      , "src":"485"
+      , "dst":"499"
+      , "type":"fMAX/II"
+      , "brief":"Data dependency"
+      , "loop":"MinimizerKernel.B1"
+      , "details":
+      [
+        {
+          "type":"table"
+          , "Variable on critical loop carried feedback path: ":"'res,a'"
+          , "Declared at: ":
+          [
+            {
+              "type":"text"
+              , "text":"%L"
+              , "links":
+              [
+                {
+                  "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                  , "line":"773"
+                }
+              ]
+            }
+          ]
+          , "Dependency: ":"Data dependency"
+          , "Estimated fmax reduced to: ":"480.0"
+          , "Loop feedback path that raised II and/or lowered fMAX: ":
+          [
+            {
+              "type":"text"
+              , "text":"+(%L)"
+              , "links":
+              [
+                {
+                  "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                  , "line":"15"
+                }
+              ]
+            }
+            , {
+              "type":"text"
+              , "text":"Select(%L)"
+              , "links":
+              [
+                {
+                  "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                  , "line":"19"
+                }
+              ]
+            }
+            , {
+              "type":"text"
+              , "text":"+(%L)"
+              , "links":
+              [
+                {
+                  "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                  , "line":"739"
+                }
+              ]
+            }
+            , {
+              "type":"text"
+              , "text":"Select(%L)"
+              , "links":
+              [
+                {
+                  "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                  , "line":"773"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      , "nodes":
+      [
+        {
+          "name":"'res,a'"
+          , "id":485
+          , "start":"4.00"
+          , "parent":"_ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE.B1"
+          , "type":"inst"
+        }
+        , {
+          "name":"Select"
+          , "id":486
+          , "debug":
+          [
+            [
+              {
+                "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                , "line":773
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+        , {
+          "name":"+"
+          , "id":498
+          , "debug":
+          [
+            [
+              {
+                "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                , "line":15
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+        , {
+          "name":"Select"
+          , "id":506
+          , "debug":
+          [
+            [
+              {
+                "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                , "line":19
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+        , {
+          "name":"+"
+          , "id":507
+          , "debug":
+          [
+            [
+              {
+                "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                , "line":739
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+        , {
+          "name":"Feedback"
+          , "id":499
+          , "end":"4.00"
+          , "parent":"_ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE.B1"
+          , "debug":
+          [
+            [
+              {
+                "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                , "line":15
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+      ]
+      , "links":
+      [
+        {
+          "from":485
+          , "to":486
+        }
+        , {
+          "from":486
+          , "to":498
+        }
+        , {
+          "from":506
+          , "to":507
+        }
+        , {
+          "from":498
+          , "to":499
+        }
+        , {
+          "from":485
+          , "to":499
+          , "reverse":1
+        }
+      ]
+    }
+    , {
+      "name":"'a,a,a,a,res,a'"
+      , "id":1118
+      , "src":"536"
+      , "dst":"558"
+      , "type":"fMAX/II"
+      , "brief":"Data dependency"
+      , "loop":"MinimizerKernel.B2"
+      , "details":
+      [
+        {
+          "type":"table"
+          , "Variable on critical loop carried feedback path: ":"'a,a,a,a,res,a'"
+          , "Declared at: ":
+          [
+            {
+              "type":"text"
+              , "text":"%L"
+              , "links":
+              [
+                {
+                  "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                  , "line":"930"
+                }
+              ]
+            }
+          ]
+          , "Dependency: ":"Data dependency"
+          , "Estimated fmax reduced to: ":"480.0"
+          , "Loop feedback path that raised II and/or lowered fMAX: ":
+          [
+            {
+              "type":"text"
+              , "text":"+(%L)"
+              , "links":
+              [
+                {
+                  "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                  , "line":"773"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      , "nodes":
+      [
+        {
+          "name":"'a,a,a,a,res,a'"
+          , "id":536
+          , "start":"4.00"
+          , "parent":"_ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE.B2"
+          , "type":"inst"
+        }
+        , {
+          "name":"+"
+          , "id":549
+          , "debug":
+          [
+            [
+              {
+                "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                , "line":773
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+        , {
+          "name":"Feedback"
+          , "id":558
+          , "end":"5.00"
+          , "parent":"_ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE.B2"
+          , "debug":
+          [
+            [
+              {
+                "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                , "line":773
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+      ]
+      , "links":
+      [
+        {
+          "from":536
+          , "to":549
+        }
+        , {
+          "from":549
+          , "to":558
+        }
+        , {
+          "from":536
+          , "to":558
+          , "reverse":1
+        }
+      ]
+    }
+    , {
+      "name":"Global variable"
+      , "id":1119
+      , "src":"725"
+      , "dst":"737"
+      , "type":"fMAX/II"
+      , "brief":"Data dependency"
+      , "loop":"IbfKernel.B1"
+      , "details":
+      [
+        {
+          "type":"table"
+          , "Variable on critical loop carried feedback path: ":"Global variable"
+          , "Declared at: ":
+          [
+            {
+              "type":"text"
+              , "text":"%L"
+              , "links":
+              [
+                {
+                  "filename":"Unknown location"
+                  , "line":"0"
+                }
+              ]
+            }
+          ]
+          , "Dependency: ":"Data dependency"
+          , "Estimated fmax reduced to: ":"480.0"
+          , "Loop feedback path that raised II and/or lowered fMAX: ":
+          [
+            {
+              "type":"text"
+              , "text":"+(%L)"
+              , "links":
+              [
+                {
+                  "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                  , "line":"9"
+                }
+              ]
+            }
+            , {
+              "type":"text"
+              , "text":"Select(%L)"
+              , "links":
+              [
+                {
+                  "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                  , "line":"930"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      , "nodes":
+      [
+        {
+          "name":"Global variable"
+          , "id":725
+          , "start":"4.00"
+          , "parent":"_ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE.B1"
+          , "type":"inst"
+        }
+        , {
+          "name":"Select"
+          , "id":726
+          , "debug":
+          [
+            [
+              {
+                "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                , "line":930
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+        , {
+          "name":"+"
+          , "id":736
+          , "debug":
+          [
+            [
+              {
+                "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                , "line":9
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+        , {
+          "name":"Feedback"
+          , "id":737
+          , "end":"4.00"
+          , "parent":"_ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE.B1"
+          , "debug":
+          [
+            [
+              {
+                "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                , "line":9
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+      ]
+      , "links":
+      [
+        {
+          "from":725
+          , "to":726
+        }
+        , {
+          "from":726
+          , "to":736
+        }
+        , {
+          "from":736
+          , "to":737
+        }
+        , {
+          "from":725
+          , "to":737
+          , "reverse":1
+        }
+      ]
+    }
+    , {
+      "name":"Unknown variable"
+      , "id":1120
+      , "type":"fMAX/II"
+      , "brief":"N/A"
+      , "loop":"IbfKernel.B2"
+      , "details":
+      [
+        {
+          "type":"table"
+          , "Loop: ":"_ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE.B2"
+          , "Declared at: ":
+          [
+            {
+              "type":"text"
+              , "text":"%L"
+              , "links":
+              [
+                {
+                  "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                  , "line":"34"
+                }
+              ]
+            }
+          ]
+          , "Dependency: ":"N/A"
+          , "Estimated fmax reduced to: ":"480.0"
+          , "Loop feedback path that raised II and/or lowered fMAX: ":
+          [
+            {
+              "type":"text"
+              , "text":"And(%L)"
+              , "links":
+              [
+                {
+                  "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                  , "line":"42"
+                }
+              ]
+            }
+            , {
+              "type":"text"
+              , "text":"Compare(%L)"
+              , "links":
+              [
+                {
+                  "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                  , "line":"42"
+                }
+              ]
+            }
+            , {
+              "type":"text"
+              , "text":"RD(%L)"
+              , "links":
+              [
+                {
+                  "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/ext/intel/pipes.hpp"
+                  , "line":"67"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      , "nodes":
+      [
+        {
+          "name":"FFwd Dest"
+          , "id":44
+          , "debug":
+          [
+            [
+              {
+                "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                , "line":932
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+        , {
+          "name":"RD"
+          , "id":119
+          , "debug":
+          [
+            [
+              {
+                "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/ext/intel/pipes.hpp"
+                , "line":67
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+        , {
+          "name":"And"
+          , "id":190
+          , "debug":
+          [
+            [
+              {
+                "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                , "line":42
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+        , {
+          "name":"Compare"
+          , "id":193
+          , "debug":
+          [
+            [
+              {
+                "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                , "line":42
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+        , {
+          "name":"And"
+          , "id":198
+          , "debug":
+          [
+            [
+              {
+                "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                , "line":932
+              }
+            ]
+          ]
+          , "type":"inst"
+        }
+      ]
+      , "links":
+      [
+        {
+          "from":44
+          , "to":119
+        }
+        , {
+          "from":119
+          , "to":190
+        }
+        , {
+          "from":190
+          , "to":193
+        }
+        , {
+          "from":193
+          , "to":198
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1705 @@
+{
+  "nodes":
+  [
+    {
+      "type":"kernel"
+      , "id":2
+      , "name":"MinimizerKernel"
+      , "children":
+      [
+        {
+          "type":"bb"
+          , "id":3
+          , "name":"MinimizerKernel.B0"
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Latency":"9"
+            }
+          ]
+        }
+        , {
+          "type":"bb"
+          , "id":4
+          , "name":"MinimizerKernel.B1"
+          , "children":
+          [
+            {
+              "type":"inst"
+              , "id":8
+              , "name":"Load"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/ext/intel/fpga_lsu.hpp"
+                    , "line":56
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Width":"64 bits"
+                  , "Type":"Burst-coalesced"
+                  , "Stall-free":"No"
+                  , "Start Cycle":"9"
+                  , "Latency":"790"
+                  , "Reference":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"See %L for more information"
+                      , "links":
+                      [
+                        {
+                          "guide":"Best Practices Guide : Load-Store Units"
+                          , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/yeo1491314105959.html"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+            , {
+              "type":"inst"
+              , "id":12
+              , "name":"Loop Input"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":15
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Start Cycle":"0"
+                  , "Latency":"1"
+                  , "Loops To":"6"
+                }
+              ]
+            }
+            , {
+              "type":"inst"
+              , "id":13
+              , "name":"End"
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Start Cycle":"808"
+                  , "Latency":"1"
+                }
+              ]
+            }
+          ]
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Latency":"808"
+              , "II":"2"
+              , "Subloops":"Yes"
+              , "Pipelined":"Yes"
+              , "Fmax Bottlenecks":"No"
+              , "Loop Info":"Entry to loop. "
+            }
+          ]
+        }
+        , {
+          "type":"bb"
+          , "id":5
+          , "name":"MinimizerKernel.B2"
+          , "children":
+          [
+            {
+              "type":"inst"
+              , "id":9
+              , "name":"Load"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/ext/intel/fpga_lsu.hpp"
+                    , "line":56
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Width":"8 bits"
+                  , "Type":"Burst-coalesced"
+                  , "Stall-free":"No"
+                  , "Start Cycle":"10"
+                  , "Latency":"790"
+                  , "Reference":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"See %L for more information"
+                      , "links":
+                      [
+                        {
+                          "guide":"Best Practices Guide : Load-Store Units"
+                          , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/yeo1491314105959.html"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+            , {
+              "type":"inst"
+              , "id":10
+              , "name":"Pipe Write"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/ext/intel/pipes.hpp"
+                    , "line":82
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Width":"128 bits"
+                  , "Depth":"25"
+                  , "Stall-free":"No"
+                  , "Start Cycle":"823"
+                  , "Latency":"0"
+                  , "Reference":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"See %L for more information"
+                      , "links":
+                      [
+                        {
+                          "guide":"Best Practices Guide : Channels"
+                          , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/qah1476410829821.html"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+            , {
+              "type":"inst"
+              , "id":14
+              , "name":"Loop Input"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":34
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Start Cycle":"0"
+                  , "Latency":"1"
+                  , "Loops To":"15"
+                }
+              ]
+            }
+            , {
+              "type":"inst"
+              , "id":15
+              , "name":"Loop End"
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Start Cycle":"823"
+                  , "Latency":"1"
+                }
+              ]
+            }
+          ]
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Latency":"823"
+              , "II":"1"
+              , "Subloops":"No"
+              , "Pipelined":"Yes"
+              , "Fmax Bottlenecks":"No"
+              , "Loop Info":""
+            }
+          ]
+        }
+        , {
+          "type":"bb"
+          , "id":6
+          , "name":"MinimizerKernel.B3"
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Latency":"0"
+              , "II":"2"
+              , "Subloops":"Yes"
+              , "Pipelined":"Yes"
+              , "Fmax Bottlenecks":"No"
+              , "Loop Info":"Exit which branches back to loop. "
+            }
+          ]
+        }
+        , {
+          "type":"bb"
+          , "id":7
+          , "name":"MinimizerKernel.B4"
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Latency":"0"
+            }
+          ]
+        }
+        , {
+          "type":"csr"
+          , "id":16
+          , "name":"Register Map"
+          , "debug":
+          [
+            [
+              {
+                "filename":"min_ibf_fpga_oneapi_report.prj/ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE_csr.hpp"
+                , "line":1
+              }
+            ]
+          ]
+          , "children":
+          [
+            {
+              "type":"interface"
+              , "id":17
+              , "name":"start"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":18
+              , "name":"done"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":19
+              , "name":"busy"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":20
+              , "name":"arg_querySizes"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE"
+                  , "Alignment":"1024"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":21
+              , "name":"arg_querySizes1"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":22
+              , "name":"arg_querySizes2"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":23
+              , "name":"arg_querySizes3"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":24
+              , "name":"arg_queries"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE"
+                  , "Alignment":"1024"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":25
+              , "name":"arg_queries4"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":26
+              , "name":"arg_queries5"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":27
+              , "name":"arg_queries6"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":28
+              , "name":"arg_queriesOffset"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":29
+              , "name":"arg_numberOfQueries"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":30
+              , "name":"arg_querySizesOffset"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":31
+              , "name":"arg_id"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"8 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl15MinimizerKernelE"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+    , {
+      "type":"kernel"
+      , "id":33
+      , "name":"IbfKernel"
+      , "children":
+      [
+        {
+          "type":"bb"
+          , "id":34
+          , "name":"IbfKernel.B0"
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Latency":"9"
+            }
+          ]
+        }
+        , {
+          "type":"bb"
+          , "id":35
+          , "name":"IbfKernel.B1"
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Latency":"9"
+              , "II":"1"
+              , "Subloops":"Yes"
+              , "Pipelined":"Yes"
+              , "Fmax Bottlenecks":"No"
+              , "Loop Info":"Entry to loop. "
+              , "Loops To":"37"
+            }
+          ]
+        }
+        , {
+          "type":"bb"
+          , "id":36
+          , "name":"IbfKernel.B2"
+          , "children":
+          [
+            {
+              "type":"inst"
+              , "id":39
+              , "name":"Pipe Read"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/ext/intel/pipes.hpp"
+                    , "line":67
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Width":"128 bits"
+                  , "Depth":"25"
+                  , "Stall-free":"No"
+                  , "Start Cycle":"2"
+                  , "Latency":"0"
+                  , "Reference":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"See %L for more information"
+                      , "links":
+                      [
+                        {
+                          "guide":"Best Practices Guide : Channels"
+                          , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/qah1476410829821.html"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+            , {
+              "type":"inst"
+              , "id":40
+              , "name":"Load"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":50
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Width":"64 bits"
+                  , "Type":"Burst-coalesced"
+                  , "Stall-free":"No"
+                  , "Start Cycle":"35"
+                  , "Latency":"838"
+                  , "Reference":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"See %L for more information"
+                      , "links":
+                      [
+                        {
+                          "guide":"Best Practices Guide : Load-Store Units"
+                          , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/yeo1491314105959.html"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+            , {
+              "type":"inst"
+              , "id":41
+              , "name":"Load"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/usr/lib/gcc/x86_64-linux-gnu/12/../../../../include/c++/12/bitset"
+                    , "line":433
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Width":"64 bits"
+                  , "Type":"Burst-coalesced"
+                  , "Stall-free":"No"
+                  , "Start Cycle":"30"
+                  , "Latency":"838"
+                  , "Reference":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"See %L for more information"
+                      , "links":
+                      [
+                        {
+                          "guide":"Best Practices Guide : Load-Store Units"
+                          , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/yeo1491314105959.html"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+            , {
+              "type":"inst"
+              , "id":42
+              , "name":"Load"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/usr/lib/gcc/x86_64-linux-gnu/12/../../../../include/c++/12/bitset"
+                    , "line":433
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Width":"64 bits"
+                  , "Type":"Burst-coalesced"
+                  , "Stall-free":"No"
+                  , "Start Cycle":"30"
+                  , "Latency":"838"
+                  , "Reference":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"See %L for more information"
+                      , "links":
+                      [
+                        {
+                          "guide":"Best Practices Guide : Load-Store Units"
+                          , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/yeo1491314105959.html"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+            , {
+              "type":"inst"
+              , "id":43
+              , "name":"Store"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":90
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Width":"64 bits"
+                  , "Type":"Burst-coalesced"
+                  , "Stall-free":"No"
+                  , "Start Cycle":"880"
+                  , "Latency":"2"
+                  , "Reference":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"See %L for more information"
+                      , "links":
+                      [
+                        {
+                          "guide":"Best Practices Guide : Load-Store Units"
+                          , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/yeo1491314105959.html"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+            , {
+              "type":"inst"
+              , "id":44
+              , "name":"Loop Input"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":94
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Start Cycle":"0"
+                  , "Latency":"1"
+                  , "Loops To":"45"
+                }
+              ]
+            }
+            , {
+              "type":"inst"
+              , "id":45
+              , "name":"Loop End"
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Start Cycle":"882"
+                  , "Latency":"1"
+                }
+              ]
+            }
+          ]
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Latency":"882"
+              , "II":"2"
+              , "Subloops":"No"
+              , "Pipelined":"Yes"
+              , "Fmax Bottlenecks":"No"
+              , "Loop Info":"Loop is pipelined with II of 2. See Loops Analysis for more information."
+            }
+          ]
+        }
+        , {
+          "type":"bb"
+          , "id":37
+          , "name":"IbfKernel.B3"
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Latency":"0"
+              , "II":"1"
+              , "Subloops":"Yes"
+              , "Pipelined":"Yes"
+              , "Fmax Bottlenecks":"No"
+              , "Loop Info":"Exit which branches back to loop. "
+            }
+          ]
+        }
+        , {
+          "type":"bb"
+          , "id":38
+          , "name":"IbfKernel.B4"
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Latency":"0"
+            }
+          ]
+        }
+        , {
+          "type":"csr"
+          , "id":46
+          , "name":"Register Map"
+          , "debug":
+          [
+            [
+              {
+                "filename":"min_ibf_fpga_oneapi_report.prj/ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE_csr.hpp"
+                , "line":1
+              }
+            ]
+          ]
+          , "children":
+          [
+            {
+              "type":"interface"
+              , "id":47
+              , "name":"start"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":48
+              , "name":"done"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":49
+              , "name":"busy"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":50
+              , "name":"arg_numberOfQueries"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":51
+              , "name":"arg_id"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"8 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":52
+              , "name":"arg_maximalNumberOfMinimizers"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":53
+              , "name":"arg_minimalNumberOfMinimizers"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":54
+              , "name":"arg_thresholds"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                  , "Alignment":"1024"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":55
+              , "name":"arg_thresholds1"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":56
+              , "name":"arg_thresholds2"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":57
+              , "name":"arg_thresholds3"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":58
+              , "name":"arg_hashShift"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":59
+              , "name":"arg_binSize"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":60
+              , "name":"arg_ibfData"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                  , "Alignment":"1024"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":61
+              , "name":"arg_ibfData4"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":62
+              , "name":"arg_ibfData5"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":63
+              , "name":"arg_ibfData6"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":64
+              , "name":"arg_result"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                  , "Alignment":"1024"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":65
+              , "name":"arg_result7"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":66
+              , "name":"arg_result8"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+            , {
+              "type":"interface"
+              , "id":67
+              , "name":"arg_result9"
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Stable":"No"
+                  , "Width":"64 bits"
+                  , "Kernel":"ZTSN12min_ibf_fpga12backend_sycl9IbfKernelE"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+    , {
+      "type":"memtype"
+      , "id":1
+      , "name":"Global Memory"
+      , "children":
+      [
+        {
+          "type":"memsys"
+          , "id":32
+          , "name":"device"
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Number of banks":"4"
+            }
+          ]
+        }
+      ]
+    }
+    , {
+      "type":"pipe"
+      , "id":11
+      , "name":"_ZN4sycl3_V13ext5intel4pipeIN10fpga_tools9PipeArrayIZN12min_ibf_fpga12backend_sycl9RunKernelERNS0_5queueERNS0_6bufferIcLi1ENS0_6detail17aligned_allocatorIcEEvEEDU64_RNSA_ISG_Li1ENSC_ISG_EEvEESG_SG_RNSA_ISt6bitsetILm64EELi1ENSC_ISL_EEvEESG_SG_SG_SG_SJ_SO_E18MinimizerToIBFPipeNS7_18MinimizerToIBFDataELm25EJLm1EEE8StructIdIJLm0EEEESQ_Li25EE9m_StorageE"
+      , "debug":
+      [
+        [
+          {
+            "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+            , "line":7
+          }
+        ]
+      ]
+      , "details":
+      [
+        {
+          "type":"table"
+          , "Width":"128 bits"
+          , "Depth":"25"
+        }
+      ]
+    }
+  ]
+  , "links":
+  [
+    {
+      "from":10
+      , "to":11
+    }
+    , {
+      "from":17
+      , "to":3
+    }
+    , {
+      "from":7
+      , "to":18
+    }
+    , {
+      "from":3
+      , "to":19
+      , "reverse":2
+    }
+    , {
+      "from":20
+      , "to":12
+    }
+    , {
+      "from":24
+      , "to":14
+    }
+    , {
+      "from":28
+      , "to":3
+    }
+    , {
+      "from":29
+      , "to":3
+    }
+    , {
+      "from":30
+      , "to":12
+    }
+    , {
+      "from":6
+      , "to":12
+    }
+    , {
+      "from":3
+      , "to":12
+    }
+    , {
+      "from":8
+      , "to":13
+    }
+    , {
+      "from":15
+      , "to":14
+    }
+    , {
+      "from":13
+      , "to":14
+    }
+    , {
+      "from":9
+      , "to":15
+    }
+    , {
+      "from":10
+      , "to":15
+    }
+    , {
+      "from":15
+      , "to":6
+    }
+    , {
+      "from":6
+      , "to":7
+    }
+    , {
+      "from":12
+      , "to":8
+    }
+    , {
+      "from":14
+      , "to":9
+    }
+    , {
+      "from":9
+      , "to":10
+    }
+    , {
+      "from":32
+      , "to":8
+    }
+    , {
+      "from":32
+      , "to":9
+    }
+    , {
+      "from":11
+      , "to":39
+    }
+    , {
+      "from":47
+      , "to":34
+    }
+    , {
+      "from":38
+      , "to":48
+    }
+    , {
+      "from":34
+      , "to":49
+      , "reverse":2
+    }
+    , {
+      "from":50
+      , "to":34
+    }
+    , {
+      "from":52
+      , "to":34
+    }
+    , {
+      "from":53
+      , "to":34
+    }
+    , {
+      "from":54
+      , "to":44
+    }
+    , {
+      "from":57
+      , "to":44
+    }
+    , {
+      "from":58
+      , "to":44
+    }
+    , {
+      "from":59
+      , "to":34
+    }
+    , {
+      "from":60
+      , "to":34
+    }
+    , {
+      "from":63
+      , "to":34
+    }
+    , {
+      "from":64
+      , "to":35
+    }
+    , {
+      "from":67
+      , "to":35
+    }
+    , {
+      "from":37
+      , "to":35
+    }
+    , {
+      "from":34
+      , "to":35
+    }
+    , {
+      "from":45
+      , "to":44
+    }
+    , {
+      "from":35
+      , "to":44
+    }
+    , {
+      "from":39
+      , "to":45
+    }
+    , {
+      "from":43
+      , "to":45
+    }
+    , {
+      "from":40
+      , "to":45
+    }
+    , {
+      "from":41
+      , "to":45
+    }
+    , {
+      "from":42
+      , "to":45
+    }
+    , {
+      "from":45
+      , "to":37
+    }
+    , {
+      "from":37
+      , "to":38
+    }
+    , {
+      "from":44
+      , "to":39
+    }
+    , {
+      "from":39
+      , "to":40
+    }
+    , {
+      "from":39
+      , "to":41
+    }
+    , {
+      "from":39
+      , "to":42
+    }
+    , {
+      "from":39
+      , "to":43
+    }
+    , {
+      "from":40
+      , "to":43
+    }
+    , {
+      "from":41
+      , "to":43
+    }
+    , {
+      "from":42
+      , "to":43
+    }
+    , {
+      "from":32
+      , "to":40
+    }
+    , {
+      "from":32
+      , "to":41
+    }
+    , {
+      "from":32
+      , "to":42
+    }
+    , {
+      "from":43
+      , "to":32
+    }
+  ]
+}

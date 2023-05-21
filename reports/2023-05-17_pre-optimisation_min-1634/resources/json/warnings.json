@@ -1,0 +1,3 @@
+{"nodes":[
+{"debug":[[{"filename":"fpga_lsu.hpp","line":"56"}]],"details":[{"text":"fpga_lsu.hpp:56: Compiler Warning: Prefetching unit is not available when hyper-optimized handshaking is enabled"}],"name":"Prefetching unit is not available when hyper-optimized handshaking is enabled"}
+]}

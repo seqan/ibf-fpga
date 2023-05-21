@@ -1,0 +1,916 @@
+{
+  "nodes":
+  [
+    {
+      "name":"MinimizerKernel"
+      , "id":1112
+      , "type":"kernel"
+      , "children":
+      [
+        {
+          "name":"On-chip Memory"
+          , "id":1113
+          , "type":"memtype"
+          , "children":
+          [
+            {
+              "name":"kmer...value"
+              , "id":1114
+              , "brief":"Implemented size:8 bytes = (1 word per bank) x (8 bytes per word) | Memory Usage:4 MLABs | Number of banks:1 | Bank width (word size):8 bytes | Bank depth:1 word | Number of replicates:1 | Number of private copies:1 | RAM Mode:Simple dual-port | Pump configuration:Single-pumped"
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                          , "line":"14"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Requested size":"5 bytes"
+                  , "Implemented size":"8 bytes = (1 word per bank) x (8 bytes per word)"
+                  , "Memory Usage":"4 MLABs"
+                  , "Number of banks":"1"
+                  , "Bank width (word size)":"8 bytes"
+                  , "Bank depth":"1 word"
+                  , "Number of replicates":"1"
+                  , "Number of private copies":"1"
+                  , "RAM Mode":"Simple dual-port"
+                  , "Pump configuration":"Single-pumped"
+                  , "Additional information":"In each private copy:</br>  Variable 'kmer...value' occupies memory words [0-0] and has 8 array elements per memory word."
+                  , "Address bit information":"<table><tr><td>Byte address</td><td>b<sub>2</sub></td><td>b<sub>1</sub></td><td>b<sub>0</sub></td></tr><tr><td>Sub-word bits</td><td>0</td><td>0</td><td>0</td></tr></table>"
+                  , "Reference":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"See %L for more information"
+                      , "links":
+                      [
+                        {
+                          "guide":"Best Practices Guide : Local Memory"
+                          , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/chn1469549457114.html"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                    , "line":14
+                  }
+                ]
+              ]
+              , "type":"memsys"
+              , "children":
+              [
+                {
+                  "name":"Bank 0"
+                  , "id":1116
+                  , "brief":"Memory Usage:4 MLABs | Bank width:8 bytes | Bank depth:1 word | Implemented bank size:8 bytes = (1 word) x (8 bytes per word)"
+                  , "details":
+                  [
+                    {
+                      "type":"table"
+                      , "Memory Usage":"4 MLABs"
+                      , "Bank width":"8 bytes"
+                      , "Bank depth":"1 word"
+                      , "Implemented bank size":"8 bytes = (1 word) x (8 bytes per word)"
+                      , "Number of active ports":"1"
+                      , "Number of write ports":"1"
+                      , "Number of un-used ports":"1"
+                      , "Additional information":"In each private copy:</br>  Variable 'kmer...value' occupies memory words [0-0] and has 8 array elements per memory word."
+                      , "Address bit information":"<table><tr><td>Byte address</td><td>b<sub>2</sub></td><td>b<sub>1</sub></td><td>b<sub>0</sub></td></tr><tr><td>Sub-word bits</td><td>0</td><td>0</td><td>0</td></tr></table>"
+                    }
+                  ]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                        , "line":14
+                      }
+                    ]
+                  ]
+                  , "type":"bank"
+                  , "children":
+                  [
+                    {
+                      "name":"Replicate 0"
+                      , "id":1117
+                      , "padding":"0"
+                      , "depth":"1"
+                      , "brief":"Implemented size:8 bytes = (1 word) x (8 bytes per word) | Memory Usage:4 MLABs"
+                      , "details":
+                      [
+                        {
+                          "type":"table"
+                          , "Implemented size":"8 bytes = (1 word) x (8 bytes per word)"
+                          , "Memory Usage":"4 MLABs"
+                          , "Number of physical ports":"2"
+                          , "Number of read ports":"0"
+                          , "Number of write ports":"1"
+                          , "Number of un-used ports":"1"
+                          , "Additional information":"In each private copy:</br>  Variable 'kmer...value' occupies memory words [0-0] and has 8 array elements per memory word."
+                          , "Address bit information":"<table><tr><td>Byte address</td><td>b<sub>2</sub></td><td>b<sub>1</sub></td><td>b<sub>0</sub></td></tr><tr><td>Sub-word bits</td><td>0</td><td>0</td><td>0</td></tr></table>"
+                        }
+                      ]
+                      , "debug":
+                      [
+                        [
+                          {
+                            "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                            , "line":14
+                          }
+                        ]
+                      ]
+                      , "type":"replicate"
+                      , "children":
+                      [
+                        {
+                          "name":"W"
+                          , "id":1118
+                          , "type":"port"
+                        }
+                      ]
+                      , "copies":
+                      {
+                        "num":1
+                        , "details":
+                        [
+                          {
+                            "type":"table"
+                            , "Width":"8 bytes"
+                            , "Depth per copy (including padding)":"1 word"
+                            , "Number of private copies":"1"
+                            , "Additional information":"In each private copy:</br>  Variable 'kmer...value' occupies memory words [0-0] and has 8 array elements per memory word."
+                            , "Address bit information":"<table><tr><td>Byte address</td><td>b<sub>2</sub></td><td>b<sub>1</sub></td><td>b<sub>0</sub></td></tr><tr><td>Sub-word bits</td><td>0</td><td>0</td><td>0</td></tr></table>"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+            , {
+              "name":"kmerComplement...value"
+              , "id":1119
+              , "brief":"Implemented size:8 bytes = (1 word per bank) x (8 bytes per word) | Memory Usage:4 MLABs | Number of banks:1 | Bank width (word size):8 bytes | Bank depth:1 word | Number of replicates:1 | Number of private copies:1 | RAM Mode:Simple dual-port | Pump configuration:Single-pumped"
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                          , "line":"15"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Requested size":"5 bytes"
+                  , "Implemented size":"8 bytes = (1 word per bank) x (8 bytes per word)"
+                  , "Memory Usage":"4 MLABs"
+                  , "Number of banks":"1"
+                  , "Bank width (word size)":"8 bytes"
+                  , "Bank depth":"1 word"
+                  , "Number of replicates":"1"
+                  , "Number of private copies":"1"
+                  , "RAM Mode":"Simple dual-port"
+                  , "Pump configuration":"Single-pumped"
+                  , "Additional information":"In each private copy:</br>  Variable 'kmerComplement...value' occupies memory words [0-0] and has 8 array elements per memory word."
+                  , "Address bit information":"<table><tr><td>Byte address</td><td>b<sub>2</sub></td><td>b<sub>1</sub></td><td>b<sub>0</sub></td></tr><tr><td>Sub-word bits</td><td>0</td><td>0</td><td>0</td></tr></table>"
+                  , "Reference":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"See %L for more information"
+                      , "links":
+                      [
+                        {
+                          "guide":"Best Practices Guide : Local Memory"
+                          , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/chn1469549457114.html"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                    , "line":15
+                  }
+                ]
+              ]
+              , "type":"memsys"
+              , "children":
+              [
+                {
+                  "name":"Bank 0"
+                  , "id":1121
+                  , "brief":"Memory Usage:4 MLABs | Bank width:8 bytes | Bank depth:1 word | Implemented bank size:8 bytes = (1 word) x (8 bytes per word)"
+                  , "details":
+                  [
+                    {
+                      "type":"table"
+                      , "Memory Usage":"4 MLABs"
+                      , "Bank width":"8 bytes"
+                      , "Bank depth":"1 word"
+                      , "Implemented bank size":"8 bytes = (1 word) x (8 bytes per word)"
+                      , "Number of active ports":"1"
+                      , "Number of write ports":"1"
+                      , "Number of un-used ports":"1"
+                      , "Additional information":"In each private copy:</br>  Variable 'kmerComplement...value' occupies memory words [0-0] and has 8 array elements per memory word."
+                      , "Address bit information":"<table><tr><td>Byte address</td><td>b<sub>2</sub></td><td>b<sub>1</sub></td><td>b<sub>0</sub></td></tr><tr><td>Sub-word bits</td><td>0</td><td>0</td><td>0</td></tr></table>"
+                    }
+                  ]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                        , "line":15
+                      }
+                    ]
+                  ]
+                  , "type":"bank"
+                  , "children":
+                  [
+                    {
+                      "name":"Replicate 0"
+                      , "id":1122
+                      , "padding":"0"
+                      , "depth":"1"
+                      , "brief":"Implemented size:8 bytes = (1 word) x (8 bytes per word) | Memory Usage:4 MLABs"
+                      , "details":
+                      [
+                        {
+                          "type":"table"
+                          , "Implemented size":"8 bytes = (1 word) x (8 bytes per word)"
+                          , "Memory Usage":"4 MLABs"
+                          , "Number of physical ports":"2"
+                          , "Number of read ports":"0"
+                          , "Number of write ports":"1"
+                          , "Number of un-used ports":"1"
+                          , "Additional information":"In each private copy:</br>  Variable 'kmerComplement...value' occupies memory words [0-0] and has 8 array elements per memory word."
+                          , "Address bit information":"<table><tr><td>Byte address</td><td>b<sub>2</sub></td><td>b<sub>1</sub></td><td>b<sub>0</sub></td></tr><tr><td>Sub-word bits</td><td>0</td><td>0</td><td>0</td></tr></table>"
+                        }
+                      ]
+                      , "debug":
+                      [
+                        [
+                          {
+                            "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                            , "line":15
+                          }
+                        ]
+                      ]
+                      , "type":"replicate"
+                      , "children":
+                      [
+                        {
+                          "name":"W"
+                          , "id":1123
+                          , "type":"port"
+                        }
+                      ]
+                      , "copies":
+                      {
+                        "num":1
+                        , "details":
+                        [
+                          {
+                            "type":"table"
+                            , "Width":"8 bytes"
+                            , "Depth per copy (including padding)":"1 word"
+                            , "Number of private copies":"1"
+                            , "Additional information":"In each private copy:</br>  Variable 'kmerComplement...value' occupies memory words [0-0] and has 8 array elements per memory word."
+                            , "Address bit information":"<table><tr><td>Byte address</td><td>b<sub>2</sub></td><td>b<sub>1</sub></td><td>b<sub>0</sub></td></tr><tr><td>Sub-word bits</td><td>0</td><td>0</td><td>0</td></tr></table>"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+            , {
+              "name":"queryBuffer"
+              , "id":1124
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                          , "line":"28"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":28
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+            , {
+              "name":"hashBuffer"
+              , "id":1125
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                          , "line":"29"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":29
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+            , {
+              "name":"lastMinimizer"
+              , "id":1126
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                          , "line":"32"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":32
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+            , {
+              "name":"minimizer"
+              , "id":1127
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                          , "line":"61"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":61
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+            , {
+              "name":"localLastMinimizer"
+              , "id":1128
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                          , "line":"62"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":62
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+            , {
+              "name":"__SYCLKernel"
+              , "id":1129
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                          , "line":"7"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+            , {
+              "name":"current"
+              , "id":1130
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                          , "line":"59"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                    , "line":59
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+          ]
+        }
+        , {
+          "name":"Store"
+          , "id":1115
+          , "brief":"Width:64 bits | Stall-free:Yes | Type:Pipelined never-stall | Stores to:kmer...value | Start cycle:20 | Latency:1"
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Width":"64 bits"
+              , "Stall-free":"Yes"
+              , "Type":"Pipelined never-stall"
+              , "Stores to":"kmer...value"
+              , "Start cycle":"20"
+              , "Latency":"1"
+              , "Reference":
+              [
+                {
+                  "type":"text"
+                  , "text":"See %L for more information"
+                  , "links":
+                  [
+                    {
+                      "guide":"Best Practices Guide : Load-Store Units"
+                      , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/yeo1491314105959.html"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+          , "type":"inst"
+        }
+        , {
+          "name":"Store"
+          , "id":1120
+          , "brief":"Width:64 bits | Stall-free:Yes | Type:Pipelined never-stall | Stores to:kmerComplement...value | Start cycle:20 | Latency:1"
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Width":"64 bits"
+              , "Stall-free":"Yes"
+              , "Type":"Pipelined never-stall"
+              , "Stores to":"kmerComplement...value"
+              , "Start cycle":"20"
+              , "Latency":"1"
+              , "Reference":
+              [
+                {
+                  "type":"text"
+                  , "text":"See %L for more information"
+                  , "links":
+                  [
+                    {
+                      "guide":"Best Practices Guide : Load-Store Units"
+                      , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/yeo1491314105959.html"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+          , "type":"inst"
+        }
+      ]
+    }
+    , {
+      "name":"IbfKernel"
+      , "id":1131
+      , "type":"kernel"
+      , "children":
+      [
+        {
+          "name":"On-chip Memory"
+          , "id":1132
+          , "type":"memtype"
+          , "children":
+          [
+            {
+              "name":"counters"
+              , "id":1133
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                          , "line":"15"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":15
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+            , {
+              "name":"binOffsets"
+              , "id":1134
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                          , "line":"53"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":53
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+            , {
+              "name":"__SYCLKernel"
+              , "id":1135
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                          , "line":"7"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+          ]
+        }
+      ]
+    }
+    , {
+      "name":"(Other)"
+      , "id":1136
+      , "type":"kernel"
+      , "children":
+      [
+        {
+          "name":"On-chip Memory"
+          , "id":1137
+          , "type":"memtype"
+          , "children":
+          [
+            {
+              "name":"seeds"
+              , "id":1138
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/shared.hpp"
+                          , "line":"34"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/shared.hpp"
+                    , "line":34
+                  }
+                ]
+              ]
+              , "type":"unsynth"
+            }
+            , {
+              "name":"Unknown Name #0"
+              , "id":1139
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                          , "line":"1953"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                    , "line":1953
+                  }
+                ]
+              ]
+              , "type":"unsynth"
+            }
+            , {
+              "name":"Unknown Name #1"
+              , "id":1140
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                          , "line":"1953"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                    , "line":1953
+                  }
+                ]
+              ]
+              , "type":"unsynth"
+            }
+            , {
+              "name":"Unknown Name #2"
+              , "id":1141
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                          , "line":"1954"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                    , "line":1954
+                  }
+                ]
+              ]
+              , "type":"unsynth"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  , "links":
+  [
+    {
+      "from":1115
+      , "to":1118
+    }
+    , {
+      "from":1120
+      , "to":1123
+    }
+  ]
+}

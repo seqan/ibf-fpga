@@ -1,0 +1,4327 @@
+{
+  "columns":
+  ["", "ALUTs", "FFs", "RAMs", "DSPs", "MLABs", "Details"]
+  , "debug_enabled":"true"
+  , "type":"module"
+  , "total_percent":
+  [65.7227, 34.1965, 33.572, 34.2803, 31.6319]
+  , "total":
+  [636009, 1253070, 4018, 1822, 109]
+  , "name":"Kernel System"
+  , "max_resources":
+  [1866240, 3732480, 11721, 5760, 93312]
+  , "children":
+  [
+    {
+      "name":"Static Partition"
+      , "type":"partition"
+      , "children":
+      [
+        {
+          "name":"Board interface"
+          , "type":"resource"
+          , "data":
+          [594280, 1.18264e+06, 3737, 1779, 0]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Platform interface logic."
+            }
+          ]
+        }
+      ]
+    }
+    , {
+      "name":"Global interconnect"
+      , "type":"resource"
+      , "data":
+      [19892, 24000, 104, 0, 0]
+      , "details":
+      [
+        {
+          "type":"text"
+          , "text":"Global interconnect for 5 global loads and 1 global store. Reduce number of global loads and stores to simplify global interconnect."
+        }
+        , {
+          "type":"brief"
+          , "text":"For 5 global loads and 1 global store."
+        }
+        , {
+          "type":"text"
+          , "text":"See %L for more information"
+          , "links":
+          [
+            {
+              "guide":"Best Practices Guide : Global Memory Interconnect"
+              , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/hnj1476724450050.html"
+            }
+          ]
+        }
+      ]
+    }
+    , {
+      "name":"System description ROM"
+      , "type":"resource"
+      , "data":
+      [2, 71, 2, 0, 0]
+      , "details":
+      [
+        {
+          "type":"text"
+          , "text":"This read-only memory contains information for the host about the system and about each kernel in the system, including kernel names, arguments, and attributes. The system description ROM ensures that the binary image on the FPGA is compatible with the host program."
+        }
+        , {
+          "type":"brief"
+          , "text":"Contains information for the host."
+        }
+      ]
+    }
+    , {
+      "name":"Pipe resources"
+      , "type":"group"
+      , "children":
+      [
+        {
+          "name":"Pipe (sycl::_V1::ext::intel::pipe<fpga_tools::PipeArray<min_ibf_fpga::backend_sycl::RunKernel(sycl::_V1::queue&, sycl::_V1::buffer<char, 1, sycl::_V1::detail::aligned_allocator<char>)"
+          , "type":"resource"
+          , "data":
+          [11, 390, 0, 0, 7]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Pipe is implemented 128 bits wide by 25 deep."
+            }
+            , {
+              "type":"brief"
+              , "text":"128b wide by 25 deep."
+            }
+            , {
+              "type":"text"
+              , "text":"See %L for more information"
+              , "links":
+              [
+                {
+                  "guide":"Best Practices Guide : Channels"
+                  , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/qah1476410829821.html"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+    , {
+      "name":"MinimizerKernel"
+      , "compute_units":1
+      , "type":"function"
+      , "total_percent":
+      [0.557589, 0.331844, 0.252888, 0.528965, 0]
+      , "total_kernel_resources":
+      [5373, 9439, 62, 0, 41]
+      , "details":
+      [
+        {
+          "type":"text"
+          , "text":"Number of compute units: 1"
+        }
+        , {
+          "type":"brief"
+          , "text":"1 compute unit."
+        }
+      ]
+      , "children":
+      [
+        {
+          "name":"Function overhead"
+          , "type":"resource"
+          , "data":
+          [1463, 1467, 0, 0, 6]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Kernel dispatch logic."
+            }
+            , {
+              "type":"brief"
+              , "text":"Kernel dispatch logic."
+            }
+          ]
+        }
+        , {
+          "name":"Coalesced Private Variables: \n - 'a' (ac_int.hpp:930)\n - 'res' (ac_int.hpp:773)"
+          , "type":"resource"
+          , "data":
+          [16, 102, 0, 0, 0]
+          , "debug":
+          [
+            [
+              {
+                "filename":"ac_int.hpp"
+                , "line":773
+              }
+            ]
+            , [
+              {
+                "filename":"ac_int.hpp"
+                , "line":930
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Type: Register"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 25 bits"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 26 bits"
+            }
+            , {
+              "type":"brief"
+              , "text":"Register,\n1 reg, 25 width,\n1 reg, 26 width"
+            }
+          ]
+        }
+        , {
+          "name":"Coalesced Private Variables: \n - 'a' (ac_int.hpp:930)\n - 'res' (ac_int.hpp:773)\n - 'a' (ac_int.hpp:923)\n - 'a' (ac_int.hpp:930)\n - 'a' (ac_int.hpp:923)\n - 'a' (ac_int.hpp:923)"
+          , "type":"resource"
+          , "data":
+          [20, 50, 0, 0, 0]
+          , "debug":
+          [
+            [
+              {
+                "filename":"ac_int.hpp"
+                , "line":773
+              }
+            ]
+            , [
+              {
+                "filename":"ac_int.hpp"
+                , "line":923
+              }
+            ]
+            , [
+              {
+                "filename":"ac_int.hpp"
+                , "line":930
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Type: Register"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 25 bits"
+            }
+            , {
+              "type":"brief"
+              , "text":"Register,\n1 reg, 25 width"
+            }
+          ]
+        }
+        , {
+          "name":"Coalesced Private Variables: \n - 'b' (ac_int.hpp:931)\n - 'b' (ac_int.hpp:924)\n - 'b' (ac_int.hpp:924)\n - 'iterations' (kernel_minimizer.cpp:24)"
+          , "type":"resource"
+          , "data":
+          [20, 50, 0, 0, 0]
+          , "debug":
+          [
+            [
+              {
+                "filename":"ac_int.hpp"
+                , "line":924
+              }
+            ]
+            , [
+              {
+                "filename":"ac_int.hpp"
+                , "line":931
+              }
+            ]
+            , [
+              {
+                "filename":"kernel_minimizer.cpp"
+                , "line":24
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Type: Register"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 25 bits"
+            }
+            , {
+              "type":"brief"
+              , "text":"Register,\n1 reg, 25 width"
+            }
+          ]
+        }
+        , {
+          "name":"Coalesced Private Variables: \n - 'current' (kernel_minimizer.hpp:59)\n - 'minimizer' (kernel_minimizer.hpp:54)\n - 'a' (ac_int.hpp:930)\n - 'b' (ac_int.hpp:931)\n - 'hashBuffer' (kernel_minimizer.cpp:29)"
+          , "type":"resource"
+          , "data":
+          [27, 76, 0, 0, 0]
+          , "debug":
+          [
+            [
+              {
+                "filename":"ac_int.hpp"
+                , "line":930
+              }
+            ]
+            , [
+              {
+                "filename":"ac_int.hpp"
+                , "line":931
+              }
+            ]
+            , [
+              {
+                "filename":"kernel_minimizer.cpp"
+                , "line":29
+              }
+            ]
+            , [
+              {
+                "filename":"kernel_minimizer.hpp"
+                , "line":54
+              }
+            ]
+            , [
+              {
+                "filename":"kernel_minimizer.hpp"
+                , "line":59
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Type: Register"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 38 bits"
+            }
+            , {
+              "type":"brief"
+              , "text":"Register,\n1 reg, 38 width"
+            }
+          ]
+        }
+        , {
+          "name":"Coalesced Private Variables: \n - 'current' (kernel_minimizer.hpp:59)\n - 'minimizer' (kernel_minimizer.hpp:54)\n - 'a' (ac_int.hpp:930)\n - 'hashBuffer' (kernel_minimizer.cpp:29)"
+          , "type":"resource"
+          , "data":
+          [72, 310, 0, 0, 0]
+          , "debug":
+          [
+            [
+              {
+                "filename":"ac_int.hpp"
+                , "line":930
+              }
+            ]
+            , [
+              {
+                "filename":"kernel_minimizer.cpp"
+                , "line":29
+              }
+            ]
+            , [
+              {
+                "filename":"kernel_minimizer.hpp"
+                , "line":54
+              }
+            ]
+            , [
+              {
+                "filename":"kernel_minimizer.hpp"
+                , "line":59
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Type: Shift Register (4 or fewer tap points)"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 3 bits"
+            }
+            , {
+              "type":"text"
+              , "text":"3 registers of width 38 bits"
+            }
+            , {
+              "type":"brief"
+              , "text":"Shift Register,\n1 reg, 3 width,\n3 regs, 38 width"
+            }
+          ]
+        }
+        , {
+          "name":"Coalesced Private Variables: \n - 'data' (kernel_minimizer.cpp:77)\n - 'lastMinimizer' (kernel_minimizer.cpp:32)\n - 'localLastMinimizer' (kernel_minimizer.cpp:62)"
+          , "type":"resource"
+          , "data":
+          [8, 80, 0, 0, 0]
+          , "debug":
+          [
+            [
+              {
+                "filename":"kernel_minimizer.cpp"
+                , "line":32
+              }
+            ]
+            , [
+              {
+                "filename":"kernel_minimizer.cpp"
+                , "line":62
+              }
+            ]
+            , [
+              {
+                "filename":"kernel_minimizer.cpp"
+                , "line":77
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Type: Register"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 40 bits"
+            }
+            , {
+              "type":"brief"
+              , "text":"Register,\n1 reg, 40 width"
+            }
+          ]
+        }
+        , {
+          "name":"Coalesced Private Variables: \n - 'lastMinimizer' (kernel_minimizer.cpp:32)\n - 'localLastMinimizer' (kernel_minimizer.cpp:62)"
+          , "type":"resource"
+          , "data":
+          [8, 16, 0, 0, 0]
+          , "debug":
+          [
+            [
+              {
+                "filename":"kernel_minimizer.cpp"
+                , "line":32
+              }
+            ]
+            , [
+              {
+                "filename":"kernel_minimizer.cpp"
+                , "line":62
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Type: Register"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 8 bits"
+            }
+            , {
+              "type":"brief"
+              , "text":"Register,\n1 reg, 8 width"
+            }
+          ]
+        }
+        , {
+          "name":"Coalesced Private Variables: \n - 'r' (ac_int.hpp:1598)\n - 'localQueryOffset' (kernel_minimizer.cpp:19)"
+          , "type":"resource"
+          , "data":
+          [8, 50, 0, 0, 0]
+          , "debug":
+          [
+            [
+              {
+                "filename":"ac_int.hpp"
+                , "line":1598
+              }
+            ]
+            , [
+              {
+                "filename":"kernel_minimizer.cpp"
+                , "line":19
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Type: Register"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 25 bits"
+            }
+            , {
+              "type":"brief"
+              , "text":"Register,\n1 reg, 25 width"
+            }
+          ]
+        }
+        , {
+          "name":"Private Variable: \n - 'queryBuffer' (kernel_minimizer.cpp:28)"
+          , "type":"resource"
+          , "data":
+          [145, 296, 0, 0, 0]
+          , "debug":
+          [
+            [
+              {
+                "filename":"kernel_minimizer.cpp"
+                , "line":28
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Type: Register"
+            }
+            , {
+              "type":"text"
+              , "text":"18 registers of width 8 bits"
+            }
+            , {
+              "type":"brief"
+              , "text":"Register,\n18 regs, 8 width"
+            }
+          ]
+        }
+        , {
+          "name":"kernel_minimizer.hpp:14 (kmer...value)"
+          , "type":"resource"
+          , "data":
+          [0, 0, 0, 0, 4]
+          , "debug":
+          [
+            [
+              {
+                "filename":"kernel_minimizer.hpp"
+                , "line":14
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Private memory":"Stall-free"
+              , "Requested size":"5 bytes"
+              , "Implemented size":"8 bytes"
+              , "Memory Usage":"4 MLABs"
+              , "Number of banks":"1"
+              , "Bank width":"64 bits"
+              , "Bank depth":"1 word"
+              , "Number of replicates":"1"
+              , "Number of private copies":"1"
+              , "Additional information":
+              [
+                {
+                  "type":"text"
+                  , "text":"Requested size 5 bytes, implemented size 8 bytes, stall-free, 0 reads and 1 write. "
+                }
+                , {
+                  "type":"text"
+                  , "text":"Private memory implemented in on-chip block RAM."
+                }
+              ]
+              , "Reference":
+              [
+                {
+                  "type":"text"
+                  , "text":"See %L for more information."
+                  , "links":
+                  [
+                    {
+                      "guide":"Best Practices Guide : Local Memory"
+                      , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/chn1469549457114.html"
+                    }
+                  ]
+                }
+              ]
+            }
+            , {
+              "type":"brief"
+              , "text":"Stall-free,\n5B requested,\n8B implemented."
+            }
+          ]
+        }
+        , {
+          "name":"kernel_minimizer.hpp:15 (kmerComplement...value)"
+          , "type":"resource"
+          , "data":
+          [0, 0, 0, 0, 4]
+          , "debug":
+          [
+            [
+              {
+                "filename":"kernel_minimizer.hpp"
+                , "line":15
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"table"
+              , "Private memory":"Stall-free"
+              , "Requested size":"5 bytes"
+              , "Implemented size":"8 bytes"
+              , "Memory Usage":"4 MLABs"
+              , "Number of banks":"1"
+              , "Bank width":"64 bits"
+              , "Bank depth":"1 word"
+              , "Number of replicates":"1"
+              , "Number of private copies":"1"
+              , "Additional information":
+              [
+                {
+                  "type":"text"
+                  , "text":"Requested size 5 bytes, implemented size 8 bytes, stall-free, 0 reads and 1 write. "
+                }
+                , {
+                  "type":"text"
+                  , "text":"Private memory implemented in on-chip block RAM."
+                }
+              ]
+              , "Reference":
+              [
+                {
+                  "type":"text"
+                  , "text":"See %L for more information."
+                  , "links":
+                  [
+                    {
+                      "guide":"Best Practices Guide : Local Memory"
+                      , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/chn1469549457114.html"
+                    }
+                  ]
+                }
+              ]
+            }
+            , {
+              "type":"brief"
+              , "text":"Stall-free,\n5B requested,\n8B implemented."
+            }
+          ]
+        }
+        , {
+          "name":"MinimizerKernel.B0"
+          , "type":"basicblock"
+          , "children":
+          [
+            {
+              "name":"State"
+              , "type":"resource"
+              , "data":
+              [2, 128, 0, 0, 0]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Live values and control logic"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for live values and control logic. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce size of local variables"
+                    }
+                    , {
+                      "type":"text"
+                      , "text":"reduce scope of local variables, localizing them as much as possible"
+                    }
+                    , {
+                      "type":"text"
+                      , "text":"reduce number of nested loops"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [2, 76, 0, 0, 0]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:13 > \nac_int.hpp:1393 > ac_int.hpp:1012 > \nac_int.hpp:633"
+                  , "type":"resource"
+                  , "data":
+                  [0, 25, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":13
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1393
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1012
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":633
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:15"
+                  , "type":"resource"
+                  , "data":
+                  [0, 26, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":15
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:15 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [0, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":15
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                }
+              ]
+            }
+            , {
+              "name":"Feedback"
+              , "type":"resource"
+              , "data":
+              [7, 2, 0, 0, 0]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Loop-carried dependencies"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for loop-carried dependencies. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce number and size of loop-carried variables"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:59 > \nkernel_minimizer.hpp:14"
+                  , "type":"resource"
+                  , "data":
+                  [7, 2, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":59
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                        , "line":14
+                      }
+                    ]
+                  ]
+                }
+              ]
+            }
+            , {
+              "name":"Cluster logic"
+              , "type":"resource"
+              , "data":
+              [10, 8, 0, 0, 1]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Logic required to efficiently support sets of operations that do not stall"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Logic required to efficiently support sets of operations that do not stall. This area cannot be affected directly."
+                }
+              ]
+            }
+            , {
+              "name":"Computation"
+              , "type":"resource"
+              , "children":
+              [
+                {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:15"
+                  , "type":"resource"
+                  , "data":
+                  [52, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":15
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"25-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [28, 1, 0, 0, 0]
+                    }
+                    , {
+                      "name":"25-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [24, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:15 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [28, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":15
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"25-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [28, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+              ]
+            }
+          ]
+        }
+        , {
+          "name":"MinimizerKernel.B1"
+          , "type":"basicblock"
+          , "children":
+          [
+            {
+              "name":"State"
+              , "type":"resource"
+              , "data":
+              [109, 280, 2, 0, 0]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Live values and control logic"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for live values and control logic. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce size of local variables"
+                    }
+                    , {
+                      "type":"text"
+                      , "text":"reduce scope of local variables, localizing them as much as possible"
+                    }
+                    , {
+                      "type":"text"
+                      , "text":"reduce number of nested loops"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [109, 280, 2, 0, 0]
+                }
+              ]
+            }
+            , {
+              "name":"Feedback"
+              , "type":"resource"
+              , "data":
+              [92, 9, 0, 0, 0]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Loop-carried dependencies"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for loop-carried dependencies. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce number and size of loop-carried variables"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [76, 0, 0, 0, 0]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:15"
+                  , "type":"resource"
+                  , "data":
+                  [9, 2, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":15
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:15 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [7, 7, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":15
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                }
+              ]
+            }
+            , {
+              "name":"Cluster logic"
+              , "type":"resource"
+              , "data":
+              [90, 144, 0, 0, 8]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Logic required to efficiently support sets of operations that do not stall"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Logic required to efficiently support sets of operations that do not stall. This area cannot be affected directly."
+                }
+              ]
+            }
+            , {
+              "name":"Computation"
+              , "type":"resource"
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [55, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":""
+                        , "line":0
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"25-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [25, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"26-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [26, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"8-bit Select"
+                      , "type":"resource"
+                      , "count":4
+                      , "data":
+                      [4, 0, 0, 0, 0]
+                    }
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:15"
+                  , "type":"resource"
+                  , "data":
+                  [10, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":15
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit And"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"26-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [9, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:15 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [1, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":15
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit And"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:17 > \nfpga_lsu.hpp:56"
+                  , "type":"resource"
+                  , "data":
+                  [488, 2050, 29, 0, 4]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":17
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/ext/intel/fpga_lsu.hpp"
+                        , "line":56
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"Load"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [488, 2050, 29, 0, 4]
+                      , "details":
+                      [
+                        {
+                          "type":"text"
+                          , "text":"Load uses a Burst-coalesced LSU"
+                        }
+                        , {
+                          "type":"brief"
+                          , "text":"Burst-coalesced LSU"
+                        }
+                      ]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:20 > \nac_int.hpp:1599 > ac_int.hpp:739"
+                  , "type":"resource"
+                  , "data":
+                  [25, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":20
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1599
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":739
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"25-bit Integer Add"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [25, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:34 > \nac_int.hpp:1792 > ac_int.hpp:925"
+                  , "type":"resource"
+                  , "data":
+                  [2, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":34
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1792
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":925
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit And"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"1-bit Or"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+              ]
+            }
+          ]
+        }
+        , {
+          "name":"MinimizerKernel.B2"
+          , "type":"basicblock"
+          , "children":
+          [
+            {
+              "name":"State"
+              , "type":"resource"
+              , "data":
+              [323, 1291, 2, 0, 4]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Live values and control logic"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for live values and control logic. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce size of local variables"
+                    }
+                    , {
+                      "type":"text"
+                      , "text":"reduce scope of local variables, localizing them as much as possible"
+                    }
+                    , {
+                      "type":"text"
+                      , "text":"reduce number of nested loops"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [323, 1291, 2, 0, 4]
+                }
+              ]
+            }
+            , {
+              "name":"Feedback"
+              , "type":"resource"
+              , "data":
+              [641, 394, 0, 0, 0]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Loop-carried dependencies"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for loop-carried dependencies. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce number and size of loop-carried variables"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [351, 278, 0, 0, 0]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:15 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [9, 3, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":15
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:17 > \nac_int.hpp:1393 > ac_int.hpp:1012 > \nac_int.hpp:633"
+                  , "type":"resource"
+                  , "data":
+                  [25, 25, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":17
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1393
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1012
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":633
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:28"
+                  , "type":"resource"
+                  , "data":
+                  [144, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":28
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:34"
+                  , "type":"resource"
+                  , "data":
+                  [9, 2, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":34
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:34 > \nac_int.hpp:1792 > ac_int.hpp:925"
+                  , "type":"resource"
+                  , "data":
+                  [25, 13, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":34
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1792
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":925
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:62"
+                  , "type":"resource"
+                  , "data":
+                  [8, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":62
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"kernel_minimizer.cpp:14"
+                  , "type":"resource"
+                  , "data":
+                  [70, 73, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":14
+                      }
+                    ]
+                  ]
+                }
+              ]
+            }
+            , {
+              "name":"Cluster logic"
+              , "type":"resource"
+              , "data":
+              [103, 166, 0, 0, 9]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Logic required to efficiently support sets of operations that do not stall"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Logic required to efficiently support sets of operations that do not stall. This area cannot be affected directly."
+                }
+              ]
+            }
+            , {
+              "name":"Computation"
+              , "type":"resource"
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [132, 49, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":""
+                        , "line":0
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"3-bit Integer Subtract"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [3, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"3-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"Store"
+                      , "type":"resource"
+                      , "count":2
+                      , "data":
+                      [126, 48, 0, 0, 0]
+                      , "details":
+                      [
+                        {
+                          "type":"text"
+                          , "text":"Store uses a Pipelined never-stall LSU"
+                        }
+                        , {
+                          "type":"brief"
+                          , "text":"Pipelined never-stall LSU"
+                        }
+                        , {
+                          "type":"text"
+                          , "text":"Stall-free write to memory declared on %L."
+                          , "links":
+                          [
+                            {
+                              "filename":"kernel_minimizer.hpp"
+                              , "line":"14"
+                            }
+                          ]
+                        }
+                        , {
+                          "type":"text"
+                          , "text":"See %L for more information"
+                          , "links":
+                          [
+                            {
+                              "guide":"Best Practices Guide : Load-Store Units"
+                              , "link":"file:////opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/aoc_help_pages/yeo1491314105959.html"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                    , {
+                      "name":"llvm.fpga.fanout"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 1, 0, 0, 0]
+                    }
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:28"
+                  , "type":"resource"
+                  , "data":
+                  [8, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":28
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"8-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [8, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:34"
+                  , "type":"resource"
+                  , "data":
+                  [1, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":34
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit And"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:34 > \nac_int.hpp:1792 > ac_int.hpp:925"
+                  , "type":"resource"
+                  , "data":
+                  [30, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":34
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1792
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":925
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit Or"
+                      , "type":"resource"
+                      , "count":2
+                      , "data":
+                      [2, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"25-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [28, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:51 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [28, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":51
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"25-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [28, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:52 > \nac_int.hpp:1514 > ac_int.hpp:739"
+                  , "type":"resource"
+                  , "data":
+                  [26, 26, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":52
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1514
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":739
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"Integer Add: signed 25-bit + signed 25-bit -> 26-bit "
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [26, 26, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:52 > \nfpga_lsu.hpp:56"
+                  , "type":"resource"
+                  , "data":
+                  [685, 2218, 29, 0, 1]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":52
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/ext/intel/fpga_lsu.hpp"
+                        , "line":56
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit And"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"Load"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [684, 2218, 29, 0, 1]
+                      , "details":
+                      [
+                        {
+                          "type":"text"
+                          , "text":"Load uses a Burst-coalesced LSU"
+                        }
+                        , {
+                          "type":"brief"
+                          , "text":"Burst-coalesced LSU"
+                        }
+                      ]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:59 > \nkernel_minimizer.hpp:20 > kernel_minimizer.hpp:6"
+                  , "type":"resource"
+                  , "data":
+                  [76, 38, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":59
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                        , "line":20
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                        , "line":6
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"llvm.fpga.case"
+                      , "type":"resource"
+                      , "count":19
+                      , "data":
+                      [76, 38, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:59 > \nkernel_minimizer.hpp:49"
+                  , "type":"resource"
+                  , "data":
+                  [52, 0.333333, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":59
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                        , "line":49
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit Or"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [0.333333, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"38-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [13.6667, 0.333333, 0, 0, 0]
+                    }
+                    , {
+                      "name":"38-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [38, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:59 > \nkernel_minimizer.hpp:49 > ac_int.hpp:1780 > \nac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [41, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":59
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                        , "line":49
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"38-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [41, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:61 > \nkernel_minimizer.hpp:61"
+                  , "type":"resource"
+                  , "data":
+                  [213.667, 115.333, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":61
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                        , "line":61
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit Or"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [0.333333, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"38-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":3
+                      , "data":
+                      [54.6667, 1.33333, 0, 0, 0]
+                    }
+                    , {
+                      "name":"38-bit Select"
+                      , "type":"resource"
+                      , "count":4
+                      , "data":
+                      [152, 114, 0, 0, 0]
+                    }
+                    , {
+                      "name":"8-bit Select"
+                      , "type":"resource"
+                      , "count":4
+                      , "data":
+                      [6.66667, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:61 > \nkernel_minimizer.hpp:61 > ac_int.hpp:1780 > \nac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [96, 2.33333, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":61
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.hpp"
+                        , "line":61
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit Or"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [0.333333, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"38-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":4
+                      , "data":
+                      [95.6667, 2.33333, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:62"
+                  , "type":"resource"
+                  , "data":
+                  [2.66667, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":62
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"8-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [2.66667, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:64"
+                  , "type":"resource"
+                  , "data":
+                  [46.6667, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":64
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"40-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [40, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"8-bit Select"
+                      , "type":"resource"
+                      , "count":4
+                      , "data":
+                      [6.66667, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:64 > \nac_int.hpp:2275 > ac_int.hpp:1784 > \nac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [28, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":64
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":2275
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1784
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"25-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [28, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:68"
+                  , "type":"resource"
+                  , "data":
+                  [3, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":68
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"8-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [3, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:69"
+                  , "type":"resource"
+                  , "data":
+                  [14, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":69
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"38-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [13, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:70 > \nac_int.hpp:1788 > ac_int.hpp:925"
+                  , "type":"resource"
+                  , "data":
+                  [28, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":70
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1788
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":925
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"25-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [28, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:73 > \nac_int.hpp:2275 > ac_int.hpp:1788 > \nac_int.hpp:925"
+                  , "type":"resource"
+                  , "data":
+                  [28, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":73
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":2275
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1788
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":925
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"25-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [28, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:75"
+                  , "type":"resource"
+                  , "data":
+                  [1, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":75
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_minimizer.cpp:84 > \npipes.hpp:82"
+                  , "type":"resource"
+                  , "data":
+                  [3, 2, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                        , "line":84
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/ext/intel/pipes.hpp"
+                        , "line":82
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"Pipe Write"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [3, 2, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+              ]
+            }
+          ]
+        }
+        , {
+          "name":"MinimizerKernel.B4"
+          , "type":"basicblock"
+          , "children":
+          [
+            {
+              "name":"Feedback"
+              , "type":"resource"
+              , "data":
+              [5, 8, 0, 0, 0]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Loop-carried dependencies"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for loop-carried dependencies. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce number and size of loop-carried variables"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"handler.hpp:1170"
+                  , "type":"resource"
+                  , "data":
+                  [5, 8, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1170
+                      }
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+    , {
+      "name":"IbfKernel"
+      , "compute_units":1
+      , "type":"function"
+      , "total_percent":
+      [1.87376, 0.946877, 0.978625, 0.964082, 0.746528]
+      , "total_kernel_resources":
+      [16451, 36527, 113, 43, 61]
+      , "details":
+      [
+        {
+          "type":"text"
+          , "text":"Number of compute units: 1"
+        }
+        , {
+          "type":"brief"
+          , "text":"1 compute unit."
+        }
+      ]
+      , "children":
+      [
+        {
+          "name":"Function overhead"
+          , "type":"resource"
+          , "data":
+          [1463, 1467, 0, 0, 6]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Kernel dispatch logic."
+            }
+            , {
+              "type":"brief"
+              , "text":"Kernel dispatch logic."
+            }
+          ]
+        }
+        , {
+          "name":"Coalesced Private Variables: \n - 'a' (ac_int.hpp:930)\n - 'res' (ac_int.hpp:773)"
+          , "type":"resource"
+          , "data":
+          [16, 102, 0, 0, 0]
+          , "debug":
+          [
+            [
+              {
+                "filename":"ac_int.hpp"
+                , "line":773
+              }
+            ]
+            , [
+              {
+                "filename":"ac_int.hpp"
+                , "line":930
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Type: Register"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 25 bits"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 26 bits"
+            }
+            , {
+              "type":"brief"
+              , "text":"Register,\n1 reg, 25 width,\n1 reg, 26 width"
+            }
+          ]
+        }
+        , {
+          "name":"Coalesced Private Variables: \n - 'counter' (kernel_ibf.cpp:76)\n - 'counters' (kernel_ibf.cpp:15)"
+          , "type":"resource"
+          , "data":
+          [2171, 6969, 0, 0, 0]
+          , "debug":
+          [
+            [
+              {
+                "filename":"kernel_ibf.cpp"
+                , "line":15
+              }
+            ]
+            , [
+              {
+                "filename":"kernel_ibf.cpp"
+                , "line":76
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Type: Register"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 16 bits and depth 3"
+              , "details":
+              [
+                {
+                  "type":"text"
+                  , "text":" Depth was increased by a factor of 2 due to a loop initiation interval of 2."
+                }
+              ]
+            }
+            , {
+              "type":"text"
+              , "text":"63 registers of width 16 bits and depth 4"
+              , "details":
+              [
+                {
+                  "type":"text"
+                  , "text":" Depth was increased by a factor of 2 due to a loop initiation interval of 2."
+                }
+              ]
+            }
+            , {
+              "type":"brief"
+              , "text":"Register,\n1 reg, 16 width by 3 depth,\n63 regs, 16 width by 4 depth"
+            }
+          ]
+        }
+        , {
+          "name":"Private Variable: \n - 'numberOfHashes' (kernel_ibf.cpp:27)"
+          , "type":"resource"
+          , "data":
+          [42, 205, 0, 0, 0]
+          , "debug":
+          [
+            [
+              {
+                "filename":"kernel_ibf.cpp"
+                , "line":27
+              }
+            ]
+          ]
+          , "details":
+          [
+            {
+              "type":"text"
+              , "text":"Type: Register"
+            }
+            , {
+              "type":"text"
+              , "text":"1 register of width 32 bits and depth 4"
+              , "details":
+              [
+                {
+                  "type":"text"
+                  , "text":" Depth was increased by a factor of 2 due to a loop initiation interval of 2."
+                }
+              ]
+            }
+            , {
+              "type":"brief"
+              , "text":"Register,\n1 reg, 32 width by 4 depth"
+            }
+          ]
+        }
+        , {
+          "name":"IbfKernel.B0"
+          , "type":"basicblock"
+          , "children":
+          [
+            {
+              "name":"State"
+              , "type":"resource"
+              , "data":
+              [2, 424, 0, 0, 0]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Live values and control logic"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for live values and control logic. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce size of local variables"
+                    }
+                    , {
+                      "type":"text"
+                      , "text":"reduce scope of local variables, localizing them as much as possible"
+                    }
+                    , {
+                      "type":"text"
+                      , "text":"reduce number of nested loops"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [2, 332, 0, 0, 0]
+                }
+                , {
+                  "name":"handler.hpp:1164 > accessor.hpp:1099"
+                  , "type":"resource"
+                  , "data":
+                  [0, 64, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1164
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/accessor.hpp"
+                        , "line":1099
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:9"
+                  , "type":"resource"
+                  , "data":
+                  [0, 26, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":9
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:9 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [0, 2, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":9
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                }
+              ]
+            }
+            , {
+              "name":"Feedback"
+              , "type":"resource"
+              , "data":
+              [7, 2, 0, 0, 0]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Loop-carried dependencies"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for loop-carried dependencies. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce number and size of loop-carried variables"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:36 > \npipes.hpp:66"
+                  , "type":"resource"
+                  , "data":
+                  [7, 2, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":36
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/ext/intel/pipes.hpp"
+                        , "line":66
+                      }
+                    ]
+                  ]
+                }
+              ]
+            }
+            , {
+              "name":"Cluster logic"
+              , "type":"resource"
+              , "data":
+              [10, 8, 0, 0, 1]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Logic required to efficiently support sets of operations that do not stall"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Logic required to efficiently support sets of operations that do not stall. This area cannot be affected directly."
+                }
+              ]
+            }
+            , {
+              "name":"Computation"
+              , "type":"resource"
+              , "children":
+              [
+                {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:9"
+                  , "type":"resource"
+                  , "data":
+                  [52, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":9
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"25-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [28, 1, 0, 0, 0]
+                    }
+                    , {
+                      "name":"25-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [24, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:9 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [28, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":9
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"25-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [28, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+              ]
+            }
+          ]
+        }
+        , {
+          "name":"IbfKernel.B1"
+          , "type":"basicblock"
+          , "children":
+          [
+            {
+              "name":"State"
+              , "type":"resource"
+              , "data":
+              [6, 102, 0, 0, 0]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Live values and control logic"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for live values and control logic. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce size of local variables"
+                    }
+                    , {
+                      "type":"text"
+                      , "text":"reduce scope of local variables, localizing them as much as possible"
+                    }
+                    , {
+                      "type":"text"
+                      , "text":"reduce number of nested loops"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [6, 102, 0, 0, 0]
+                }
+              ]
+            }
+            , {
+              "name":"Feedback"
+              , "type":"resource"
+              , "data":
+              [67, 9, 0, 0, 0]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Loop-carried dependencies"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for loop-carried dependencies. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce number and size of loop-carried variables"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [51, 0, 0, 0, 0]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:9"
+                  , "type":"resource"
+                  , "data":
+                  [9, 2, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":9
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:9 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [7, 7, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":9
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                }
+              ]
+            }
+            , {
+              "name":"Cluster logic"
+              , "type":"resource"
+              , "data":
+              [46, 74, 0, 0, 4]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Logic required to efficiently support sets of operations that do not stall"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Logic required to efficiently support sets of operations that do not stall. This area cannot be affected directly."
+                }
+              ]
+            }
+            , {
+              "name":"Computation"
+              , "type":"resource"
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [26, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":""
+                        , "line":0
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"26-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [26, 0, 0, 0, 0]
+                    }
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:9"
+                  , "type":"resource"
+                  , "data":
+                  [10, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":9
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit And"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"26-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [9, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:9 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [1, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":9
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit And"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+              ]
+            }
+          ]
+        }
+        , {
+          "name":"IbfKernel.B2"
+          , "type":"basicblock"
+          , "children":
+          [
+            {
+              "name":"State"
+              , "type":"resource"
+              , "data":
+              [1979, 3603, 9, 0, 9]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Live values and control logic"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for live values and control logic. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce size of local variables"
+                    }
+                    , {
+                      "type":"text"
+                      , "text":"reduce scope of local variables, localizing them as much as possible"
+                    }
+                    , {
+                      "type":"text"
+                      , "text":"reduce number of nested loops"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [1979, 3603, 9, 0, 9]
+                }
+              ]
+            }
+            , {
+              "name":"Feedback"
+              , "type":"resource"
+              , "data":
+              [1065, 1619, 0, 0, 0]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Loop-carried dependencies"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for loop-carried dependencies. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce number and size of loop-carried variables"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:15"
+                  , "type":"resource"
+                  , "data":
+                  [448, 544, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":15
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:27"
+                  , "type":"resource"
+                  , "data":
+                  [11, 16.5, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":27
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:38 > \nac_int.hpp:1642 > ac_int.hpp:774"
+                  , "type":"resource"
+                  , "data":
+                  [11, 16.5, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":38
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1642
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":774
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:42"
+                  , "type":"resource"
+                  , "data":
+                  [6.5, 5.5, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":42
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:79"
+                  , "type":"resource"
+                  , "data":
+                  [448, 544, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":79
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:9 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [44.5, 30.5, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":9
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:90"
+                  , "type":"resource"
+                  , "data":
+                  [96, 462, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":90
+                      }
+                    ]
+                  ]
+                }
+              ]
+            }
+            , {
+              "name":"Cluster logic"
+              , "type":"resource"
+              , "data":
+              [328, 544, 0, 0, 29]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Logic required to efficiently support sets of operations that do not stall"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Logic required to efficiently support sets of operations that do not stall. This area cannot be affected directly."
+                }
+              ]
+            }
+            , {
+              "name":"Computation"
+              , "type":"resource"
+              , "children":
+              [
+                {
+                  "name":"No Source Line"
+                  , "type":"resource"
+                  , "data":
+                  [46, 85, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":""
+                        , "line":0
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"llvm.fpga.fanout"
+                      , "type":"resource"
+                      , "count":8
+                      , "data":
+                      [46, 85, 0, 0, 0]
+                    }
+                  ]
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:9 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [10.5, 10, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":9
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit And"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [0.5, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"FFwd Destination"
+                      , "type":"resource"
+                      , "count":5
+                      , "data":
+                      [10, 10, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:36 > \npipes.hpp:67"
+                  , "type":"resource"
+                  , "data":
+                  [1, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":36
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/ext/intel/pipes.hpp"
+                        , "line":67
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"Pipe Read"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:42"
+                  , "type":"resource"
+                  , "data":
+                  [0.5, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":42
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit And"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [0.5, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:45 > \nac_int.hpp:1521 > ac_int.hpp:746"
+                  , "type":"resource"
+                  , "data":
+                  [64, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":45
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1521
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":746
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"64-bit Integer Subtract"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [64, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:47 > \nac_int.hpp:1521 > ac_int.hpp:746"
+                  , "type":"resource"
+                  , "data":
+                  [128, 64, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":47
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1521
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":746
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"64-bit Integer Subtract"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [64, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"64-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [64, 64, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:47 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [68, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":47
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"65-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [68, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:48"
+                  , "type":"resource"
+                  , "data":
+                  [61, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":48
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"64-bit Select"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [61, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:48 > \nac_int.hpp:1780 > ac_int.hpp:932"
+                  , "type":"resource"
+                  , "data":
+                  [67, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":48
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1780
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":932
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"64-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [67, 1, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:50 > \nac_int.hpp:2275 > ac_int.hpp:1514 > \nac_int.hpp:738"
+                  , "type":"resource"
+                  , "data":
+                  [489, 2051, 29, 0, 4]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":50
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":2275
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1514
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":738
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"1-bit Or"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [1, 1, 0, 0, 0]
+                    }
+                    , {
+                      "name":"Load"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [488, 2050, 29, 0, 4]
+                      , "details":
+                      [
+                        {
+                          "type":"text"
+                          , "text":"Load uses a Burst-coalesced LSU"
+                        }
+                        , {
+                          "type":"brief"
+                          , "text":"Burst-coalesced LSU"
+                        }
+                      ]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:57 > \nkernel_ibf.hpp:14"
+                  , "type":"resource"
+                  , "data":
+                  [844, 2762, 0, 11, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":57
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.hpp"
+                        , "line":14
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"64-bit Integer Multiply"
+                      , "type":"resource"
+                      , "count":2
+                      , "data":
+                      [844, 2762, 0, 11, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:57 > \nkernel_ibf.hpp:15"
+                  , "type":"resource"
+                  , "data":
+                  [128, 128, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":57
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.hpp"
+                        , "line":15
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"64-bit Xor"
+                      , "type":"resource"
+                      , "count":2
+                      , "data":
+                      [128, 128, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:57 > \nkernel_ibf.hpp:15 > ac_int.hpp:2278 > \nac_int.hpp:1739 > ac_int.hpp:849"
+                  , "type":"resource"
+                  , "data":
+                  [137, 1, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":57
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.hpp"
+                        , "line":15
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":2278
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1739
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":849
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"64-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [9, 1, 0, 0, 0]
+                    }
+                    , {
+                      "name":"64-bit Select"
+                      , "type":"resource"
+                      , "count":2
+                      , "data":
+                      [128, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:57 > \nkernel_ibf.hpp:16"
+                  , "type":"resource"
+                  , "data":
+                  [1574, 4972, 0, 16, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":57
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.hpp"
+                        , "line":16
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"64-bit Integer Multiply"
+                      , "type":"resource"
+                      , "count":2
+                      , "data":
+                      [1574, 4972, 0, 16, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:57 > \nkernel_ibf.hpp:18 > kernel_ibf.hpp:8 > \nac_int.hpp:1507 > ac_int.hpp:732"
+                  , "type":"resource"
+                  , "data":
+                  [1574, 4966, 0, 16, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":57
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.hpp"
+                        , "line":18
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.hpp"
+                        , "line":8
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1507
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":732
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"Integer Multiply: unsigned 64-bit x unsigned 64-bit -> 128-bit "
+                      , "type":"resource"
+                      , "count":2
+                      , "data":
+                      [1574, 4966, 0, 16, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:68 > \nac_int.hpp:1699 > ac_int.hpp:902"
+                  , "type":"resource"
+                  , "data":
+                  [1040, 4100, 58, 0, 8]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":68
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1699
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":902
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"64-bit And"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [64, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"Load"
+                      , "type":"resource"
+                      , "count":2
+                      , "data":
+                      [976, 4100, 58, 0, 8]
+                      , "details":
+                      [
+                        {
+                          "type":"text"
+                          , "text":"Load uses a Burst-coalesced LSU"
+                        }
+                        , {
+                          "type":"brief"
+                          , "text":"Burst-coalesced LSU"
+                        }
+                      ]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:78"
+                  , "type":"resource"
+                  , "data":
+                  [1024, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":78
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"16-bit Select"
+                      , "type":"resource"
+                      , "count":64
+                      , "data":
+                      [1024, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:79"
+                  , "type":"resource"
+                  , "data":
+                  [16, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":79
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"16-bit Integer Add"
+                      , "type":"resource"
+                      , "count":64
+                      , "data":
+                      [16, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:83"
+                  , "type":"resource"
+                  , "data":
+                  [1216, 64, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":83
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"16-bit Integer Compare"
+                      , "type":"resource"
+                      , "count":64
+                      , "data":
+                      [1216, 64, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:83 > \nac_int.hpp:1901"
+                  , "type":"resource"
+                  , "data":
+                  [259, 0, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":83
+                      }
+                      , {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/lib/oclfpga/include/sycl/ext/intel/ac_types/ac_int.hpp"
+                        , "line":1901
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"64-bit Or"
+                      , "type":"resource"
+                      , "count":5
+                      , "data":
+                      [9, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"64-bit Select"
+                      , "type":"resource"
+                      , "count":63
+                      , "data":
+                      [63, 0, 0, 0, 0]
+                    }
+                    , {
+                      "name":"64-bit Xor"
+                      , "type":"resource"
+                      , "count":58
+                      , "data":
+                      [187, 0, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:90"
+                  , "type":"resource"
+                  , "data":
+                  [366, 2172, 17, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":90
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"Store"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [366, 2172, 17, 0, 0]
+                      , "details":
+                      [
+                        {
+                          "type":"text"
+                          , "text":"Store uses a Burst-coalesced LSU"
+                        }
+                        , {
+                          "type":"brief"
+                          , "text":"Burst-coalesced LSU"
+                        }
+                      ]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+                , {
+                  "name":"handler.hpp:1166 > kernel_ibf.cpp:94"
+                  , "type":"resource"
+                  , "data":
+                  [14, 12, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1166
+                      }
+                      , {
+                        "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                        , "line":94
+                      }
+                    ]
+                  ]
+                  , "children":
+                  [
+                    {
+                      "name":"Iteration Initiation"
+                      , "type":"resource"
+                      , "count":1
+                      , "data":
+                      [14, 12, 0, 0, 0]
+                    }
+                  ]
+                  , "replace_name":"true"
+                }
+              ]
+            }
+          ]
+        }
+        , {
+          "name":"IbfKernel.B4"
+          , "type":"basicblock"
+          , "children":
+          [
+            {
+              "name":"Feedback"
+              , "type":"resource"
+              , "data":
+              [5, 8, 0, 0, 0]
+              , "details":
+              [
+                {
+                  "type":"brief"
+                  , "text":"Loop-carried dependencies"
+                }
+                , {
+                  "type":"text"
+                  , "text":"Resources for loop-carried dependencies. To reduce this area:"
+                  , "details":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"reduce number and size of loop-carried variables"
+                    }
+                  ]
+                }
+              ]
+              , "children":
+              [
+                {
+                  "name":"handler.hpp:1170"
+                  , "type":"resource"
+                  , "data":
+                  [5, 8, 0, 0, 0]
+                  , "debug":
+                  [
+                    [
+                      {
+                        "filename":"/opt/intel/oneapi/compiler/2023.1.0/linux/bin-llvm/../include/sycl/handler.hpp"
+                        , "line":1170
+                      }
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

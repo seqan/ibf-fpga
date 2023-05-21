@@ -1,0 +1,300 @@
+{
+  "nodes":
+  [
+    {
+      "name":"MinimizerKernel"
+      , "id":1079
+      , "type":"kernel"
+      , "children":
+      [
+        {
+          "name":"On-chip Memory"
+          , "id":1080
+          , "type":"memtype"
+          , "children":
+          [
+            {
+              "name":"queryBuffer"
+              , "id":1081
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                          , "line":"28"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":28
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+            , {
+              "name":"hashBuffer"
+              , "id":1082
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                          , "line":"29"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":29
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+            , {
+              "name":"__SYCLKernel"
+              , "id":1083
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                          , "line":"7"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_minimizer.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+          ]
+        }
+      ]
+    }
+    , {
+      "name":"IbfKernel"
+      , "id":1084
+      , "type":"kernel"
+      , "children":
+      [
+        {
+          "name":"On-chip Memory"
+          , "id":1085
+          , "type":"memtype"
+          , "children":
+          [
+            {
+              "name":"counters"
+              , "id":1086
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                          , "line":"15"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":15
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+            , {
+              "name":"binOffsets"
+              , "id":1087
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                          , "line":"53"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":53
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+            , {
+              "name":"__SYCLKernel"
+              , "id":1088
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                          , "line":"7"
+                        }
+                      ]
+                    }
+                  ]
+                  , "Additional information":"This variable is carried through the pipeline in registers (rather than being stored in RAM)"
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/kernel_ibf.cpp"
+                    , "line":7
+                  }
+                ]
+              ]
+              , "type":"reg"
+            }
+          ]
+        }
+      ]
+    }
+    , {
+      "name":"(Other)"
+      , "id":1089
+      , "type":"kernel"
+      , "children":
+      [
+        {
+          "name":"On-chip Memory"
+          , "id":1090
+          , "type":"memtype"
+          , "children":
+          [
+            {
+              "name":"seeds"
+              , "id":1091
+              , "details":
+              [
+                {
+                  "type":"table"
+                  , "Declared at":
+                  [
+                    {
+                      "type":"text"
+                      , "text":"%L"
+                      , "links":
+                      [
+                        {
+                          "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/shared.hpp"
+                          , "line":"33"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+              , "debug":
+              [
+                [
+                  {
+                    "filename":"/home/bzbbaumt/Projects/min-ibf-fpga-oneapi/include/min_ibf_fpga/backend_sycl/shared.hpp"
+                    , "line":33
+                  }
+                ]
+              ]
+              , "type":"unsynth"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  , "links":
+  [
+  ]
+}

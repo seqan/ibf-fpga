@@ -1,0 +1,116 @@
+{
+  "nodes":
+  [
+    {
+      "name":"MinimizerKernel"
+      , "id":1
+      , "type":"kernel"
+      , "children":
+      [
+        {
+          "name":"MinimizerKernel.B0"
+          , "id":3
+          , "type":"bb"
+        }
+        , {
+          "name":"MinimizerKernel.B1"
+          , "id":4
+          , "type":"bb"
+          , "children":
+          [
+            {
+              "name":"Cluster 0"
+              , "id":24
+              , "type":"cluster"
+            }
+            , {
+              "name":"Cluster 1"
+              , "id":26
+              , "type":"cluster"
+            }
+          ]
+        }
+        , {
+          "name":"MinimizerKernel.B2"
+          , "id":5
+          , "type":"bb"
+          , "children":
+          [
+            {
+              "name":"Cluster 2"
+              , "id":33
+              , "type":"cluster"
+            }
+            , {
+              "name":"Cluster 3"
+              , "id":37
+              , "type":"cluster"
+            }
+          ]
+        }
+        , {
+          "name":"MinimizerKernel.B3"
+          , "id":6
+          , "type":"bb"
+        }
+        , {
+          "name":"MinimizerKernel.B4"
+          , "id":7
+          , "type":"bb"
+        }
+      ]
+    }
+    , {
+      "name":"IbfKernel"
+      , "id":2
+      , "type":"kernel"
+      , "children":
+      [
+        {
+          "name":"IbfKernel.B0"
+          , "id":8
+          , "type":"bb"
+        }
+        , {
+          "name":"IbfKernel.B1"
+          , "id":9
+          , "type":"bb"
+          , "children":
+          [
+            {
+              "name":"Cluster 4"
+              , "id":66
+              , "type":"cluster"
+            }
+          ]
+        }
+        , {
+          "name":"IbfKernel.B2"
+          , "id":10
+          , "type":"bb"
+          , "children":
+          [
+            {
+              "name":"Cluster 5"
+              , "id":574
+              , "type":"cluster"
+            }
+          ]
+        }
+        , {
+          "name":"IbfKernel.B3"
+          , "id":11
+          , "type":"bb"
+        }
+        , {
+          "name":"IbfKernel.B4"
+          , "id":12
+          , "type":"bb"
+        }
+      ]
+    }
+  ]
+  , "links":
+  [
+  ]
+}
