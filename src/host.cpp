@@ -147,7 +147,7 @@ int main() {
   // Print results
   for (size_t i = 0; i < ids.size(); i++) {
     std::clog << ids[i].substr(1, std::string::npos) << "\t";
-    uint64_t result = results[i];
+    uint64_t result = static_cast<uint64_t>(results[i].to_ulong());
 
     for (size_t byteOffset = 0; byteOffset < sizeof(uint64_t); ++byteOffset) {
       uint8_t& value = ((uint8_t*)&result)[byteOffset];

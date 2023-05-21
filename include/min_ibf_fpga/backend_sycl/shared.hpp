@@ -1,5 +1,4 @@
 #include <sycl/sycl.hpp>
-#include <sycl/ext/intel/ac_types/ac_int.hpp>
 
 // Note: This header only contains code that can easily be shared between host and device.
 
@@ -75,13 +74,13 @@ static_assert((bool)(TECHNICAL_BIN_COUNT < MAX_BUS_WIDTH) || (TECHNICAL_BIN_COUN
 // Types & Conversions
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-using HostSizeType = ac_int<HOST_SIZE_TYPE_BITS, false>;
+using HostSizeType = unsigned _BitInt(HOST_SIZE_TYPE_BITS);
 
-using Element = ac_int<2, false>;
+using Element = unsigned _BitInt(2);
 
-using QueryIndex = ac_int<25, true>;
+using QueryIndex = _BitInt(25);
 
-using Chunk = ac_int<CHUNK_BITS, false>;
+using Chunk = std::bitset<CHUNK_BITS>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Function declarations

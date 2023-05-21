@@ -4,7 +4,6 @@
 
 #include <sycl/sycl.hpp>
 #include <sycl/ext/intel/fpga_extensions.hpp>
-#include <sycl/ext/intel/ac_types/ac_int.hpp>
 
 #include <min_ibf_fpga/backend_sycl/kernel_ibf_test.cpp>
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>

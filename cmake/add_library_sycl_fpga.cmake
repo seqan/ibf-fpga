@@ -26,7 +26,7 @@ macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_DEVICE_KEYWORD FPGA_DE
         #    [link]    dpcpp -fsycl -fintelfpga host.cpp.o kernel.cpp.o -o fast_recompile.fpga_emu
 
         add_library("${TARGET_NAME}_device_image" OBJECT "${SOURCE1}")
-        target_compile_options("${TARGET_NAME}_device_image" PRIVATE -fsycl -fintelfpga -qactypes -DMIN_IBF_K=${K} -DWINDOW_SIZE=${W})
+        target_compile_options("${TARGET_NAME}_device_image" PRIVATE -fsycl -fintelfpga -DMIN_IBF_K=${K} -DWINDOW_SIZE=${W})
         target_link_options("${TARGET_NAME}_device_image" PRIVATE -fsycl -fintelfpga)
 
         if ("${LIBRARY_TYPE_UPPER}" STREQUAL "SHARED")
@@ -39,7 +39,7 @@ macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_DEVICE_KEYWORD FPGA_DE
         else ()
             target_link_libraries("${TARGET_NAME}" PRIVATE "${TARGET_NAME}_device_image")
         endif ()
-        target_compile_options("${TARGET_NAME}" PRIVATE -fsycl -fintelfpga -qactypes)
+        target_compile_options("${TARGET_NAME}" PRIVATE -fsycl -fintelfpga)
         target_link_options("${TARGET_NAME}" PRIVATE -fsycl -fintelfpga)
     else ()
         ###############################################################################

@@ -47,7 +47,7 @@
 								HostSizeType index = localNumberOfHashes < minimalNumberOfMinimizers? 0 : localNumberOfHashes - minimalNumberOfMinimizers;
 								index = index < maximalIndex? index : maximalIndex;
 
-								threshold = (thresholds[static_cast<size_t>(index)] + 2).to_uint();
+								threshold = static_cast<Counter>(thresholds[static_cast<size_t>(index)] + 2);
 						}
 
 						HostSizeType binOffsets[HASH_COUNT];

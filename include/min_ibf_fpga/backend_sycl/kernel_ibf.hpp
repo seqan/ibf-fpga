@@ -3,7 +3,7 @@ namespace min_ibf_fpga::backend_sycl
 
 inline HostSizeType mapTo(const HostHash hash, const HostSizeType binSize)
 {
-	using DoubleHostSizeType = ac_int<HOST_SIZE_TYPE_BITS * 2, false>;
+	using DoubleHostSizeType = unsigned _BitInt(HOST_SIZE_TYPE_BITS * 2);
 
 	return ((DoubleHostSizeType)hash * (DoubleHostSizeType)binSize) >> HOST_SIZE_TYPE_BITS;
 }

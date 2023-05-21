@@ -34,7 +34,7 @@ constexpr auto MINIMIZER_SEED_ADJUSTED = MINIMIZER_SEED >> (64 - 2 * MIN_IBF_K);
 // Types & Conversions
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-using Hash = ac_int<2 * MIN_IBF_K, false>;
+using Hash = unsigned _BitInt(2 * MIN_IBF_K);
 
 using Minimizer = struct
 {
