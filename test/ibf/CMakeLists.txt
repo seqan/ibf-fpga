@@ -1,6 +1,6 @@
 
-find_path(SDSL_INCLUDE_DIR NAMES sdsl/bit_vectors.hpp HINTS "${SEQAN3_SUBMODULES_DIR}/submodules/sdsl-lite/include")
-find_path(CEREAL_INCLUDE_DIR NAMES cereal/archives/binary.hpp HINTS "${SEQAN3_SUBMODULES_DIR}/submodules/cereal/include")
+find_path(SDSL_INCLUDE_DIR NAMES sdsl/bit_vectors.hpp HINTS "${SEQAN3_ROOT_DIR}/submodules/sdsl-lite/include")
+find_path(CEREAL_INCLUDE_DIR NAMES cereal/archives/binary.hpp HINTS "${SEQAN3_ROOT_DIR}/submodules/cereal/include")
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM" AND SDSL_INCLUDE_DIR AND CEREAL_INCLUDE_DIR)
     add_executable(ibf_sycl_test ibf_sycl_test.cpp)
