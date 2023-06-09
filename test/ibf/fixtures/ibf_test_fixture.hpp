@@ -2,6 +2,7 @@
 
 #include <array>
 #include <bitset>
+#include <cstdint>
 #include <map>
 #include <vector>
 
