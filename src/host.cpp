@@ -38,7 +38,7 @@ int main() {
     std::getline(queries_ifs, query);
     queries.insert(queries.end(), query.begin(), query.end());
     querySizes.push_back(query.size());
-    std::getline(queries_ifs, query); // ignore seperator
+    std::getline(queries_ifs, query); // ignore delimiter
     std::getline(queries_ifs, query); // ignore quality
   }
 
@@ -138,7 +138,7 @@ int main() {
 
   // At this point, the device buffers have gone out of scope and the kernel
   // has been synchronized. Therefore, the output data has been updated
-  // with the results of the kernel and is safely accesible by the host CPU.
+  // with the results of the kernel and is safely accessible by the host CPU.
 
   // Dump results to binary file
   std::ofstream ostrm("results.bin", std::ios::binary);

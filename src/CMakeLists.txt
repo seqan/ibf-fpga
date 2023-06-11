@@ -20,7 +20,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURC
 #    For this reason, FPGA backend flags must be passed as link flags in CMake.
 set(EMULATOR_COMPILE_FLAGS "-fsycl -fintelfpga -qactypes -DFPGA_EMULATOR -Wall -Xshyper-optimized-handshaking=off")
 set(EMULATOR_LINK_FLAGS "-fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off")
-set(HARDWARE_COMPILE_FLAGS "-fsycl -fintelfpga -qactypes -Wall -Xshyper-optimized-handshaking=off")
+set(HARDWARE_COMPILE_FLAGS "-fsycl -fintelfpga -qactypes -DFPGA_HARDWARE -Wall -Xshyper-optimized-handshaking=off")
 set(HARDWARE_LINK_FLAGS "-fsycl -fintelfpga -qactypes -Xshardware -Xstarget=${FPGA_DEVICE} ${USER_HARDWARE_FLAGS} -Xshyper-optimized-handshaking=off")
 # use cmake -D USER_HARDWARE_FLAGS=<flags> to set extra flags for FPGA backend compilation
 
