@@ -1,0 +1,3 @@
+[submodule "external/min-ibf-fpga"]
+	path = external/min-ibf-fpga
+	url = https://git.zib.de/hpc-research/Projects/seqanatfpga/min-ibf-fpga.git
