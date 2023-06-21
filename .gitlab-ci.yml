@@ -14,12 +14,16 @@ stages:          # List of stages for jobs, and their order of execution
   git submodule sync
   git submodule update --init
 
+.install_packages: &install_packages |-
+  apt update
+  apt -y install ninja-build cmake ocl-icd-opencl-dev
+
 build:icc:23.1:
   stage: build
   image: intel/oneapi-basekit:2023.1.0-devel-ubuntu22.04
   before_script:
     - *update_submodule
-    - apt update && apt -y install ninja-build cmake ocl-icd-opencl-dev
+    - *install_packages
     - mkdir -p build-icc-23.1
     - cd build-icc-23.1
   script:
@@ -39,7 +43,7 @@ test:icc:23.1:
   needs: [build:icc:23.1]
   image: intel/oneapi-basekit:2023.1.0-devel-ubuntu22.04
   before_script:
-    - apt update && apt -y install cmake ocl-icd-opencl-dev
+    - *install_packages
     - cd build-icc-23.1
   script:
     - ctest --test-dir ./test
