@@ -1,15 +1,25 @@
 variables:
-  GIT_SUBMODULE_STRATEGY: recursive
+  # use custom version below that can handle private repositories
+  # GIT_SUBMODULE_STRATEGY: recursive
 
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
   # - deploy
 
+
+# https://stackoverflow.com/a/58679225
+# https://stackoverflow.com/a/53758544
+.update_submodule: &update_submodule |-
+  git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@git.zib.de".insteadOf "https://git@git.zib.de"
+  git submodule sync
+  git submodule update --init
+
 build:icc:23.1:
   stage: build
   image: intel/oneapi-basekit:2023.1.0-devel-ubuntu22.04
   before_script:
+    - *update_submodule
     - apt update && apt -y install cmake ninja-build
     - mkdir -p build-icc-23.1
     - cd build-icc-23.1
