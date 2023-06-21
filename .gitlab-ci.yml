@@ -42,4 +42,4 @@ test:icc:23.1:
     - apt update && apt -y install cmake ocl-icd-opencl-dev
     - cd build-icc-23.1
   script:
-    - ctest
+    - ctest --test-dir ./test
