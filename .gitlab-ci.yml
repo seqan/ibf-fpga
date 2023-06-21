@@ -24,7 +24,7 @@ build:icc:23.1:
     - cd build-icc-23.1
   script:
     - CC=icx CXX=icpx cmake -G Ninja ${CI_PROJECT_DIR}
-    - cmake --build .
+    - cmake --build . -j 1
   artifacts:
     paths:
       - build-icc-23.1
