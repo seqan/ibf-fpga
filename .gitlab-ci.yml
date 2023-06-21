@@ -18,7 +18,7 @@ stages:          # List of stages for jobs, and their order of execution
   apt update
   apt -y install ninja-build # ninja
   apt -y install cmake # cmake
-  apt -y install opencl-headers opencl-clhpp-headers ocl-icd-opencl-dev # opencl-lib
+  # apt -y install opencl-headers opencl-clhpp-headers ocl-icd-opencl-dev # opencl-lib
 
 build:icc:23.1:
   stage: build
@@ -59,7 +59,10 @@ build:gcc:9:
     - mkdir -p build-gcc-9-test
     - cd build-gcc-9-test
   script:
-    - CC=gcc-9 CXX=g++-9 cmake -G Ninja -DIBF_USE_IOC64=1 ${CI_PROJECT_DIR}/test
+    # INTELFPGAOCLSDKROOT=/opt/intel/oneapi/compiler/<version>/linux/lib/oclfpga
+    # <...>/host contains OpenCL Header like CL/opencl.hpp
+    # <...>/.. contains OpenCL Library libOpenCL.so
+    - CC=gcc-9 CXX=g++-9 cmake -DCMAKE_INCLUDE_PATH="${INTELFPGAOCLSDKROOT}/host" -DCMAKE_LIBRARY_PATH="${INTELFPGAOCLSDKROOT}/.." -G Ninja -DIBF_USE_IOC64=1 ${CI_PROJECT_DIR}/test
     - cmake --build . -j 1
   artifacts:
     paths:
