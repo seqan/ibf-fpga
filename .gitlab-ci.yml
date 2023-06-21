@@ -22,7 +22,7 @@ stages:          # List of stages for jobs, and their order of execution
 
 build:icc:23.1:
   stage: build
-  image: intel/oneapi-basekit:2023.1.0-devel-ubuntu22.04
+  image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
   before_script:
     - *update_submodule
     - *install_packages
@@ -43,7 +43,7 @@ build:icc:23.1:
 test:icc:23.1:
   stage: test
   needs: [build:icc:23.1]
-  image: intel/oneapi-basekit:2023.1.0-devel-ubuntu22.04
+  image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
   before_script:
     - *install_packages
     - cd build-icc-23.1
