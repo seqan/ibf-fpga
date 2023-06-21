@@ -11,7 +11,7 @@ stages:          # List of stages for jobs, and their order of execution
 # https://stackoverflow.com/a/58679225
 # https://stackoverflow.com/a/53758544
 .update_submodule: &update_submodule |-
-  git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@git.zib.de".insteadOf "https://git@git.zib.de"
+  git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@git.zib.de".insteadOf "https://git.zib.de"
   git submodule sync
   git submodule update --init
 
