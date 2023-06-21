@@ -19,7 +19,7 @@ build:icc:23.1:
   image: intel/oneapi-basekit:2023.1.0-devel-ubuntu22.04
   before_script:
     - *update_submodule
-    - apt update && apt -y install cmake ninja-build
+    - apt update && apt -y install ninja-build cmake ocl-icd-opencl-dev
     - mkdir -p build-icc-23.1
     - cd build-icc-23.1
   script:
@@ -39,7 +39,7 @@ test:icc:23.1:
   needs: [build:icc:23.1]
   image: intel/oneapi-basekit:2023.1.0-devel-ubuntu22.04
   before_script:
-    - apt update && apt -y install cmake
+    - apt update && apt -y install cmake ocl-icd-opencl-dev
     - cd build-icc-23.1
   script:
     - ctest
