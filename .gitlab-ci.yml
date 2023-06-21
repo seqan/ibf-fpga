@@ -18,7 +18,7 @@ stages:          # List of stages for jobs, and their order of execution
   apt update
   apt -y install ninja-build # ninja
   apt -y install cmake # cmake
-  apt -y install ocl-icd-opencl-dev # opencl-lib
+  apt -y install opencl-headers ocl-icd-opencl-dev # opencl-lib
 
 build:icc:23.1:
   stage: build
