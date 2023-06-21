@@ -49,3 +49,33 @@ test:icc:23.1:
     - cd build-icc-23.1
   script:
     - ctest --test-dir ./test
+
+build:gcc:9:
+  stage: build
+  image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
+  before_script:
+    - *update_submodule
+    - *install_packages
+    - mkdir -p build-gcc-9-test
+    - cd build-gcc-9-test
+  script:
+    - CC=gcc-9 CXX=g++-9 cmake -G Ninja -DIBF_USE_IOC64=1 ${CI_PROJECT_DIR}/test
+    - cmake --build . -j 1
+  artifacts:
+    paths:
+      - build-gcc-9-test
+      # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
+      # cache:
+      #   paths:
+      #     - "*.o"
+
+# run tests using the binary built before
+test:gcc:9:
+  stage: test
+  needs: [build:gcc:9]
+  image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
+  before_script:
+    - *install_packages
+    - cd build-gcc-9-test
+  script:
+    - ctest .
