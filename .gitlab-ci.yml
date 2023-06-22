@@ -26,8 +26,8 @@ build:icc:23.1:
   before_script:
     - *update_submodule
     - *install_packages
-    - mkdir -p build-icc-23.1
-    - cd build-icc-23.1
+    - mkdir -p ${CI_PROJECT_DIR}/build-icc-23.1
+    - cd ${CI_PROJECT_DIR}/build-icc-23.1
   script:
     - CC=icx CXX=icpx cmake -G Ninja -DIBF_USE_IOC64=1 ${CI_PROJECT_DIR}
     - cmake --build . -j 1
@@ -46,7 +46,7 @@ test:icc:23.1:
   image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
   before_script:
     - *install_packages
-    - cd build-icc-23.1
+    - cd ${CI_PROJECT_DIR}/build-icc-23.1
   script:
     - ctest --test-dir ./test
 
@@ -56,13 +56,17 @@ build:gcc:9:
   before_script:
     - *update_submodule
     - *install_packages
-    - mkdir -p build-gcc-9-test
-    - cd build-gcc-9-test
+    - git -C ${CI_PROJECT_DIR}/external clone https://github.com/eseiler/seqan3
+    - cd ${CI_PROJECT_DIR}/external/seqan3
+    - git checkout b26aef71221af70e31ff1c47f6262a7852d9c02c
+    - git submodule update --init --recursive
+    - mkdir -p ${CI_PROJECT_DIR}/build-gcc-9-test
+    - cd ${CI_PROJECT_DIR}/build-gcc-9-test
   script:
     # INTELFPGAOCLSDKROOT=/opt/intel/oneapi/compiler/<version>/linux/lib/oclfpga
     # <...>/host contains OpenCL Header like CL/opencl.hpp
     # <...>/.. contains OpenCL Library libOpenCL.so
-    - CC=gcc-9 CXX=g++-9 cmake -DCMAKE_INCLUDE_PATH="${INTELFPGAOCLSDKROOT}/host" -DCMAKE_LIBRARY_PATH="${INTELFPGAOCLSDKROOT}/.." -G Ninja -DIBF_USE_IOC64=1 ${CI_PROJECT_DIR}/test
+    - CC=gcc-9 CXX=g++-9 cmake -DCMAKE_INCLUDE_PATH="${INTELFPGAOCLSDKROOT}/host" -DCMAKE_LIBRARY_PATH="${INTELFPGAOCLSDKROOT}/.." -G Ninja -DIBF_USE_IOC64=1 -DSeqAn3_DIR="${CI_PROJECT_DIR}/external/seqan3/build_system" ${CI_PROJECT_DIR}/test
     - cmake --build . -j 1
   artifacts:
     paths:
