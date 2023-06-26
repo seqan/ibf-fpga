@@ -31,3 +31,7 @@ if (SEQAN3_FOUND AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_link_libraries(minimizer_seqan3_test PUBLIC min_ibf_fpga_test "seqan3::seqan3")
     add_test(NAME minimizer_seqan3_test COMMAND minimizer_seqan3_test)
 endif()
+
+add_executable(minimizer_on_cpu_test minimizer_on_cpu_test.cpp)
+target_link_libraries(minimizer_on_cpu_test PUBLIC min_ibf_fpga_test)
+add_test(NAME minimizer_on_cpu_test COMMAND minimizer_on_cpu_test)
