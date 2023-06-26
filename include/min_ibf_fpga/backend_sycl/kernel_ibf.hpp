@@ -10,7 +10,7 @@ using HostHash = typename types::HostHash;
 
 static inline HostSizeType mapTo(const HostHash hash, const HostSizeType binSize)
 {
-	using DoubleHostSizeType = ac_int<constants::host_size_type_bits * 2, false>;
+	using DoubleHostSizeType = typename types::DoubleHostSizeType;
 
 	return ((DoubleHostSizeType)hash * (DoubleHostSizeType)binSize) >> constants::host_size_type_bits;
 }
@@ -85,6 +85,10 @@ static void compute_ibf(
 
 		Counter threshold;
 
+#if MIN_IBF_FPGA_INIT_EVERYTHING
+		threshold = 0; // Without this the code below has UB on CPU
+#endif // MIN_IBF_FPGA_INIT_EVERYTHING
+
 		if (data.isLastElement) {
 			//threshold = getThreshold(localNumberOfHashes, minimalNumberOfMinimizers, maximalNumberOfMinimizers, thresholds);
 			// manual inline of getThreshold() because of thresholds accessor
@@ -107,7 +111,7 @@ static void compute_ibf(
 		for (unsigned char chunkIndex = 0; chunkIndex < constants::chunks; chunkIndex++)
 		{
 			Chunk bitvector = ~(Chunk)0;
-			Chunk localResult = 0;
+			Chunk localResult{0};
 
 			// Unroll: Burst-coalesced over chunks per seed
 			#pragma unroll
@@ -127,6 +131,7 @@ static void compute_ibf(
 
 				counters[chunkIndex][bitOffset] = counter;
 
+				// Note: threshold might be UNDEFINED if
 				localResult[bitOffset] = counter >= threshold;
 
 				/*if (data.isLastElement)

@@ -2,9 +2,10 @@
 
 #include "fixtures/all.hpp"
 
-#include <min_ibf_fpga/test/assert_equal.hpp>
 #include <min_ibf_fpga/backend_sycl/kernel_minimizer.hpp>
 #include <min_ibf_fpga/backend_sycl/min_ibf_constants.hpp>
+
+#include <min_ibf_fpga/test/assert_equal.hpp>
 #include <min_ibf_fpga/test/min_ibf_test_types.hpp>
 
 template <size_t windows_size, size_t kmer_size, size_t bin_count = 64>
