@@ -48,7 +48,7 @@ test:icc:23.1:
     - *install_packages
     - cd ${CI_PROJECT_DIR}/build-icc-23.1
   script:
-    - ctest --test-dir ./test
+    - ctest --output-on-failure --test-dir ./test
 
 build:gcc:9:
   stage: build
@@ -85,4 +85,4 @@ test:gcc:9:
     - *install_packages
     - cd build-gcc-9-test
   script:
-    - ctest .
+    - ctest --output-on-failure .
