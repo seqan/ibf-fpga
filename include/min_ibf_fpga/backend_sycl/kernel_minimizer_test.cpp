@@ -17,19 +17,23 @@ class PipeToHostKernel;
 
 void RunMinimizerKernel(sycl::queue& queue,
 	sycl::buffer<char, 1>& queries_buffer,
-	const HostSizeType queriesOffset,
-	sycl::buffer<HostSizeType, 1>& querySizes_buffer,
-	const HostSizeType querySizesOffset,
-	const HostSizeType numberOfQueries,
-	sycl::buffer<MinimizerToIBFData, 1>& minimizerToIbf_buffer)
+	const _types::HostSizeType queriesOffset,
+	sycl::buffer<_types::HostSizeType, 1>& querySizes_buffer,
+	const _types::HostSizeType querySizesOffset,
+	const _types::HostSizeType numberOfQueries,
+	sycl::buffer<_types::MinimizerToIBFData, 1>& minimizerToIbf_buffer)
 {
-	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
+	using constants = _constants;
+	using types = _types;
+	using minimizer_kernel_t = minimizer_kernel<constants, types>;
+
+	using MinimizerToIBFData = types::MinimizerToIBFData;
+	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, constants::number_of_kernels>;
 
 	using PrefetchingLSU = sycl::ext::intel::lsu<sycl::ext::intel::prefetch<true>, sycl::ext::intel::statically_coalesce<false>>;
 
-	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
+	fpga_tools::UnrolledLoop<constants::number_of_kernels>([&](auto id)
 	{
-
 		#include "kernel_minimizer.cpp"
 
 		queue.submit([&](sycl::handler &handler)

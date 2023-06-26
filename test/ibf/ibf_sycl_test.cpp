@@ -28,10 +28,10 @@ void sycl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpga:
     sycl::queue q(device_selector, fpga_tools::exception_handler);
 
     std::vector<uint64_t> minimizer = test.minimizer();
-    std::vector<min_ibf_fpga::backend_sycl::MinimizerToIBFData> minimizerToIbf;
+    std::vector<min_ibf_fpga::backend_sycl::_types::MinimizerToIBFData> minimizerToIbf;
     for (size_t i = 0; i < minimizer.size(); i++)
     {
-        min_ibf_fpga::backend_sycl::MinimizerToIBFData data;
+        min_ibf_fpga::backend_sycl::_types::MinimizerToIBFData data;
         data.hash = minimizer[i];
         data.isLastElement = false;
         if(i + 1 == minimizer.size())
@@ -41,7 +41,7 @@ void sycl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpga:
         minimizerToIbf.push_back(data);
     }
 
-    std::vector<min_ibf_fpga::backend_sycl::Chunk> ibfData;
+    std::vector<min_ibf_fpga::backend_sycl::_types::Chunk> ibfData;
     for (size_t i = 0; i < ibf.size(); i++)
     {
         ibfData.push_back(ibf.data()[i]);
@@ -55,12 +55,12 @@ void sycl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpga:
         size_t const minimalNumberOfMinimizers = test.minimizer_range.minimal;
         size_t const maximalNumberOfMinimizers = test.minimizer_range.maximal;
         min_ibf_fpga::threshold::threshold_table ths = test.threshold_table_per_error[errors];
-            std::vector<min_ibf_fpga::backend_sycl::HostSizeType> thresholds;
+            std::vector<min_ibf_fpga::backend_sycl::_types::HostSizeType> thresholds;
         for (size_t i = 0; i < ths.table.size(); i++)
         {
             thresholds.push_back(ths.table[i]);
         }
-        std::vector<min_ibf_fpga::backend_sycl::Chunk> result(numberOfQueries, 0);
+        std::vector<min_ibf_fpga::backend_sycl::_types::Chunk> result(numberOfQueries, 0);
 
         { // device buffer scope
             sycl::buffer minimizerToIbf_buffer(minimizerToIbf);
