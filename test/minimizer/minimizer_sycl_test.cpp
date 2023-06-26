@@ -29,13 +29,13 @@ void sycl_test(minimizer_test_fixture test)
     for(char c : test.query)
         queries.push_back(c);
 
-    std::vector<min_ibf_fpga::backend_sycl::HostSizeType> querySizes;
+    std::vector<min_ibf_fpga::backend_sycl::_types::HostSizeType> querySizes;
     querySizes.push_back(test.query.size());
 
     size_t const queriesOffset = 0;
     size_t const querySizesOffset = 0;
     size_t const numberOfQueries = 1;
-    std::vector<min_ibf_fpga::backend_sycl::MinimizerToIBFData> pipe_results(test.query.size(), min_ibf_fpga::backend_sycl::MinimizerToIBFData{});
+    std::vector<min_ibf_fpga::backend_sycl::_types::MinimizerToIBFData> pipe_results(test.query.size(), min_ibf_fpga::backend_sycl::_types::MinimizerToIBFData{});
     std::vector<uint64_t> minimizer{};
 
     { // device buffer scope
@@ -52,7 +52,7 @@ void sycl_test(minimizer_test_fixture test)
                 minimizerToIbf_buffer);
     } // device buffer scope
 
-    min_ibf_fpga::backend_sycl::MinimizerToIBFData pipe_result{};
+    min_ibf_fpga::backend_sycl::_types::MinimizerToIBFData pipe_result{};
     for (int i = 0; i < pipe_results.size() && !pipe_result.isLastElement; ++i)
     {
         pipe_result = pipe_results[i];

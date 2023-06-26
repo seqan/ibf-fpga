@@ -1,7 +1,16 @@
+#pragma once
+
 namespace min_ibf_fpga::backend_sycl
 {
 
-Element inline translateCharacterToElement(const char character)
+template <typename constants, typename types>
+struct minimizer_kernel
+{
+using Element = typename types::Element;
+using Hash = typename types::Hash;
+using Minimizer = typename types::Minimizer;
+
+static Element inline translateCharacterToElement(const char character)
 {
 	return character == 'A'? 0
 		: character == 'C'? 1
@@ -9,13 +18,13 @@ Element inline translateCharacterToElement(const char character)
 		: 3;
 }
 
-Hash inline extractHash(const char* buffer) //, sycl::stream out) // DEBUG
+static Hash inline extractHash(const char* buffer) //, sycl::stream out) // DEBUG
 {
 	Hash kmer = 0;
 	Hash kmerComplement = 0;
 
 	#pragma unroll
-	for (unsigned char elementIndex = 0; elementIndex < MIN_IBF_K; ++elementIndex)
+	for (unsigned char elementIndex = 0; elementIndex < constants::min_ibf_k; ++elementIndex)
 	{
 		const Element value = translateCharacterToElement(buffer[elementIndex]);
 
@@ -30,7 +39,7 @@ Hash inline extractHash(const char* buffer) //, sycl::stream out) // DEBUG
 
 		//out << "char " << static_cast<unsigned>(buffer[elementIndex]) << " value " << static_cast<unsigned>(value) << " ~value " << static_cast<unsigned>((Element)~value) << sycl::endl;
 
-		kmer           |= (Hash)(value) << (2 * (MIN_IBF_K - 1) - elementIndex * 2);
+		kmer           |= (Hash)(value) << (2 * (constants::min_ibf_k - 1) - elementIndex * 2);
 		kmerComplement |= (Hash)((Element)~value) << elementIndex * 2;
 	}
 
@@ -43,18 +52,18 @@ Hash inline extractHash(const char* buffer) //, sycl::stream out) // DEBUG
 	//	out << (unsigned)kmerComplement[i];
 	//out << sycl::endl;
 
-	kmer ^= (Hash)MINIMIZER_SEED_ADJUSTED;
-	kmerComplement ^= (Hash)MINIMIZER_SEED_ADJUSTED;
+	kmer ^= (Hash)constants::minimizer_seed_adjusted;
+	kmerComplement ^= (Hash)constants::minimizer_seed_adjusted;
 
 	return kmer < kmerComplement? kmer : kmerComplement;
 }
 
-Minimizer inline findMinimizer(const Hash* hashBuffer)
+static Minimizer inline findMinimizer(const Hash* hashBuffer)
 {
 	Minimizer minimizer = {~(Hash)0, 0};
 
 	#pragma unroll
-	for (unsigned char kmerIndex = 0; kmerIndex < NUMBER_OF_KMERS_PER_WINDOW; ++kmerIndex)
+	for (unsigned char kmerIndex = 0; kmerIndex < constants::number_of_kmers_per_window; ++kmerIndex)
 	{
 		const Minimizer current = {hashBuffer[kmerIndex], kmerIndex};
 
@@ -64,5 +73,6 @@ Minimizer inline findMinimizer(const Hash* hashBuffer)
 
 	return minimizer;
 }
+};
 
 } // namespace min_ibf_fpga::backend_sycl

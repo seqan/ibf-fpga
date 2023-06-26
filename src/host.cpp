@@ -31,7 +31,7 @@ int main() {
   std::string query, id;
   std::vector<std::string> ids;
   std::vector<char> queries;
-  std::vector<min_ibf_fpga::backend_sycl::HostSizeType> querySizes;
+  std::vector<min_ibf_fpga::backend_sycl::_types::HostSizeType> querySizes;
   std::ifstream queries_ifs(queries_filename, std::ios::binary);
   while (std::getline(queries_ifs, id)) {
     ids.push_back(id);
@@ -45,9 +45,9 @@ int main() {
   size_t file_size, bytes_read, bytes_to_read;
 
   std::string ibfData_filename = "ibfdata.bin";
-  std::vector<min_ibf_fpga::backend_sycl::Chunk> ibfData;
+  std::vector<min_ibf_fpga::backend_sycl::_types::Chunk> ibfData;
   std::ifstream ibf_ifs(ibfData_filename, std::ios::binary);
-  min_ibf_fpga::backend_sycl::Chunk chunk;
+  min_ibf_fpga::backend_sycl::_types::Chunk chunk;
   file_size = std::filesystem::file_size(ibfData_filename);
   assert(file_size > 0);
   bytes_read = 0;
@@ -59,9 +59,9 @@ int main() {
   } while (bytes_read < file_size);
 
   std::string thresholds_filename = "thresholds_1e.bin";
-  std::vector<min_ibf_fpga::backend_sycl::HostSizeType> thresholds;
+  std::vector<min_ibf_fpga::backend_sycl::_types::HostSizeType> thresholds;
   std::ifstream th_ifs(thresholds_filename, std::ios::binary);
-  min_ibf_fpga::backend_sycl::HostSizeType threshold;
+  min_ibf_fpga::backend_sycl::_types::HostSizeType threshold;
   file_size = std::filesystem::file_size(thresholds_filename);
   assert(file_size > 0);
   bytes_read = 0;
@@ -72,7 +72,7 @@ int main() {
     bytes_read += bytes_to_read;
   } while (bytes_read < file_size);
 
-  std::vector<min_ibf_fpga::backend_sycl::Chunk> results;
+  std::vector<min_ibf_fpga::backend_sycl::_types::Chunk> results;
   results.resize(querySizes.size()); // numberOfQueries
 
 #if FPGA_SIMULATOR

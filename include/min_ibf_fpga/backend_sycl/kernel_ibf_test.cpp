@@ -16,19 +16,23 @@ class HostToKernelPipe;
 class IbfKernel;
 
 void RunIBFKernel(sycl::queue& queue,
-	sycl::buffer<MinimizerToIBFData, 1>& minimizerToIbf_buffer,
-	sycl::buffer<Chunk, 1>& ibfData_buffer,
-	const HostSizeType binSize,
-	const HostSizeType hashShift,
-	const HostSizeType numberOfQueries,
-	const HostSizeType minimalNumberOfMinimizers,
-	const HostSizeType maximalNumberOfMinimizers,
-	sycl::buffer<HostSizeType, 1>& thresholds_buffer,
-	sycl::buffer<Chunk, 1>& result_buffer)
+	sycl::buffer<_types::MinimizerToIBFData, 1>& minimizerToIbf_buffer,
+	sycl::buffer<_types::Chunk, 1>& ibfData_buffer,
+	const _types::HostSizeType binSize,
+	const _types::HostSizeType hashShift,
+	const _types::HostSizeType numberOfQueries,
+	const _types::HostSizeType minimalNumberOfMinimizers,
+	const _types::HostSizeType maximalNumberOfMinimizers,
+	sycl::buffer<_types::HostSizeType, 1>& thresholds_buffer,
+	sycl::buffer<_types::Chunk, 1>& result_buffer)
 {
-	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
+	using constants = _constants;
+	using types = _types;
+	using ibf_kernel_t = ibf_kernel<constants, types>;
+	using MinimizerToIBFData = _types::MinimizerToIBFData;
+	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, constants::number_of_kernels>;
 
-	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
+	fpga_tools::UnrolledLoop<constants::number_of_kernels>([&](auto id)
 	{
 		queue.submit([&](sycl::handler &handler)
 		{
