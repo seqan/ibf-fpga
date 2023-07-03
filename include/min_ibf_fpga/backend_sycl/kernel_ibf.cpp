@@ -10,6 +10,7 @@
 				using HostSizeType = typename types::HostSizeType;
 				using Counter = typename types::Counter;
 				using Chunk = typename types::Chunk;
+				using Hash = typename types::Hash;
 
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
@@ -32,6 +33,8 @@
 					}, [&](size_t const chunkIndex, Chunk const & localResult) {
 						size_t result_idx = (size_t)queryIndex * constants::chunks + chunkIndex;
 						result[result_idx] = localResult;
+					}, [&](unsigned char const chunk_idx, Hash const & minimizer, Chunk const & minimizer_membership) {
+						// no-op this is for debugging
 					});
 				}
 			});

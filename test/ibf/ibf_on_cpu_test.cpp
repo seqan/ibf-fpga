@@ -22,6 +22,7 @@ void on_cpu_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
     using ibf_kernel_t = min_ibf_fpga::backend_sycl::ibf_kernel<constants, types>;
 
     using MinimizerToIBFData = typename types::MinimizerToIBFData;
+    using Hash = typename types::Hash;
     using Chunk = typename types::Chunk;
     using HostSizeType = typename types::HostSizeType;
     using QueryIndex = typename types::QueryIndex;
@@ -35,8 +36,11 @@ void on_cpu_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
         ibfData.push_back(Chunk{ibf.data()[i]});
     }
 
-    auto compute_bin_containment_from_minimizer = [&](size_t const errors) -> std::bitset<64>
+    // std::array<size_t, 64> counter_actual{};
+    std::vector<std::bitset<64>> bin_bit_membership_per_error{};
+    for (size_t error = 0; error < test.threshold_per_error.size(); ++error)
     {
+        std::vector<std::tuple<size_t, std::bitset<64>>> minimizer_bit_membership_actual{};
         size_t const numberOfQueries = 1;
         std::vector<Chunk> result(numberOfQueries, Chunk{0});
 
@@ -55,7 +59,7 @@ void on_cpu_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
                 HostSizeType index = localNumberOfHashes < minimalNumberOfMinimizers? 0 : localNumberOfHashes - minimalNumberOfMinimizers;
                 index = index < maximalIndex? index : maximalIndex;
 
-                Counter threshold = test.threshold_table_per_error[errors].table[static_cast<size_t>(index)] + 2;
+                Counter threshold = test.threshold_table_per_error[error].table[static_cast<size_t>(index)] + 2;
                 return threshold;
             }, [&, i = 0]() mutable -> MinimizerToIBFData {
                 return MinimizerToIBFData {
@@ -66,6 +70,11 @@ void on_cpu_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
                 size_t const queryIndex = 0;
                 size_t const result_idx = queryIndex * constants::chunks + chunkIndex;
                 result[result_idx] = localResult;
+            }, [&](unsigned char const chunk_idx, Hash const & minimizer, Chunk const & minimizer_membership) {
+                min_ibf_fpga::test::assert_equal(chunk_idx, (unsigned char){0}, "TODO: test more than one chunk.");
+
+                std::bitset<64> bit_membership{minimizer_membership};
+                minimizer_bit_membership_actual.push_back({minimizer, bit_membership});
             }
         );
 
@@ -73,20 +82,13 @@ void on_cpu_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
         if (ibf_meta.bin_count() > 64) throw std::runtime_error{"NEEDS TO BE FIXED!!!!"};
 
         std::bitset<64> bin_bit_membership{(uint64_t)result[0]};
-        return bin_bit_membership;
-    };
-
-    // std::map<size_t, std::bitset<64>> minimizer_bit_membership_actual{};
-    // std::array<size_t, 64> counter_actual{};
-    std::vector<std::bitset<64>> bin_bit_membership_per_error{};
-    for (size_t error = 0; error < test.threshold_per_error.size(); ++error)
-    {
-        std::bitset<64> bin_bit_membership = compute_bin_containment_from_minimizer(error);
 
         bin_bit_membership_per_error.push_back(bin_bit_membership);
+
+        // minimizer_bit_membership is independent on error; only the threshold changes the bin_bit_membership
+        test.compare_minimizer_membership(minimizer_bit_membership_actual);
     }
 
-    // test.compare_minimizer_membership(minimizer_bit_membership_actual);
     // test.compare_counter(counter_actual);
     test.compare_bin_bit_membership(bin_bit_membership_per_error);
 }

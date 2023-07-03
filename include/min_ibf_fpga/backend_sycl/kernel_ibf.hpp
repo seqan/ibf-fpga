@@ -39,14 +39,15 @@ static inline HostSizeType calculateBinIndex(HostHash hash,
 // 	return (thresholds[index] + 2).to_uint();
 // }
 
-template <typename ibfData_ptr_t, typename get_threshold_fn_t, typename on_minimizer_fn_t, typename on_result_fn_t>
+template <typename ibfData_ptr_t, typename get_threshold_fn_t, typename on_minimizer_fn_t, typename on_result_fn_t, typename on_minimizer_membership_fn_t>
 static void compute_ibf(
 	ibfData_ptr_t const & ibfData,
 	const typename types::HostSizeType binSize,
 	const typename types::HostSizeType hashShift,
 	get_threshold_fn_t && get_threshold_fn,
 	on_minimizer_fn_t && on_minimizer_fn,
-	on_result_fn_t && on_result_fn)
+	on_result_fn_t && on_result_fn,
+	on_minimizer_membership_fn_t && on_minimizer_membership_fn)
 {
 	using QueryIndex = typename types::QueryIndex;
 	using Counter = typename types::Counter;
@@ -128,6 +129,8 @@ static void compute_ibf(
 					/*&*/ibfData[static_cast<size_t>(binOffsets[seedIndex]) + chunkIndex];//,
 					//1048576); // 1 MiB = 8 megabit
 					//65536); // 65536 byte = 512 kilobit (default)
+
+			on_minimizer_membership_fn(chunkIndex, data.hash, bitvector);
 
 			#pragma unroll
 			for (ushort bitOffset = 0; bitOffset < constants::chunk_bits; ++bitOffset)
