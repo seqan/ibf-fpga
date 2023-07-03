@@ -60,6 +60,10 @@ void on_cpu_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
                 index = index < maximalIndex? index : maximalIndex;
 
                 Counter threshold = test.threshold_table_per_error[error].table[static_cast<size_t>(index)] + 2;
+
+                Counter const threshold_expected = test.threshold_per_error[error];
+                min_ibf_fpga::test::assert_equal(threshold, threshold_expected, "Threshold should be the same.");
+
                 return threshold;
             }, [&, i = 0]() mutable -> MinimizerToIBFData {
                 return MinimizerToIBFData {
