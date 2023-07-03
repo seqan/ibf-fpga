@@ -36,10 +36,10 @@ void on_cpu_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
         ibfData.push_back(Chunk{ibf.data()[i]});
     }
 
-    // std::array<size_t, 64> counter_actual{};
     std::vector<std::bitset<64>> bin_bit_membership_per_error{};
     for (size_t error = 0; error < test.threshold_per_error.size(); ++error)
     {
+        std::array<size_t, 64> counter_actual{};
         std::vector<std::tuple<size_t, std::bitset<64>>> minimizer_bit_membership_actual{};
         size_t const numberOfQueries = 1;
         std::vector<Chunk> result(numberOfQueries, Chunk{0});
@@ -79,6 +79,13 @@ void on_cpu_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
 
                 std::bitset<64> bit_membership{minimizer_membership};
                 minimizer_bit_membership_actual.push_back({minimizer, bit_membership});
+            }, [&](unsigned char const chunk_idx, Counter const * counters, size_t const counters_size) {
+                min_ibf_fpga::test::assert_equal(chunk_idx, (unsigned char){0}, "TODO: test more than one chunk.");
+
+                for (size_t counter_id = 0; counter_id < counters_size; ++counter_id)
+                {
+                    counter_actual[counter_id] = counters[counter_id];
+                }
             }
         );
 
@@ -91,9 +98,9 @@ void on_cpu_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpg
 
         // minimizer_bit_membership is independent on error; only the threshold changes the bin_bit_membership
         test.compare_minimizer_membership(minimizer_bit_membership_actual);
+        test.compare_counter(counter_actual);
     }
 
-    // test.compare_counter(counter_actual);
     test.compare_bin_bit_membership(bin_bit_membership_per_error);
 }
 

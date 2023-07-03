@@ -39,7 +39,7 @@ static inline HostSizeType calculateBinIndex(HostHash hash,
 // 	return (thresholds[index] + 2).to_uint();
 // }
 
-template <typename ibfData_ptr_t, typename get_threshold_fn_t, typename on_minimizer_fn_t, typename on_result_fn_t, typename on_minimizer_membership_fn_t>
+template <typename ibfData_ptr_t, typename get_threshold_fn_t, typename on_minimizer_fn_t, typename on_result_fn_t, typename on_minimizer_membership_fn_t, typename on_report_counters_fn_t>
 static void compute_ibf(
 	ibfData_ptr_t const & ibfData,
 	const typename types::HostSizeType binSize,
@@ -47,7 +47,8 @@ static void compute_ibf(
 	get_threshold_fn_t && get_threshold_fn,
 	on_minimizer_fn_t && on_minimizer_fn,
 	on_result_fn_t && on_result_fn,
-	on_minimizer_membership_fn_t && on_minimizer_membership_fn)
+	on_minimizer_membership_fn_t && on_minimizer_membership_fn,
+	on_report_counters_fn_t && on_report_counters_fn)
 {
 	using QueryIndex = typename types::QueryIndex;
 	using Counter = typename types::Counter;
@@ -151,6 +152,7 @@ static void compute_ibf(
 
 			if (data.isLastElement)
 			{
+				on_report_counters_fn(chunkIndex, counters[chunkIndex], constants::chunk_bits);
 				on_result_fn(chunkIndex, localResult);
 			}
 		}

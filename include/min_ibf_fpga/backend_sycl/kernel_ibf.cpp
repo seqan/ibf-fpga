@@ -35,6 +35,8 @@
 						result[result_idx] = localResult;
 					}, [&](unsigned char const chunk_idx, Hash const & minimizer, Chunk const & minimizer_membership) {
 						// no-op this is for debugging
+					}, [&](unsigned char const chunk_idx, Counter const * counters, size_t const counters_size) {
+						// no-op this is for debugging
 					});
 				}
 			});
