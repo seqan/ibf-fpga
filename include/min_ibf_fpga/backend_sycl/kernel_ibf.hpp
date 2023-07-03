@@ -58,7 +58,11 @@ static void compute_ibf(
 	#define II (UNSAFELEN - CHUNKS)
 
 	#if II > 1
-		Counter counters[constants::chunks][constants::chunk_bits]; // __attribute__((register))
+		Counter counters[constants::chunks][constants::chunk_bits]
+#if MIN_IBF_FPGA_INIT_EVERYTHING
+			= {}
+#endif // MIN_IBF_FPGA_INIT_EVERYTHING
+		; // __attribute__((register))
 	#else
 		Counter __attribute__((
 				memory,
@@ -101,7 +105,11 @@ static void compute_ibf(
 			threshold = get_threshold_fn(localNumberOfHashes);
 		}
 
-		HostSizeType binOffsets[constants::hash_count];
+		HostSizeType binOffsets[constants::hash_count]
+#if MIN_IBF_FPGA_INIT_EVERYTHING
+			= {}
+#endif // MIN_IBF_FPGA_INIT_EVERYTHING
+		;
 
 		#pragma unroll
 		for (unsigned char seedIndex = 0; seedIndex < constants::hash_count; ++seedIndex)
