@@ -36,7 +36,7 @@ ibf_test_fixture ibf_w23_k19_query3_test =
     },
     .threshold_per_error = {
         /*0 errors: */ 15,
-        /*1 error: */ 6
+        /*1 error: */ 5
     },
     .bin_bit_membership_per_error = {
         /*0 errors: */ none_match,

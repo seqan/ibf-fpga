@@ -36,7 +36,7 @@ ibf_test_fixture ibf_w23_k19_query0_test =
     },
     .threshold_per_error = {
         /*0 errors: */ 15, // p65_w23_k19_e0_tau0dot99[13 - 10] + 2 = 13 + 2 ???? Investigate Formula
-        /*1 error: */ 5 // p65_w23_k19_e0_tau1dot99[13 - 10] + 2 = 13 + 2 ???? Investigate Formula
+        /*1 error: */ 5 // p65_w23_k19_e0_tau1dot99[13 - 10] + 2 = 3 + 2 ???? Investigate Formula
     },
     .bin_bit_membership_per_error = {
         /*0 errors: */ none_match,
