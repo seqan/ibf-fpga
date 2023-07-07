@@ -1,3 +1,5 @@
+#pragma once
+
 namespace min_ibf_fpga::backend_sycl
 {
 
