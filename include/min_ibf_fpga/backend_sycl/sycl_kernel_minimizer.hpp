@@ -1,11 +1,19 @@
 #pragma once
 
+#include <sycl/sycl.hpp>
+#include <sycl/ext/intel/fpga_extensions.hpp>
+
+#include <min_ibf_fpga/backend_sycl/kernel_minimizer.hpp>
+
 namespace min_ibf_fpga::backend_sycl
 {
 
-template <typename constants, typename types>
+template <typename _constants, typename _types>
 struct sycl_minimizer_kernel
 {
+	using types = _types;
+	using constants = _constants;
+
 	using HostSizeType = typename types::HostSizeType;
 	using QueryIndex = typename types::QueryIndex;
 	using minimizer_kernel_t = minimizer_kernel<constants, types>;
