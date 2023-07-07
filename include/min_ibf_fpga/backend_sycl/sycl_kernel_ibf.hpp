@@ -1,11 +1,19 @@
 #pragma once
 
+#include <sycl/sycl.hpp>
+#include <sycl/ext/intel/fpga_extensions.hpp>
+
+#include <min_ibf_fpga/backend_sycl/kernel_ibf.hpp>
+
 namespace min_ibf_fpga::backend_sycl
 {
 
-template <typename MinimizerToIBFPipes, typename constants, typename types>
+template <typename _MinimizerToIBFPipes, typename _constants, typename _types>
 struct sycl_ibf_kernel
 {
+	using types = _types;
+	using constants = _constants;
+
 	using QueryIndex = typename types::QueryIndex;
 	using HostSizeType = typename types::HostSizeType;
 	using Counter = typename types::Counter;
@@ -15,6 +23,7 @@ struct sycl_ibf_kernel
 	using ibf_kernel_t = ibf_kernel<constants, types>;
 
 	using MinimizerToIBFData = typename types::MinimizerToIBFData;
+	using MinimizerToIBFPipes = _MinimizerToIBFPipes;
 
 	sycl::accessor<Chunk, 1, sycl::access_mode::read> ibfData;
 	HostSizeType binSize{};
