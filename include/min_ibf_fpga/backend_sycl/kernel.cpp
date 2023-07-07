@@ -42,8 +42,20 @@ void RunKernel(sycl::queue& queue,
 
 	fpga_tools::UnrolledLoop<constants::number_of_kernels>([&](auto id)
 	{
-
-	#include "kernel_minimizer.cpp"
+		queue.submit([&](sycl::handler &handler)
+		{
+			sycl_minimizer_kernel_t minimizer_kernel{
+				.queries{queries_buffer, handler, sycl::read_only},
+				.queriesOffset{queriesOffset},
+				.querySizes{querySizes_buffer, handler, sycl::read_only},
+				.querySizesOffset{querySizesOffset},
+				.numberOfQueries{numberOfQueries}
+			};
+			handler.single_task<MinimizerKernel>([minimizer_kernel, id]() [[intel::kernel_args_restrict]]
+			{
+				minimizer_kernel.execute<id>();
+			});
+		});
 
 	#include "kernel_ibf.cpp"
 
