@@ -8,6 +8,7 @@
 #include "kernel.hpp"
 #include "kernel_ibf.hpp"
 #include "kernel_minimizer.hpp"
+#include "sycl_kernel_minimizer.hpp"
 
 
 namespace min_ibf_fpga::backend_sycl
@@ -33,13 +34,11 @@ void RunKernel(sycl::queue& queue,
 {
 	using constants = _constants;
 	using types = _types;
-	using minimizer_kernel_t = minimizer_kernel<constants, types>;
 	using ibf_kernel_t = ibf_kernel<constants, types>;
 
+	using sycl_minimizer_kernel_t = sycl_minimizer_kernel<constants, types>;
 	using MinimizerToIBFData = types::MinimizerToIBFData;
-	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, constants::number_of_kernels>;
-
-	using PrefetchingLSU = sycl::ext::intel::lsu<sycl::ext::intel::prefetch<true>, sycl::ext::intel::statically_coalesce<false>>;
+	using MinimizerToIBFPipes = typename sycl_minimizer_kernel_t::MinimizerToIBFPipes;
 
 	fpga_tools::UnrolledLoop<constants::number_of_kernels>([&](auto id)
 	{
