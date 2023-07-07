@@ -7,6 +7,7 @@
 // Kernel includes
 #include "kernel.hpp"
 #include "kernel_ibf.hpp"
+#include "sycl_kernel_ibf.hpp"
 
 namespace min_ibf_fpga::backend_sycl
 {
@@ -28,12 +29,15 @@ void RunIBFKernel(sycl::queue& queue,
 {
 	using constants = _constants;
 	using types = _types;
-	using ibf_kernel_t = ibf_kernel<constants, types>;
-	using MinimizerToIBFData = _types::MinimizerToIBFData;
+	using MinimizerToIBFData = types::MinimizerToIBFData;
 	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, constants::number_of_kernels>;
+
+	using sycl_ibf_kernel_t = sycl_ibf_kernel<MinimizerToIBFPipes, constants, types>;
 
 	fpga_tools::UnrolledLoop<constants::number_of_kernels>([&](auto id)
 	{
+		static constexpr size_t pipe_id = id;
+
 		queue.submit([&](sycl::handler &handler)
 		{
 			sycl::accessor minimizerToIbf(minimizerToIbf_buffer, handler, sycl::read_only);
@@ -42,7 +46,7 @@ void RunIBFKernel(sycl::queue& queue,
 			{
 				for (size_t i = 0; i < minimizerToIbf.size(); i++)
 				{
-					MinimizerToIBFPipes::PipeAt<id>::write(minimizerToIbf[i]);
+					MinimizerToIBFPipes::PipeAt<pipe_id>::write(minimizerToIbf[i]);
 				}
 			});
 		});

@@ -8,6 +8,7 @@
 #include "kernel.hpp"
 #include "kernel_ibf.hpp"
 #include "kernel_minimizer.hpp"
+#include "sycl_kernel_ibf.hpp"
 #include "sycl_kernel_minimizer.hpp"
 
 
@@ -34,11 +35,10 @@ void RunKernel(sycl::queue& queue,
 {
 	using constants = _constants;
 	using types = _types;
-	using ibf_kernel_t = ibf_kernel<constants, types>;
 
 	using sycl_minimizer_kernel_t = sycl_minimizer_kernel<constants, types>;
-	using MinimizerToIBFData = types::MinimizerToIBFData;
 	using MinimizerToIBFPipes = typename sycl_minimizer_kernel_t::MinimizerToIBFPipes;
+	using sycl_ibf_kernel_t = sycl_ibf_kernel<MinimizerToIBFPipes, constants, types>;
 
 	fpga_tools::UnrolledLoop<constants::number_of_kernels>([&](auto id)
 	{
