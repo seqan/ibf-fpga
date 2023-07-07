@@ -5,7 +5,7 @@
 #include "unrolled_loop.hpp"
 
 // Kernel includes
-#include "kernel.hpp"
+#include "shared.hpp"
 #include "kernel_ibf.hpp"
 #include "kernel_minimizer.hpp"
 #include "sycl_kernel_ibf.hpp"
