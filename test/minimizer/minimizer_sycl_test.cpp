@@ -7,8 +7,9 @@
 #include <sycl/ext/intel/ac_types/ac_int.hpp>
 
 #include <min_ibf_fpga/test/assert_equal.hpp>
-#include <min_ibf_fpga/backend_sycl/kernel_minimizer_test.cpp>
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
+
+#include "RunMinimizerKernel.hpp"
 
 // Forward declaration of the kernel names. FPGA best practice to reduce compiler name mangling in the optimization reports.
 struct MinimizerKernel_w23_k19
@@ -68,7 +69,7 @@ void sycl_test(minimizer_test_fixture test)
         sycl::buffer querySizes_buffer(querySizes);
         sycl::buffer minimizerToIbf_buffer(pipe_results);
 
-        min_ibf_fpga::backend_sycl::RunMinimizerKernel<MinimizerKernel, PipeToHostKernel>(q,
+        min_ibf_fpga::backend_sycl::test::RunMinimizerKernel<MinimizerKernel, PipeToHostKernel>(q,
                 queries_buffer,
                 queriesOffset,
                 querySizes_buffer,

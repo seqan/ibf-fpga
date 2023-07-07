@@ -1,15 +1,15 @@
 #include <sycl/ext/intel/fpga_extensions.hpp>
 
 // Utilities
-#include "pipe_utils.hpp"
-#include "unrolled_loop.hpp"
+#include <min_ibf_fpga/backend_sycl/pipe_utils.hpp>
+#include <min_ibf_fpga/backend_sycl/unrolled_loop.hpp>
 
 // Kernel includes
 #include <min_ibf_fpga/backend_sycl/min_ibf_constants.hpp>
 #include <min_ibf_fpga/backend_sycl/min_ibf_types.hpp>
 #include <min_ibf_fpga/backend_sycl/sycl_kernel_minimizer.hpp>
 
-namespace min_ibf_fpga::backend_sycl
+namespace min_ibf_fpga::backend_sycl::test
 {
 
 template <typename SyclMinimizerKernel, typename pipe_to_host_kernel_t>
@@ -67,4 +67,4 @@ void RunMinimizerKernel(sycl::queue& queue,
 	});
 }
 
-} // namespace min_ibf_fpga::backend_sycl
+} // namespace min_ibf_fpga::backend_sycl::test
