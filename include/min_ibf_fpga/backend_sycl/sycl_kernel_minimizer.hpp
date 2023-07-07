@@ -21,7 +21,7 @@ struct sycl_minimizer_kernel
 	HostSizeType querySizesOffset{};
 	HostSizeType numberOfQueries{};
 
-	template <size_t id>
+	template <size_t pipe_id>
 	void execute() const
 	{
 		// Prefetching requires pointer
@@ -41,7 +41,7 @@ struct sycl_minimizer_kernel
 				return PrefetchingLSU::load(queries_ptr + static_cast<size_t>(localQueryOffset + iteration));
 			}, [&](auto && data)
 			{
-				using pipe_t = typename MinimizerToIBFPipes::template PipeAt<id>;
+				using pipe_t = typename MinimizerToIBFPipes::template PipeAt<pipe_id>;
 				pipe_t::write(std::forward<decltype(data)>(data));
 			});
 		}

@@ -42,6 +42,8 @@ void RunKernel(sycl::queue& queue,
 
 	fpga_tools::UnrolledLoop<constants::number_of_kernels>([&](auto id)
 	{
+		static constexpr size_t pipe_id = id;
+
 		queue.submit([&](sycl::handler &handler)
 		{
 			sycl_minimizer_kernel_t minimizer_kernel{
@@ -51,9 +53,9 @@ void RunKernel(sycl::queue& queue,
 				.querySizesOffset{querySizesOffset},
 				.numberOfQueries{numberOfQueries}
 			};
-			handler.single_task<MinimizerKernel>([minimizer_kernel, id]() [[intel::kernel_args_restrict]]
+			handler.single_task<MinimizerKernel>([minimizer_kernel]() [[intel::kernel_args_restrict]]
 			{
-				minimizer_kernel.execute<id>();
+				minimizer_kernel.execute<pipe_id>();
 			});
 		});
 
