@@ -20,6 +20,9 @@ stages:          # List of stages for jobs, and their order of execution
   apt -y install cmake # cmake
   # apt -y install opencl-headers opencl-clhpp-headers ocl-icd-opencl-dev # opencl-lib
 
+.install_clang: &install_clang |-
+  apt -y install clang # clang-10
+
 #############################################################
 # ---------------------- ICC 23.1 --------------------------#
 #############################################################
@@ -117,7 +120,7 @@ build:clang:10:
   before_script:
     - *update_submodule
     - *install_packages
-    - apt install -y clang
+    - *install_clang
     - mkdir -p ${BUILD_DIR}
     - cd ${BUILD_DIR}
   script:
@@ -143,7 +146,7 @@ test:clang:10:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-clang-10-test'
   before_script:
     - *install_packages
-    - apt install -y clang
+    - *install_clang
     - cd ${BUILD_DIR}
   script:
     - ctest --output-on-failure .
@@ -161,7 +164,7 @@ build:clang:10:sanitizer-address:
   before_script:
     - *update_submodule
     - *install_packages
-    - apt install -y clang
+    - *install_clang
     - mkdir -p ${BUILD_DIR}
     - cd ${BUILD_DIR}
   script:
@@ -187,7 +190,7 @@ test:clang:10:sanitizer-address:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-clang-10-test-sanitizer-address'
   before_script:
     - *install_packages
-    - apt install -y clang
+    - *install_clang
     - cd ${BUILD_DIR}
   script:
     - ctest --output-on-failure .
