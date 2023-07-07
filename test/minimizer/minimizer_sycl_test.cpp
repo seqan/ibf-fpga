@@ -21,6 +21,16 @@ struct MinimizerKernel_w23_k19
 };
 class PipeToHostKernel_w23_k19;
 
+struct MinimizerKernel_w19_k19
+{
+    using _constants = min_ibf_fpga::backend_sycl::min_ibf_constants<19, 19, 64>;
+    using _backend = min_ibf_fpga::backend_sycl::sycl_backend;
+    using _types = min_ibf_fpga::backend_sycl::min_ibf_types<_constants, _backend>;
+
+    using type = min_ibf_fpga::backend_sycl::sycl_minimizer_kernel<_constants, _types>;
+};
+class PipeToHostKernel_w19_k19;
+
 template <typename MinimizerKernel, typename PipeToHostKernel>
 void sycl_test(minimizer_test_fixture test)
 {
@@ -86,11 +96,11 @@ int main()
     sycl_test<MinimizerKernel_w23_k19, PipeToHostKernel_w23_k19>(minimizer_w23_k19_query4_test);
 
     // not supported yet
-    // sycl_test(minimizer_w19_k19_query0_test);
-    // sycl_test(minimizer_w19_k19_query1_test);
-    // sycl_test(minimizer_w19_k19_query2_test);
-    // sycl_test(minimizer_w19_k19_query3_test);
-    // sycl_test(minimizer_w19_k19_query4_test);
+    sycl_test<MinimizerKernel_w19_k19, PipeToHostKernel_w19_k19>(minimizer_w19_k19_query0_test);
+    sycl_test<MinimizerKernel_w19_k19, PipeToHostKernel_w19_k19>(minimizer_w19_k19_query1_test);
+    sycl_test<MinimizerKernel_w19_k19, PipeToHostKernel_w19_k19>(minimizer_w19_k19_query2_test);
+    sycl_test<MinimizerKernel_w19_k19, PipeToHostKernel_w19_k19>(minimizer_w19_k19_query3_test);
+    sycl_test<MinimizerKernel_w19_k19, PipeToHostKernel_w19_k19>(minimizer_w19_k19_query4_test);
 
     return 0;
 }
