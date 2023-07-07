@@ -20,6 +20,9 @@ stages:          # List of stages for jobs, and their order of execution
   apt -y install cmake # cmake
   # apt -y install opencl-headers opencl-clhpp-headers ocl-icd-opencl-dev # opencl-lib
 
+.install_clang: &install_clang |-
+  apt -y install clang # clang-10
+
 #############################################################
 # ---------------------- ICC 23.1 --------------------------#
 #############################################################
@@ -57,6 +60,7 @@ test:icc:23.1:
     - cd ${BUILD_DIR}
   script:
     - ctest --output-on-failure --test-dir ./test
+
 
 #############################################################
 # ----------------------- GCC 9 ----------------------------#
@@ -116,7 +120,7 @@ build:clang:10:
   before_script:
     - *update_submodule
     - *install_packages
-    - apt install -y clang
+    - *install_clang
     - mkdir -p ${BUILD_DIR}
     - cd ${BUILD_DIR}
   script:
@@ -142,7 +146,67 @@ test:clang:10:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-clang-10-test'
   before_script:
     - *install_packages
-    - apt install -y clang
+    - *install_clang
     - cd ${BUILD_DIR}
   script:
+    - ctest --output-on-failure .
+
+
+#############################################################
+# --------------- CLANG 10 sanitizer=address ---------------#
+#############################################################
+
+build:clang:10:sanitizer-address:
+  stage: build
+  image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
+  variables:
+    BUILD_DIR: '${CI_PROJECT_DIR}/build-clang-10-test-sanitizer-address'
+  before_script:
+    - *update_submodule
+    - *install_packages
+    - *install_clang
+    - mkdir -p ${BUILD_DIR}
+    - cd ${BUILD_DIR}
+  script:
+    # INTELFPGAOCLSDKROOT=/opt/intel/oneapi/compiler/<version>/linux/lib/oclfpga
+    # <...>/host contains OpenCL Header like CL/opencl.hpp
+    # <...>/.. contains OpenCL Library libOpenCL.so
+    - CC=clang-10 CXX=clang++-10 cmake -DCMAKE_CXX_FLAGS="-fsanitize=undefined -fsanitize=address -fno-omit-frame-pointer" -DCMAKE_INCLUDE_PATH="${INTELFPGAOCLSDKROOT}/host" -DCMAKE_LIBRARY_PATH="${INTELFPGAOCLSDKROOT}/.." -G Ninja -DIBF_USE_IOC64=1 ${CI_PROJECT_DIR}/test
+    - cmake --build . -j 1
+  artifacts:
+    paths:
+      - ${BUILD_DIR}
+      # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
+      # cache:
+      #   paths:
+      #     - "*.o"
+
+# run tests using the binary built before
+test:clang:10:sanitizer-address:
+  stage: test
+  needs: [build:clang:10:sanitizer-address]
+  image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
+  variables:
+    BUILD_DIR: '${CI_PROJECT_DIR}/build-clang-10-test-sanitizer-address'
+  before_script:
+    - *install_packages
+    - *install_clang
+    - cd ${BUILD_DIR}
+  script:
+    # Note: The following line fixes the error:
+    # > You are trying to dlopen a /usr/lib/wsl/lib/libdxcore.so shared library with RTLD_DEEPBIND flag which is
+    # > incompatibe with sanitizer runtime (see https://github.com/google/sanitizers/issues/611 for details).
+    # > If you want to run /usr/lib/wsl/lib/libdxcore.so library under sanitizers please remove RTLD_DEEPBIND from dlopen flags.
+    # For some reason /etc/OpenCL/vendors/intel.icd tries to load that shared library that doesn't exist. O.o
+    # The following line explicitly tells which OpenCL loader should be used (basically `cat /etc/OpenCL/vendors/Intel_FPGA_SSG_Emulator.icd`)
+    # See https://github.com/KhronosGroup/OpenCL-ICD-Loader#table-of-debug-environment-variables for more informations on the environment vars
+    - export OCL_ICD_ENABLE_TRACE=True
+    - export OCL_ICD_VENDORS=/etc/OpenCL/vendors/non-existing
+    - export OCL_ICD_FILENAMES=/opt/intel/oneapi/compiler/latest/linux/lib/x64/libintelocl_emu.so
+    # For some reason the OpenCL binaries do encounter:
+    # > ==10738==LeakSanitizer has encountered a fatal error.
+    # > ==10738==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+    # > ==10738==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+    # We disable LeakSanitizer for now.
+    - export ASAN_OPTIONS=detect_leaks=0
     - ctest --output-on-failure .
