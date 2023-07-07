@@ -7,7 +7,6 @@
 #include <sycl/ext/intel/ac_types/ac_int.hpp>
 #include <min_ibf_fpga/backend_sycl/pipe_utils.hpp>
 
-#include <min_ibf_fpga/backend_sycl/kernel_ibf_test.cpp>
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
 #include <min_ibf_fpga/index/ibf_metadata.hpp>
 #include <min_ibf_fpga/index/ibf_data.hpp>
@@ -15,6 +14,8 @@
 #include <min_ibf_fpga/test/assert_equal.hpp>
 #include <min_ibf_fpga/test/assert_loaded_ibf.hpp>
 #include <min_ibf_fpga/test/load_ibf_index.hpp>
+
+#include "RunIBFKernel.hpp"
 
 // Forward declaration of the kernel names. FPGA best practice to reduce compiler name mangling in the optimization reports.
 struct IbfKernel_w23_k19
