@@ -23,17 +23,19 @@ stages:          # List of stages for jobs, and their order of execution
 build:icc:23.1:
   stage: build
   image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
+  variables:
+    BUILD_DIR: '${CI_PROJECT_DIR}/build-icc-23.1'
   before_script:
     - *update_submodule
     - *install_packages
-    - mkdir -p ${CI_PROJECT_DIR}/build-icc-23.1
-    - cd ${CI_PROJECT_DIR}/build-icc-23.1
+    - mkdir -p ${BUILD_DIR}
+    - cd ${BUILD_DIR}
   script:
     - CC=icx CXX=icpx cmake -G Ninja -DIBF_USE_IOC64=1 ${CI_PROJECT_DIR}
     - cmake --build . -j 1
   artifacts:
     paths:
-      - build-icc-23.1
+      - ${BUILD_DIR}
       # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
       # cache:
       #   paths:
@@ -44,15 +46,19 @@ test:icc:23.1:
   stage: test
   needs: [build:icc:23.1]
   image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
+  variables:
+    BUILD_DIR: '${CI_PROJECT_DIR}/build-icc-23.1'
   before_script:
     - *install_packages
-    - cd ${CI_PROJECT_DIR}/build-icc-23.1
+    - cd ${BUILD_DIR}
   script:
     - ctest --output-on-failure --test-dir ./test
 
 build:gcc:9:
   stage: build
   image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
+  variables:
+    BUILD_DIR: '${CI_PROJECT_DIR}/build-gcc-9-test'
   before_script:
     - *update_submodule
     - *install_packages
@@ -60,8 +66,8 @@ build:gcc:9:
     - cd ${CI_PROJECT_DIR}/external/seqan3
     - git checkout b26aef71221af70e31ff1c47f6262a7852d9c02c
     - git submodule update --init --recursive
-    - mkdir -p ${CI_PROJECT_DIR}/build-gcc-9-test
-    - cd ${CI_PROJECT_DIR}/build-gcc-9-test
+    - mkdir -p ${BUILD_DIR}
+    - cd ${BUILD_DIR}
   script:
     # INTELFPGAOCLSDKROOT=/opt/intel/oneapi/compiler/<version>/linux/lib/oclfpga
     # <...>/host contains OpenCL Header like CL/opencl.hpp
@@ -70,7 +76,7 @@ build:gcc:9:
     - cmake --build . -j 1
   artifacts:
     paths:
-      - build-gcc-9-test
+      - ${BUILD_DIR}
       # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
       # cache:
       #   paths:
@@ -81,8 +87,10 @@ test:gcc:9:
   stage: test
   needs: [build:gcc:9]
   image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
+  variables:
+    BUILD_DIR: '${CI_PROJECT_DIR}/build-gcc-9-test'
   before_script:
     - *install_packages
-    - cd build-gcc-9-test
+    - cd ${BUILD_DIR}
   script:
     - ctest --output-on-failure .
