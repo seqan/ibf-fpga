@@ -12,27 +12,22 @@
 namespace min_ibf_fpga::backend_sycl
 {
 
-// Forward declaration of the kernel names. FPGA best practice to reduce compiler name mangling in the optimization reports.
-class HostToKernelPipe;
-class IbfKernel;
-
+template <typename SyclIbfKernel, typename HostToKernelPipe>
 void RunIBFKernel(sycl::queue& queue,
-	sycl::buffer<_types::MinimizerToIBFData, 1>& minimizerToIbf_buffer,
-	sycl::buffer<_types::Chunk, 1>& ibfData_buffer,
-	const _types::HostSizeType binSize,
-	const _types::HostSizeType hashShift,
-	const _types::HostSizeType numberOfQueries,
-	const _types::HostSizeType minimalNumberOfMinimizers,
-	const _types::HostSizeType maximalNumberOfMinimizers,
-	sycl::buffer<_types::HostSizeType, 1>& thresholds_buffer,
-	sycl::buffer<_types::Chunk, 1>& result_buffer)
+	sycl::buffer<typename SyclIbfKernel::type::MinimizerToIBFData, 1>& minimizerToIbf_buffer,
+	sycl::buffer<typename SyclIbfKernel::type::Chunk, 1>& ibfData_buffer,
+	const typename SyclIbfKernel::type::HostSizeType binSize,
+	const typename SyclIbfKernel::type::HostSizeType hashShift,
+	const typename SyclIbfKernel::type::HostSizeType numberOfQueries,
+	const typename SyclIbfKernel::type::HostSizeType minimalNumberOfMinimizers,
+	const typename SyclIbfKernel::type::HostSizeType maximalNumberOfMinimizers,
+	sycl::buffer<typename SyclIbfKernel::type::HostSizeType, 1>& thresholds_buffer,
+	sycl::buffer<typename SyclIbfKernel::type::Chunk, 1>& result_buffer)
 {
-	using constants = _constants;
-	using types = _types;
-	using MinimizerToIBFData = types::MinimizerToIBFData;
-	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, constants::number_of_kernels>;
+	using sycl_ibf_kernel_t = typename SyclIbfKernel::type;
+	using constants = typename sycl_ibf_kernel_t::constants;
 
-	using sycl_ibf_kernel_t = sycl_ibf_kernel<MinimizerToIBFPipes, constants, types>;
+	using MinimizerToIBFPipes = typename sycl_ibf_kernel_t::MinimizerToIBFPipes;
 
 	fpga_tools::UnrolledLoop<constants::number_of_kernels>([&](auto id)
 	{
@@ -46,7 +41,8 @@ void RunIBFKernel(sycl::queue& queue,
 			{
 				for (size_t i = 0; i < minimizerToIbf.size(); i++)
 				{
-					MinimizerToIBFPipes::PipeAt<pipe_id>::write(minimizerToIbf[i]);
+					using pipe_t = typename MinimizerToIBFPipes::template PipeAt<pipe_id>;
+					pipe_t::write(minimizerToIbf[i]);
 				}
 			});
 		});
@@ -63,9 +59,9 @@ void RunIBFKernel(sycl::queue& queue,
 				.thresholds{thresholds_buffer, handler, sycl::read_only},
 				.result{result_buffer, handler, sycl::write_only},
 			};
-			handler.single_task<IbfKernel>([ibf_kernel]() [[intel::kernel_args_restrict]]
+			handler.single_task<SyclIbfKernel>([ibf_kernel]() [[intel::kernel_args_restrict]]
 			{
-				ibf_kernel.execute<pipe_id>();
+				ibf_kernel.template execute<pipe_id>();
 			});
 		});
 

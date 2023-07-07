@@ -15,8 +15,26 @@
 #include <min_ibf_fpga/test/assert_loaded_ibf.hpp>
 #include <min_ibf_fpga/test/load_ibf_index.hpp>
 
+// Forward declaration of the kernel names. FPGA best practice to reduce compiler name mangling in the optimization reports.
+struct IbfKernel_w23_k19
+{
+    using _constants = min_ibf_fpga::backend_sycl::min_ibf_constants<23, 19, 64>;
+    using _backend = min_ibf_fpga::backend_sycl::sycl_backend;
+    using _types = min_ibf_fpga::backend_sycl::min_ibf_types<_constants, _backend>;
+    struct _pipe_name{};
+    using _MinimizerToIBFPipes = fpga_tools::PipeArray<_pipe_name, _types::MinimizerToIBFData, 25, _constants::number_of_kernels>;
+
+    using type = min_ibf_fpga::backend_sycl::sycl_ibf_kernel<_MinimizerToIBFPipes, _constants, _types>;
+};
+class HostToKernelPipe_w23_k19;
+
+template <typename IbfKernel, typename HostToKernelPipe>
 void sycl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpga::index::ibf_data const & ibf, ibf_test_fixture const & test)
 {
+    using MinimizerToIBFData = typename IbfKernel::_types::MinimizerToIBFData;
+    using Chunk = typename IbfKernel::_types::Chunk;
+    using HostSizeType = typename IbfKernel::_types::HostSizeType;
+
 #if FPGA_SIMULATOR
   auto device_selector = sycl::ext::intel::fpga_simulator_selector_v;
 #elif FPGA_HARDWARE
@@ -28,10 +46,10 @@ void sycl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpga:
     sycl::queue q(device_selector, fpga_tools::exception_handler);
 
     std::vector<uint64_t> minimizer = test.minimizer();
-    std::vector<min_ibf_fpga::backend_sycl::_types::MinimizerToIBFData> minimizerToIbf;
+    std::vector<MinimizerToIBFData> minimizerToIbf;
     for (size_t i = 0; i < minimizer.size(); i++)
     {
-        min_ibf_fpga::backend_sycl::_types::MinimizerToIBFData data;
+        MinimizerToIBFData data;
         data.hash = minimizer[i];
         data.isLastElement = false;
         if(i + 1 == minimizer.size())
@@ -41,7 +59,7 @@ void sycl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpga:
         minimizerToIbf.push_back(data);
     }
 
-    std::vector<min_ibf_fpga::backend_sycl::_types::Chunk> ibfData;
+    std::vector<Chunk> ibfData;
     for (size_t i = 0; i < ibf.size(); i++)
     {
         ibfData.push_back(ibf.data()[i]);
@@ -55,12 +73,12 @@ void sycl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpga:
         size_t const minimalNumberOfMinimizers = test.minimizer_range.minimal;
         size_t const maximalNumberOfMinimizers = test.minimizer_range.maximal;
         min_ibf_fpga::threshold::threshold_table ths = test.threshold_table_per_error[errors];
-            std::vector<min_ibf_fpga::backend_sycl::_types::HostSizeType> thresholds;
+        std::vector<HostSizeType> thresholds;
         for (size_t i = 0; i < ths.table.size(); i++)
         {
             thresholds.push_back(ths.table[i]);
         }
-        std::vector<min_ibf_fpga::backend_sycl::_types::Chunk> result(numberOfQueries, 0);
+        std::vector<Chunk> result(numberOfQueries, 0);
 
         { // device buffer scope
             sycl::buffer minimizerToIbf_buffer(minimizerToIbf);
@@ -68,7 +86,7 @@ void sycl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpga:
             sycl::buffer thresholds_buffer(thresholds);
             sycl::buffer result_buffer(result);
 
-            min_ibf_fpga::backend_sycl::RunIBFKernel(q,
+            min_ibf_fpga::backend_sycl::RunIBFKernel<IbfKernel, HostToKernelPipe>(q,
                     minimizerToIbf_buffer,
                     ibfData_buffer,
                     binSize,
@@ -122,11 +140,11 @@ int main()
         .bin_size = bin_size
     });
 
-    sycl_test(ibf_w23_k19_meta, ibf_w23_k19, ibf_w23_k19_query0_test);
-    sycl_test(ibf_w23_k19_meta, ibf_w23_k19, ibf_w23_k19_query1_test);
-    sycl_test(ibf_w23_k19_meta, ibf_w23_k19, ibf_w23_k19_query2_test);
-    sycl_test(ibf_w23_k19_meta, ibf_w23_k19, ibf_w23_k19_query3_test);
-    sycl_test(ibf_w23_k19_meta, ibf_w23_k19, ibf_w23_k19_query4_test);
+    sycl_test<IbfKernel_w23_k19, HostToKernelPipe_w23_k19>(ibf_w23_k19_meta, ibf_w23_k19, ibf_w23_k19_query0_test);
+    sycl_test<IbfKernel_w23_k19, HostToKernelPipe_w23_k19>(ibf_w23_k19_meta, ibf_w23_k19, ibf_w23_k19_query1_test);
+    sycl_test<IbfKernel_w23_k19, HostToKernelPipe_w23_k19>(ibf_w23_k19_meta, ibf_w23_k19, ibf_w23_k19_query2_test);
+    sycl_test<IbfKernel_w23_k19, HostToKernelPipe_w23_k19>(ibf_w23_k19_meta, ibf_w23_k19, ibf_w23_k19_query3_test);
+    sycl_test<IbfKernel_w23_k19, HostToKernelPipe_w23_k19>(ibf_w23_k19_meta, ibf_w23_k19, ibf_w23_k19_query4_test);
 
     // not supported yet
     //sycl_test(ibf_w19_k19_meta, ibf_w19_k19, ibf_w19_k19_query0_test);
