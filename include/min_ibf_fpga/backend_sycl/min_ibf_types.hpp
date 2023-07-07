@@ -44,6 +44,8 @@ struct min_ibf_types<min_ibf_constants<sizes...>, sycl_backend>
 
     using HostSizeType = ac_int<_constants::host_size_type_bits, false>;
 
+    using DoubleHostSizeType = ac_int<_constants::host_size_type_bits * 2, false>;
+
     using Element = ac_int<2, false>;
 
     using QueryIndex = ac_int<25, true>;
