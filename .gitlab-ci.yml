@@ -203,4 +203,10 @@ test:clang:10:sanitizer-address:
     - export OCL_ICD_ENABLE_TRACE=True
     - export OCL_ICD_VENDORS=/etc/OpenCL/vendors/non-existing
     - export OCL_ICD_FILENAMES=/opt/intel/oneapi/compiler/latest/linux/lib/x64/libintelocl_emu.so
+    # For some reason the OpenCL binaries do encounter:
+    # > ==10738==LeakSanitizer has encountered a fatal error.
+    # > ==10738==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+    # > ==10738==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+    # We disable LeakSanitizer for now.
+    - export ASAN_OPTIONS=detect_leaks=0
     - ctest --output-on-failure .
