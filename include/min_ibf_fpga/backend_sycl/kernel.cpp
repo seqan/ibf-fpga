@@ -8,6 +8,8 @@
 #include "kernel.hpp"
 #include "kernel_ibf.hpp"
 #include "kernel_minimizer.hpp"
+#include "sycl_kernel_ibf.hpp"
+#include "sycl_kernel_minimizer.hpp"
 
 
 namespace min_ibf_fpga::backend_sycl
@@ -33,20 +35,47 @@ void RunKernel(sycl::queue& queue,
 {
 	using constants = _constants;
 	using types = _types;
-	using minimizer_kernel_t = minimizer_kernel<constants, types>;
-	using ibf_kernel_t = ibf_kernel<constants, types>;
 
-	using MinimizerToIBFData = types::MinimizerToIBFData;
-	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, constants::number_of_kernels>;
-
-	using PrefetchingLSU = sycl::ext::intel::lsu<sycl::ext::intel::prefetch<true>, sycl::ext::intel::statically_coalesce<false>>;
+	using sycl_minimizer_kernel_t = sycl_minimizer_kernel<constants, types>;
+	using MinimizerToIBFPipes = typename sycl_minimizer_kernel_t::MinimizerToIBFPipes;
+	using sycl_ibf_kernel_t = sycl_ibf_kernel<MinimizerToIBFPipes, constants, types>;
 
 	fpga_tools::UnrolledLoop<constants::number_of_kernels>([&](auto id)
 	{
+		static constexpr size_t pipe_id = id;
 
-	#include "kernel_minimizer.cpp"
+		queue.submit([&](sycl::handler &handler)
+		{
+			sycl_minimizer_kernel_t minimizer_kernel{
+				.queries{queries_buffer, handler, sycl::read_only},
+				.queriesOffset{queriesOffset},
+				.querySizes{querySizes_buffer, handler, sycl::read_only},
+				.querySizesOffset{querySizesOffset},
+				.numberOfQueries{numberOfQueries}
+			};
+			handler.single_task<MinimizerKernel>([minimizer_kernel]() [[intel::kernel_args_restrict]]
+			{
+				minimizer_kernel.execute<pipe_id>();
+			});
+		});
 
-	#include "kernel_ibf.cpp"
+		queue.submit([&](sycl::handler &handler)
+		{
+			sycl_ibf_kernel_t ibf_kernel{
+				.ibfData{ibfData_buffer, handler, sycl::read_only},
+				.binSize{binSize},
+				.hashShift{hashShift},
+				.numberOfQueries{numberOfQueries},
+				.minimalNumberOfMinimizers{minimalNumberOfMinimizers},
+				.maximalNumberOfMinimizers{maximalNumberOfMinimizers},
+				.thresholds{thresholds_buffer, handler, sycl::read_only},
+				.result{result_buffer, handler, sycl::write_only},
+			};
+			handler.single_task<IbfKernel>([ibf_kernel]() [[intel::kernel_args_restrict]]
+			{
+				ibf_kernel.execute<pipe_id>();
+			});
+		});
 
 	});
 }
