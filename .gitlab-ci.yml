@@ -193,4 +193,14 @@ test:clang:10:sanitizer-address:
     - *install_clang
     - cd ${BUILD_DIR}
   script:
+    # Note: The following line fixes the error:
+    # > You are trying to dlopen a /usr/lib/wsl/lib/libdxcore.so shared library with RTLD_DEEPBIND flag which is
+    # > incompatibe with sanitizer runtime (see https://github.com/google/sanitizers/issues/611 for details).
+    # > If you want to run /usr/lib/wsl/lib/libdxcore.so library under sanitizers please remove RTLD_DEEPBIND from dlopen flags.
+    # For some reason /etc/OpenCL/vendors/intel.icd tries to load that shared library that doesn't exist. O.o
+    # The following line explicitly tells which OpenCL loader should be used (basically `cat /etc/OpenCL/vendors/Intel_FPGA_SSG_Emulator.icd`)
+    # See https://github.com/KhronosGroup/OpenCL-ICD-Loader#table-of-debug-environment-variables for more informations on the environment vars
+    - export OCL_ICD_ENABLE_TRACE=True
+    - export OCL_ICD_VENDORS=/etc/OpenCL/vendors/non-existing
+    - export OCL_ICD_FILENAMES=/opt/intel/oneapi/compiler/latest/linux/lib/x64/libintelocl_emu.so
     - ctest --output-on-failure .
