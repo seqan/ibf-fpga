@@ -1,5 +1,10 @@
 #pragma once
 
+#include <sycl/sycl.hpp>
+#include <sycl/ext/intel/fpga_extensions.hpp>
+
+#include <min_ibf_fpga/backend_sycl/kernel_ibf.hpp>
+
 namespace min_ibf_fpga::backend_sycl
 {
 
