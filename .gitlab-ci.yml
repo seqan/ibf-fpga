@@ -20,6 +20,10 @@ stages:          # List of stages for jobs, and their order of execution
   apt -y install cmake # cmake
   # apt -y install opencl-headers opencl-clhpp-headers ocl-icd-opencl-dev # opencl-lib
 
+#############################################################
+# ---------------------- ICC 23.1 --------------------------#
+#############################################################
+
 build:icc:23.1:
   stage: build
   image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
@@ -53,6 +57,10 @@ test:icc:23.1:
     - cd ${BUILD_DIR}
   script:
     - ctest --output-on-failure --test-dir ./test
+
+#############################################################
+# ----------------------- GCC 9 ----------------------------#
+#############################################################
 
 build:gcc:9:
   stage: build
