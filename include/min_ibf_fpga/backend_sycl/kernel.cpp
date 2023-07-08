@@ -5,7 +5,9 @@
 #include "unrolled_loop.hpp"
 
 // Kernel includes
-#include "shared.hpp"
+#include <min_ibf_fpga/backend_sycl/min_ibf_constants.hpp>
+#include <min_ibf_fpga/backend_sycl/min_ibf_types.hpp>
+#include <min_ibf_fpga/backend_sycl/kernel.hpp>
 #include "kernel_ibf.hpp"
 #include "kernel_minimizer.hpp"
 #include "sycl_kernel_ibf.hpp"

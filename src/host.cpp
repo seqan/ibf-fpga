@@ -6,7 +6,7 @@
 #include <sycl/ext/intel/fpga_extensions.hpp>
 
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
-#include <min_ibf_fpga/backend_sycl/shared.hpp>
+#include <min_ibf_fpga/backend_sycl/kernel.hpp>
 
 int main() {
 
