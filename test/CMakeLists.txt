@@ -2,6 +2,8 @@
 cmake_minimum_required(VERSION 3.16)
 project (min_ibf_fpga_test)
 
+include("../cmake/cxx17_filesystem.cmake")
+
 enable_testing()
 
 add_library(min_ibf_fpga_test INTERFACE)
