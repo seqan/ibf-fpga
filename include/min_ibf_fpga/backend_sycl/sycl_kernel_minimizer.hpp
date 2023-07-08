@@ -5,6 +5,8 @@
 
 #include <min_ibf_fpga/backend_sycl/kernel_minimizer.hpp>
 
+#include <min_ibf_fpga/backend_sycl/pipe_utils.hpp>
+
 namespace min_ibf_fpga::backend_sycl
 {
 
