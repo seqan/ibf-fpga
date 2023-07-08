@@ -66,7 +66,7 @@ set_target_properties(${FPGA_EARLY_IMAGE} PROPERTIES LINK_FLAGS "${HARDWARE_LINK
 add_custom_target(fpga DEPENDS ${FPGA_TARGET})
 set(HOST_OBJ "host.o")
 set(DEVICE_OBJ "dev.o")
-set(DEVICE_IMAGE_OBJ "dev_image.a")
+set(DEVICE_IMAGE_OBJ "dev_image.o")
 
 set(CMAKE_CXX_FLAGS_LIST "${CMAKE_CXX_FLAGS}")
 separate_arguments(CMAKE_CXX_FLAGS_LIST)
@@ -75,14 +75,17 @@ separate_arguments(HARDWARE_COMPILE_FLAGS_LIST)
 set(HARDWARE_LINK_FLAGS_LIST "${HARDWARE_LINK_FLAGS}")
 separate_arguments(HARDWARE_LINK_FLAGS_LIST)
 
-add_custom_command(OUTPUT ${HOST_OBJ}
-                   COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS_LIST} ${HARDWARE_COMPILE_FLAGS_LIST} -c ${CMAKE_CURRENT_SOURCE_DIR}/${HOST_SOURCE_FILE} -o ${HOST_OBJ} -I${CMAKE_CURRENT_LIST_DIR}/../include
-                   DEPENDS ${HOST_SOURCE_FILE} ${KERNEL_HEADER_FILE})
-
-add_custom_command(OUTPUT ${DEVICE_IMAGE_OBJ}
-                   COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS_LIST} ${HARDWARE_LINK_FLAGS_LIST} -fsycl-link=image ${DEVICE_SOURCE_FILE} -o ${DEVICE_IMAGE_OBJ} -I${CMAKE_CURRENT_LIST_DIR}/../include
+add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ}
+                   COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS_LIST} ${HARDWARE_LINK_FLAGS_LIST} -fsycl-link=image ${DEVICE_SOURCE_FILE} -o ${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ} -I${CMAKE_CURRENT_LIST_DIR}/../include
                    DEPENDS ${DEVICE_SOURCE_FILE} ${KERNEL_HEADER_FILE})
 
-add_custom_command(OUTPUT ${FPGA_TARGET}
-                   COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS_LIST} -fsycl -fintelfpga -qactypes ${HOST_OBJ} ${DEVICE_IMAGE_OBJ} -o ${CMAKE_BINARY_DIR}/${FPGA_TARGET} -I${CMAKE_CURRENT_LIST_DIR}/../include
-                   DEPENDS ${HOST_OBJ} ${DEVICE_IMAGE_OBJ})
+add_library(fpga_device.fpga OBJECT IMPORTED)
+set_property(TARGET fpga_device.fpga PROPERTY IMPORTED_OBJECTS
+    "${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ}" # <build-dir>/dev_image.o
+)
+
+add_executable(${FPGA_TARGET} ${HOST_SOURCE_FILE})
+target_include_directories(${FPGA_TARGET} PRIVATE ../include)
+set_target_properties(${FPGA_TARGET} PROPERTIES COMPILE_FLAGS "${HARDWARE_COMPILE_FLAGS}")
+set_target_properties(${FPGA_TARGET} PROPERTIES LINK_FLAGS "-fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off")
+target_link_libraries(${FPGA_TARGET} PRIVATE fpga_device.fpga)
