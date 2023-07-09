@@ -8,7 +8,6 @@ set(DEVICE_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/fpga_device.cpp)
 set(KERNEL_HEADER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/kernel_w23_k19_b64.hpp)
 set(HOST_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/host.cpp)
 set(TARGET_NAME min-ibf-fpga-oneapi)
-set(FPGA_TARGET ${TARGET_NAME}.fpga)
 
 add_subdirectory(emulator)
 
@@ -29,29 +28,4 @@ set(HARDWARE_LINK_FLAGS -fsycl -fintelfpga -qactypes -Xshardware -Xstarget=${FPG
 # use cmake -D USER_HARDWARE_FLAGS=<flags> to set extra flags for FPGA backend compilation
 
 add_subdirectory(report)
-
-###############################################################################
-### FPGA Hardware
-###############################################################################
-# To compile manually:
-#   icpx -fsycl -fintelfpga -qactypes -c host.cpp -o host.o
-#   icpx -fsycl -fintelfpga -qactypes -Xshardware -Xstarget=<FPGA_DEVICE> -fsycl-link=image kernel/kernel.cpp -o dev_image.a
-#   icpx -fsycl -fintelfpga -qactypes host.o dev_image.a -o min-ibf-fpga-oneapi.fpga
-
-add_custom_target(fpga DEPENDS ${FPGA_TARGET})
-set(DEVICE_IMAGE_OBJ "dev_image.a")
-
-add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ}
-                   COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS_LIST} ${HARDWARE_LINK_FLAGS} -fsycl-link=image ${DEVICE_SOURCE_FILE} -o ${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ} -I${CMAKE_CURRENT_LIST_DIR}/../include
-                   DEPENDS ${DEVICE_SOURCE_FILE} ${KERNEL_HEADER_FILE})
-
-add_library(fpga_device.fpga OBJECT IMPORTED)
-set_property(TARGET fpga_device.fpga PROPERTY IMPORTED_OBJECTS
-    "${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ}" # <build-dir>/dev_image.a
-)
-
-add_executable(${FPGA_TARGET} EXCLUDE_FROM_ALL ${HOST_SOURCE_FILE})
-target_include_directories(${FPGA_TARGET} PRIVATE ../include)
-target_compile_options(${FPGA_TARGET} PRIVATE ${HARDWARE_COMPILE_FLAGS})
-target_link_options(${FPGA_TARGET} PRIVATE -fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off)
-target_link_libraries(${FPGA_TARGET} PRIVATE fpga_device.fpga)
+add_subdirectory(fpga EXCLUDE_FROM_ALL)
