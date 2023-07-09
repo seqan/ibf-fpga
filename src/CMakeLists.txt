@@ -64,8 +64,6 @@ set_target_properties(${FPGA_EARLY_IMAGE} PROPERTIES LINK_FLAGS "${HARDWARE_LINK
 #   icpx -fsycl -fintelfpga -qactypes host.o dev_image.a -o min-ibf-fpga-oneapi.fpga
 
 add_custom_target(fpga DEPENDS ${FPGA_TARGET})
-set(HOST_OBJ "host.o")
-set(DEVICE_OBJ "dev.o")
 set(DEVICE_IMAGE_OBJ "dev_image.o")
 
 set(CMAKE_CXX_FLAGS_LIST "${CMAKE_CXX_FLAGS}")
