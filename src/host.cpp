@@ -6,9 +6,16 @@
 #include <sycl/ext/intel/fpga_extensions.hpp>
 
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
-#include <min_ibf_fpga/backend_sycl/shared.hpp>
+#include <min_ibf_fpga/backend_sycl/kernel.hpp>
+
+#include <min_ibf_fpga/backend_sycl/sycl_kernel_ibf.hpp>
+#include <min_ibf_fpga/backend_sycl/sycl_kernel_minimizer.hpp>
+
+#include "kernel_w23_k19_b64.hpp"
 
 int main() {
+  using HostSizeType = MinimizerKernel_w23_k19_b64::type::HostSizeType;
+  using Chunk = IbfKernel_w23_k19_b64::type::Chunk;
 
   static_assert(sizeof(size_t) == 8);
 
@@ -31,7 +38,7 @@ int main() {
   std::string query, id;
   std::vector<std::string> ids;
   std::vector<char> queries;
-  std::vector<min_ibf_fpga::backend_sycl::_types::HostSizeType> querySizes;
+  std::vector<HostSizeType> querySizes;
   std::ifstream queries_ifs(queries_filename, std::ios::binary);
   while (std::getline(queries_ifs, id)) {
     ids.push_back(id);
@@ -45,9 +52,9 @@ int main() {
   size_t file_size, bytes_read, bytes_to_read;
 
   std::string ibfData_filename = "ibfdata.bin";
-  std::vector<min_ibf_fpga::backend_sycl::_types::Chunk> ibfData;
+  std::vector<Chunk> ibfData;
   std::ifstream ibf_ifs(ibfData_filename, std::ios::binary);
-  min_ibf_fpga::backend_sycl::_types::Chunk chunk;
+  Chunk chunk;
   file_size = std::filesystem::file_size(ibfData_filename);
   assert(file_size > 0);
   bytes_read = 0;
@@ -59,9 +66,9 @@ int main() {
   } while (bytes_read < file_size);
 
   std::string thresholds_filename = "thresholds_1e.bin";
-  std::vector<min_ibf_fpga::backend_sycl::_types::HostSizeType> thresholds;
+  std::vector<HostSizeType> thresholds;
   std::ifstream th_ifs(thresholds_filename, std::ios::binary);
-  min_ibf_fpga::backend_sycl::_types::HostSizeType threshold;
+  HostSizeType threshold;
   file_size = std::filesystem::file_size(thresholds_filename);
   assert(file_size > 0);
   bytes_read = 0;
@@ -72,7 +79,7 @@ int main() {
     bytes_read += bytes_to_read;
   } while (bytes_read < file_size);
 
-  std::vector<min_ibf_fpga::backend_sycl::_types::Chunk> results;
+  std::vector<Chunk> results;
   results.resize(querySizes.size()); // numberOfQueries
 
 #if FPGA_SIMULATOR
@@ -103,7 +110,7 @@ int main() {
 
     // The definition of this function is in a different compilation unit,
     // so host and device code can be separately compiled.
-    min_ibf_fpga::backend_sycl::RunKernel(q,
+    min_ibf_fpga::backend_sycl::RunKernel<MinimizerKernel_w23_k19_b64, IbfKernel_w23_k19_b64>(q,
       queries_buffer,
       queriesOffset,
       querySizes_buffer,
