@@ -82,7 +82,7 @@ set_property(TARGET fpga_device.fpga PROPERTY IMPORTED_OBJECTS
     "${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ}" # <build-dir>/dev_image.o
 )
 
-add_executable(${FPGA_TARGET} ${HOST_SOURCE_FILE})
+add_executable(${FPGA_TARGET} EXCLUDE_FROM_ALL ${HOST_SOURCE_FILE})
 target_include_directories(${FPGA_TARGET} PRIVATE ../include)
 set_target_properties(${FPGA_TARGET} PROPERTIES COMPILE_FLAGS "${HARDWARE_COMPILE_FLAGS}")
 set_target_properties(${FPGA_TARGET} PROPERTIES LINK_FLAGS "-fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off")
