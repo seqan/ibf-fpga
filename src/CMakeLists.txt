@@ -6,10 +6,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 set(DEVICE_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/fpga_device.cpp)
 set(KERNEL_HEADER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/kernel_w23_k19_b64.hpp)
-set(HOST_SOURCE_FILE host.cpp)
+set(HOST_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/host.cpp)
 set(TARGET_NAME min-ibf-fpga-oneapi)
-set(EMULATOR_TARGET ${TARGET_NAME}.fpga_emu)
 set(FPGA_TARGET ${TARGET_NAME}.fpga)
+
+add_subdirectory(emulator)
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/query.fq ${CMAKE_CURRENT_BINARY_DIR}/../query.fq)
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/data/ibfdata.bin ${CMAKE_CURRENT_BINARY_DIR}/../ibfdata.bin)
@@ -23,26 +24,9 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURC
 set(CMAKE_CXX_FLAGS_LIST "${CMAKE_CXX_FLAGS}")
 separate_arguments(CMAKE_CXX_FLAGS_LIST)
 
-set(EMULATOR_COMPILE_FLAGS -fsycl -fintelfpga -qactypes -DFPGA_EMULATOR -Wall -Xshyper-optimized-handshaking=off)
-set(EMULATOR_LINK_FLAGS -fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off)
 set(HARDWARE_COMPILE_FLAGS -fsycl -fintelfpga -qactypes -DFPGA_HARDWARE -Wall -Xshyper-optimized-handshaking=off)
 set(HARDWARE_LINK_FLAGS -fsycl -fintelfpga -qactypes -Xshardware -Xstarget=${FPGA_DEVICE} ${USER_HARDWARE_FLAGS} -Xshyper-optimized-handshaking=off)
 # use cmake -D USER_HARDWARE_FLAGS=<flags> to set extra flags for FPGA backend compilation
-
-###############################################################################
-### FPGA Emulator
-###############################################################################
-# To compile in a single command:
-#    icpx -fsycl -fintelfpga -qactypes -DFPGA_EMULATOR host.cpp kernel/kernel.cpp -o min-ibf-fpga-oneapi.fpga_emu
-# CMake executes:
-#    [compile] icpx -fsycl -fintelfpga -qactypes -DFPGA_EMULATOR -o host.cpp.o -c host.cpp
-#    [compile] icpx -fsycl -fintelfpga -qactypes -DFPGA_EMULATOR -o kernel/kernel.cpp.o -c kernel/kernel.cpp
-#    [link]    icpx -fsycl -fintelfpga -qactypes host.cpp.o kernel/kernel.cpp.o -o min-ibf-fpga-oneapi.fpga_emu
-add_executable(${EMULATOR_TARGET} ${HOST_SOURCE_FILE} ${DEVICE_SOURCE_FILE})
-target_include_directories(${EMULATOR_TARGET} PRIVATE ../include)
-target_compile_options(${EMULATOR_TARGET} PRIVATE ${EMULATOR_COMPILE_FLAGS})
-target_link_options(${EMULATOR_TARGET} PRIVATE ${EMULATOR_LINK_FLAGS})
-add_custom_target(fpga_emu DEPENDS ${EMULATOR_TARGET})
 
 ###############################################################################
 ### Generate Report
