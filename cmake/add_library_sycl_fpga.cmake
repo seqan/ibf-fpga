@@ -47,14 +47,14 @@ macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_DEVICE_KEYWORD FPGA_DE
         ###############################################################################
         # To compile manually:
         #   dpcpp -fsycl -fintelfpga -c host.cpp -o host.o
-        #   dpcpp -fsycl -fintelfpga -Xshardware -Xsboard=<FPGA_DEVICE> -fsycl-link=image kernel.cpp -o dev_image.a
+        #   dpcpp -fsycl -fintelfpga -Xshardware -Xstarget=<FPGA_DEVICE> -fsycl-link=image kernel.cpp -o dev_image.a
         #   dpcpp -fsycl -fintelfpga host.o dev_image.a -o fast_recompile.fpga
 
         set(CMAKE_CXX_FLAGS_LIST "${CMAKE_CXX_FLAGS}")
         separate_arguments(CMAKE_CXX_FLAGS_LIST)
 
         # Compiler Flags needed to invoke `Intel(R) Quartus(R) Prime`
-        set (HARDWARE_COMPILE_FLAGS "-fsycl;-fintelfpga;-Xshardware;-Xsboard=${FPGA_DEVICE};-fsycl-link=image")
+        set (HARDWARE_COMPILE_FLAGS "-fsycl;-fintelfpga;-Xshardware;-Xstarget=${FPGA_DEVICE};-fsycl-link=image")
 
         # Comment this out to debug cmake dependencies and build steps (this will compile the object file the traditional way and skips the synthesis)
         # set (HARDWARE_COMPILE_FLAGS "-c")
