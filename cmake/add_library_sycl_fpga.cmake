@@ -7,7 +7,7 @@
 
 set(_ADD_LIBRARY_SYCL_FPGA_BASE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
-macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_DEVICE_KEYWORD FPGA_DEVICE W K SOURCE1)
+macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_DEVICE_KEYWORD FPGA_DEVICE SOURCE1)
     if (NOT "${FPGA_DEVICE_KEYWORD}" STREQUAL "FPGA_DEVICE")
         message (FATAL_ERROR "EXPECTED Keyword 'FPGA_DEVICE', got '${FPGA_DEVICE_KEYWORD}'")
     endif ()
@@ -26,7 +26,7 @@ macro(add_library_sycl_fpga TARGET_NAME LIBRARY_TYPE FPGA_DEVICE_KEYWORD FPGA_DE
         #    [link]    dpcpp -fsycl -fintelfpga host.cpp.o kernel.cpp.o -o fast_recompile.fpga_emu
 
         add_library("${TARGET_NAME}_device_image" OBJECT "${SOURCE1}")
-        target_compile_options("${TARGET_NAME}_device_image" PRIVATE -fsycl -fintelfpga -qactypes -DMIN_IBF_K=${K} -DWINDOW_SIZE=${W})
+        target_compile_options("${TARGET_NAME}_device_image" PRIVATE -fsycl -fintelfpga -qactypes)
         target_link_options("${TARGET_NAME}_device_image" PRIVATE -fsycl -fintelfpga)
 
         if ("${LIBRARY_TYPE_UPPER}" STREQUAL "SHARED")
