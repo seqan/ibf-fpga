@@ -23,21 +23,10 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURC
 set(CMAKE_CXX_FLAGS_LIST "${CMAKE_CXX_FLAGS}")
 separate_arguments(CMAKE_CXX_FLAGS_LIST)
 
-set(EMULATOR_COMPILE_FLAGS "-fsycl -fintelfpga -qactypes -DFPGA_EMULATOR -Wall -Xshyper-optimized-handshaking=off")
-set(EMULATOR_COMPILE_FLAGS_LIST "${EMULATOR_COMPILE_FLAGS}")
-separate_arguments(EMULATOR_COMPILE_FLAGS_LIST)
-
-set(EMULATOR_LINK_FLAGS "-fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off")
-set(EMULATOR_LINK_FLAGS_LIST "${EMULATOR_LINK_FLAGS}")
-separate_arguments(EMULATOR_LINK_FLAGS_LIST)
-
-set(HARDWARE_COMPILE_FLAGS "-fsycl -fintelfpga -qactypes -DFPGA_HARDWARE -Wall -Xshyper-optimized-handshaking=off")
-set(HARDWARE_COMPILE_FLAGS_LIST "${HARDWARE_COMPILE_FLAGS}")
-separate_arguments(HARDWARE_COMPILE_FLAGS_LIST)
-
-set(HARDWARE_LINK_FLAGS "-fsycl -fintelfpga -qactypes -Xshardware -Xstarget=${FPGA_DEVICE} ${USER_HARDWARE_FLAGS} -Xshyper-optimized-handshaking=off")
-set(HARDWARE_LINK_FLAGS_LIST "${HARDWARE_LINK_FLAGS}")
-separate_arguments(HARDWARE_LINK_FLAGS_LIST)
+set(EMULATOR_COMPILE_FLAGS -fsycl -fintelfpga -qactypes -DFPGA_EMULATOR -Wall -Xshyper-optimized-handshaking=off)
+set(EMULATOR_LINK_FLAGS -fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off)
+set(HARDWARE_COMPILE_FLAGS -fsycl -fintelfpga -qactypes -DFPGA_HARDWARE -Wall -Xshyper-optimized-handshaking=off)
+set(HARDWARE_LINK_FLAGS -fsycl -fintelfpga -qactypes -Xshardware -Xstarget=${FPGA_DEVICE} ${USER_HARDWARE_FLAGS} -Xshyper-optimized-handshaking=off)
 # use cmake -D USER_HARDWARE_FLAGS=<flags> to set extra flags for FPGA backend compilation
 
 ###############################################################################
@@ -51,8 +40,8 @@ separate_arguments(HARDWARE_LINK_FLAGS_LIST)
 #    [link]    icpx -fsycl -fintelfpga -qactypes host.cpp.o kernel/kernel.cpp.o -o min-ibf-fpga-oneapi.fpga_emu
 add_executable(${EMULATOR_TARGET} ${HOST_SOURCE_FILE} ${DEVICE_SOURCE_FILE})
 target_include_directories(${EMULATOR_TARGET} PRIVATE ../include)
-target_compile_options(${EMULATOR_TARGET} PRIVATE ${EMULATOR_COMPILE_FLAGS_LIST})
-target_link_options(${EMULATOR_TARGET} PRIVATE ${EMULATOR_LINK_FLAGS_LIST})
+target_compile_options(${EMULATOR_TARGET} PRIVATE ${EMULATOR_COMPILE_FLAGS})
+target_link_options(${EMULATOR_TARGET} PRIVATE ${EMULATOR_LINK_FLAGS})
 add_custom_target(fpga_emu DEPENDS ${EMULATOR_TARGET})
 
 ###############################################################################
@@ -65,8 +54,8 @@ set(FPGA_EARLY_IMAGE ${TARGET_NAME}_report.a)
 add_executable(${FPGA_EARLY_IMAGE} ${HOST_SOURCE_FILE} ${DEVICE_SOURCE_FILE})
 target_include_directories(${FPGA_EARLY_IMAGE} PRIVATE ../include)
 add_custom_target(report DEPENDS ${FPGA_EARLY_IMAGE})
-target_compile_options(${FPGA_EARLY_IMAGE} PRIVATE ${HARDWARE_COMPILE_FLAGS_LIST})
-target_link_options(${FPGA_EARLY_IMAGE} PRIVATE ${HARDWARE_LINK_FLAGS_LIST} -fsycl-link=early)
+target_compile_options(${FPGA_EARLY_IMAGE} PRIVATE ${HARDWARE_COMPILE_FLAGS})
+target_link_options(${FPGA_EARLY_IMAGE} PRIVATE ${HARDWARE_LINK_FLAGS} -fsycl-link=early)
 # fsycl-link=early stops the compiler after RTL generation, before invoking Quartus®
 
 ###############################################################################
@@ -81,7 +70,7 @@ add_custom_target(fpga DEPENDS ${FPGA_TARGET})
 set(DEVICE_IMAGE_OBJ "dev_image.o")
 
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ}
-                   COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS_LIST} ${HARDWARE_LINK_FLAGS_LIST} -fsycl-link=image ${DEVICE_SOURCE_FILE} -o ${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ} -I${CMAKE_CURRENT_LIST_DIR}/../include
+                   COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS_LIST} ${HARDWARE_LINK_FLAGS} -fsycl-link=image ${DEVICE_SOURCE_FILE} -o ${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ} -I${CMAKE_CURRENT_LIST_DIR}/../include
                    DEPENDS ${DEVICE_SOURCE_FILE} ${KERNEL_HEADER_FILE})
 
 add_library(fpga_device.fpga OBJECT IMPORTED)
@@ -91,6 +80,6 @@ set_property(TARGET fpga_device.fpga PROPERTY IMPORTED_OBJECTS
 
 add_executable(${FPGA_TARGET} EXCLUDE_FROM_ALL ${HOST_SOURCE_FILE})
 target_include_directories(${FPGA_TARGET} PRIVATE ../include)
-target_compile_options(${FPGA_TARGET} PRIVATE ${HARDWARE_COMPILE_FLAGS_LIST})
+target_compile_options(${FPGA_TARGET} PRIVATE ${HARDWARE_COMPILE_FLAGS})
 target_link_options(${FPGA_TARGET} PRIVATE -fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off)
 target_link_libraries(${FPGA_TARGET} PRIVATE fpga_device.fpga)
