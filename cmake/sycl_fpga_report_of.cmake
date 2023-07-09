@@ -13,7 +13,7 @@ macro(sycl_fpga_report_of TARGET_NAME)
     ### Generate Report
     ###############################################################################
     # To compile manually:
-    #   dpcpp -fsycl -fintelfpga -Xshardware -Xsboard=<FPGA_DEVICE> -fsycl-link=early host.cpp kernel.cpp -o fast_compile_report.a
+    #   dpcpp -fsycl -fintelfpga -Xshardware -Xstarget=<FPGA_DEVICE> -fsycl-link=early host.cpp kernel.cpp -o fast_compile_report.a
     # A DPC++ ahead-of-time (AoT) compile processes the device code in two stages.
     # 1. The "compile" stage compiles the device code to an intermediate representation (SPIR-V).
     # 2. The "link" stage invokes the compiler's FPGA backend before linking.
@@ -21,13 +21,13 @@ macro(sycl_fpga_report_of TARGET_NAME)
     set(REPORT_NAME "${TARGET_NAME}.report")
 
     get_property(_source TARGET "${TARGET_NAME}" PROPERTY SYCL_FPGA_SOURCE)
-    get_property(_board TARGET "${TARGET_NAME}" PROPERTY SYCL_FPGA_DEVICE)
+    get_property(_device TARGET "${TARGET_NAME}" PROPERTY SYCL_FPGA_DEVICE)
 
-    if (NOT _source OR NOT _board)
+    if (NOT _source OR NOT _device)
         message(FATAL_ERROR "sycl_fpga_report_of: target `${TARGET_NAME}` was not created by add_library_sycl_fpga")
     endif ()
 
-    string(TOLOWER "${_board}" _board_lower)
+    string(TOLOWER "${_device}" _device_lower)
     if (FPGA_DEVICE_LOWER STREQUAL "emulator")
         message(FATAL_ERROR "sycl_fpga_report_of: can't create report of emulator target `${TARGET_NAME}`")
     endif ()
@@ -36,7 +36,7 @@ macro(sycl_fpga_report_of TARGET_NAME)
     add_executable(${REPORT_NAME} EXCLUDE_FROM_ALL ${_source})
     set_target_properties(${REPORT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "CMakeFiles/")
     target_compile_options(${REPORT_NAME} PUBLIC -fsycl -fintelfpga $<TARGET_PROPERTY:${TARGET_NAME},COMPILE_OPTIONS>)
-    target_link_options(${REPORT_NAME} PUBLIC -fsycl -fintelfpga -Xshardware -Xsboard=${_board} -fsycl-link=early)
+    target_link_options(${REPORT_NAME} PUBLIC -fsycl -fintelfpga -Xshardware -Xstarget=${_device} -fsycl-link=early)
     # fsycl-link=early stops the compiler after RTL generation, before invoking Quartus®
 
     set(report_html_full_path "$<TARGET_FILE_DIR:${REPORT_NAME}>/$<TARGET_FILE_BASE_NAME:${REPORT_NAME}>.prj/reports/report.html")
