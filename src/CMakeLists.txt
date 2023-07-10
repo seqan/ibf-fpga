@@ -67,7 +67,7 @@ target_link_options(${FPGA_EARLY_IMAGE} PRIVATE ${HARDWARE_LINK_FLAGS} -fsycl-li
 #   icpx -fsycl -fintelfpga -qactypes host.o dev_image.a -o min-ibf-fpga-oneapi.fpga
 
 add_custom_target(fpga DEPENDS ${FPGA_TARGET})
-set(DEVICE_IMAGE_OBJ "dev_image.o")
+set(DEVICE_IMAGE_OBJ "dev_image.a")
 
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ}
                    COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_FLAGS_LIST} ${HARDWARE_LINK_FLAGS} -fsycl-link=image ${DEVICE_SOURCE_FILE} -o ${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ} -I${CMAKE_CURRENT_LIST_DIR}/../include
@@ -75,7 +75,7 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ}
 
 add_library(fpga_device.fpga OBJECT IMPORTED)
 set_property(TARGET fpga_device.fpga PROPERTY IMPORTED_OBJECTS
-    "${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ}" # <build-dir>/dev_image.o
+    "${CMAKE_CURRENT_BINARY_DIR}/${DEVICE_IMAGE_OBJ}" # <build-dir>/dev_image.a
 )
 
 add_executable(${FPGA_TARGET} EXCLUDE_FROM_ALL ${HOST_SOURCE_FILE})
