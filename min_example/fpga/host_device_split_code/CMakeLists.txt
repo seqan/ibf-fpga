@@ -12,10 +12,10 @@ else()
     message(STATUS "Configuring the design to run on FPGA board ${FPGA_DEVICE}")
 endif()
 
-include ("../../cmake/add_library_sycl_fpga.cmake")
-include ("../../cmake/sycl_fpga_report_of.cmake")
+include ("../../../cmake/add_library_sycl_fpga.cmake")
+include ("../../../cmake/sycl_fpga_report_of.cmake")
 
-include ("../../cmake/cxx17_filesystem.cmake")
+include ("../../../cmake/cxx17_filesystem.cmake")
 
 # Common Compilation Flags of host and device code
 # This is a Windows-specific flag that enables exception handling in host code
