@@ -139,7 +139,14 @@ int main() {
 
   {
     using function_ptr_t = void (sycl::queue& q, sycl::buffer<float,1>& buf_a, sycl::buffer<float,1>& buf_b, sycl::buffer<float,1>& buf_r, size_t size);
-    std::filesystem::path library_path = std::filesystem::current_path() / "librun_min_ibf_fpga_w18_k6.fpga_emu_kernel.so";
+    std::filesystem::path library_path = std::filesystem::current_path()
+      / "librun_min_ibf_fpga_w18_k6."
+#if defined(FPGA_HARDWARE)
+           "fpga_kernel"
+#elif defined(FPGA_EMULATOR)
+           "fpga_emu_kernel"
+#endif
+      ".so";
     std::string_view symbol_name = "run_min_ibf_fpga_w18_k6";
 
     sycl_kernel_loader<function_ptr_t *> run_min_ibf_fpga_w18_k6{library_path, symbol_name};
