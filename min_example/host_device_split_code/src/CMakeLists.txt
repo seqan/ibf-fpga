@@ -51,7 +51,8 @@ add_executable(${TARGET_NAME}.fpga host.cpp)
 target_link_libraries(${TARGET_NAME}.fpga PUBLIC intel_fpga)
 target_link_libraries(${TARGET_NAME}.fpga PUBLIC run_min_ibf_fpga_w16_k8.fpga_kernel)
 target_link_libraries(${TARGET_NAME}.fpga PUBLIC run_min_ibf_fpga_w16_k6.fpga_kernel)
-target_link_libraries(${TARGET_NAME}.fpga PUBLIC run_min_ibf_fpga_w18_k6.fpga_kernel)
+# target_link_libraries(${TARGET_NAME}.fpga PUBLIC run_min_ibf_fpga_w18_k6.fpga_kernel)
+target_compile_definitions(${TARGET_NAME}.fpga PUBLIC -DFPGA_HARDWARE)
 
 ###############################################################################
 ### Generate Report
