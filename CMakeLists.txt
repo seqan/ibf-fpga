@@ -27,5 +27,4 @@ else()
 endif()
 
 add_subdirectory(src)
-add_subdirectory(min_example/host_device_split_code)
 add_subdirectory(test)
