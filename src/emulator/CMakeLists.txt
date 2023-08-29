@@ -14,8 +14,6 @@
 #    [link]    icpx -fsycl -fintelfpga -qactypes host.cpp.o kernel/kernel.cpp.o -o min-ibf-fpga-oneapi.fpga_emu
 add_executable(min-ibf-fpga-oneapi.fpga_emu ../host.cpp ../fpga_device.cpp)
 target_include_directories(min-ibf-fpga-oneapi.fpga_emu PRIVATE ../../include)
-target_compile_definitions(min-ibf-fpga-oneapi.fpga_emu PRIVATE -DFPGA_EMULATOR)
-target_compile_options(min-ibf-fpga-oneapi.fpga_emu PRIVATE -fsycl -fintelfpga -qactypes -Wall -Xshyper-optimized-handshaking=off)
-target_link_options(min-ibf-fpga-oneapi.fpga_emu PRIVATE -fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off)
+target_link_libraries(min-ibf-fpga-oneapi.fpga_emu PRIVATE intel_fpga_emulator_host_and_device)
 
 add_custom_target(fpga_emu DEPENDS min-ibf-fpga-oneapi.fpga_emu)
