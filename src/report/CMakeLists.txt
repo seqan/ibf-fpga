@@ -3,13 +3,14 @@
 ###############################################################################
 # To compile manually:
 #   icpx -fsycl -fintelfpga -qactypes -Xshardware -Xstarget=<FPGA_DEVICE> -fsycl-link=early host.cpp kernel/kernel.cpp -o fast_compile_report.a
-set(REPORT_NAME "${TARGET_NAME}_report")
+set(REPORT_NAME "min-ibf-fpga-oneapi_report")
 # The compile output is not an executable, but an intermediate compilation result unique to SYCL.
-add_executable(${REPORT_NAME} ${HOST_SOURCE_FILE} ${DEVICE_SOURCE_FILE})
+add_executable(${REPORT_NAME} ../host.cpp ../fpga_device.cpp)
 target_include_directories(${REPORT_NAME} PRIVATE ../../include)
 add_custom_target(report DEPENDS ${REPORT_NAME})
-target_compile_options(${REPORT_NAME} PRIVATE ${HARDWARE_COMPILE_FLAGS})
-target_link_options(${REPORT_NAME} PRIVATE ${HARDWARE_LINK_FLAGS} -fsycl-link=early)
+target_compile_definitions(${REPORT_NAME} PRIVATE -DFPGA_HARDWARE)
+target_compile_options(${REPORT_NAME} PRIVATE -fsycl -fintelfpga -qactypes -Wall -Xshyper-optimized-handshaking=off)
+target_link_options(${REPORT_NAME} PRIVATE -fsycl -fintelfpga -qactypes -Xshardware -Xstarget=${FPGA_DEVICE} ${USER_HARDWARE_FLAGS} -Xshyper-optimized-handshaking=off -fsycl-link=early)
 # fsycl-link=early stops the compiler after RTL generation, before invoking Quartus®
 
 cmake_policy(PUSH)
@@ -19,14 +20,14 @@ cmake_policy(PUSH)
 cmake_policy(SET CMP0112 NEW)
 set(report_html_full_path "$<TARGET_FILE_DIR:${REPORT_NAME}>/$<TARGET_FILE_BASE_NAME:${REPORT_NAME}>.prj/reports/report.html")
 add_custom_target(
-    "${TARGET_NAME}.report.html"
+    "min-ibf-fpga-oneapi.report.html"
     ALL
     COMMAND
         ${CMAKE_COMMAND} -E
         create_symlink
             "'${report_html_full_path}'"
-            "'${TARGET_NAME}.report.html'"
-    COMMENT "Created ${TARGET_NAME}.report.html"
+            "'min-ibf-fpga-oneapi.report.html'"
+    COMMENT "Created min-ibf-fpga-oneapi.report.html"
     DEPENDS "${REPORT_NAME}"
 )
 cmake_policy(POP)
