@@ -7,6 +7,7 @@
 
 #include <min_ibf_fpga/fastq/fastq_parser.hpp>
 #include <min_ibf_fpga/io/read_in_binary_data.hpp>
+#include <min_ibf_fpga/io/write_out_binary_data.hpp>
 
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
 #include <min_ibf_fpga/backend_sycl/kernel.hpp>
@@ -131,7 +132,7 @@ int main() {
 
   // Dump results to binary file
   std::ofstream ostrm("results.bin", std::ios::binary);
-  ostrm.write(reinterpret_cast<char*>(results.data()), results.size() * sizeof(size_t));
+  min_ibf_fpga::io::write_out_binary_data(ostrm, results);
 
   // Print results
   for (size_t i = 0; i < ids.size(); i++) {
