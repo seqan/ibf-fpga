@@ -6,6 +6,7 @@
 #include <sycl/ext/intel/fpga_extensions.hpp>
 
 #include <min_ibf_fpga/fastq/fastq_parser.hpp>
+#include <min_ibf_fpga/io/print_results.hpp>
 #include <min_ibf_fpga/io/read_in_binary_data.hpp>
 #include <min_ibf_fpga/io/write_out_binary_data.hpp>
 
@@ -135,20 +136,6 @@ int main() {
   min_ibf_fpga::io::write_out_binary_data(ostrm, results);
 
   // Print results
-  for (size_t i = 0; i < ids.size(); i++) {
-    std::clog << ids[i].substr(1, std::string::npos) << "\t";
-    uint64_t result = results[i];
-
-    for (size_t byteOffset = 0; byteOffset < sizeof(uint64_t); ++byteOffset) {
-      uint8_t& value = ((uint8_t*)&result)[byteOffset];
-
-      for (size_t bitOffset = 0; bitOffset < 8; ++bitOffset) {
-        if (value & (1 << 7))
-          std::clog << byteOffset * 8 + bitOffset << ",";
-        value <<= 1;
-      }
-    }
-    std::clog << std::endl;
-  }
+  min_ibf_fpga::io::print_results(ids, results, std::clog);
   return EXIT_SUCCESS;
 }
