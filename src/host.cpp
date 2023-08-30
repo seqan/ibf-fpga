@@ -6,6 +6,7 @@
 #include <sycl/ext/intel/fpga_extensions.hpp>
 
 #include <min_ibf_fpga/fastq/fastq_parser.hpp>
+#include <min_ibf_fpga/io/read_in_binary_data.hpp>
 
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
 #include <min_ibf_fpga/backend_sycl/kernel.hpp>
@@ -52,35 +53,13 @@ int main() {
     querySizes.push_back(query.size());
   });
 
-  size_t file_size, bytes_read, bytes_to_read;
-
   std::string ibfData_filename = "ibfdata.bin";
   std::vector<Chunk> ibfData;
-  std::ifstream ibf_ifs(ibfData_filename, std::ios::binary);
-  Chunk chunk;
-  file_size = std::filesystem::file_size(ibfData_filename);
-  assert(file_size > 0);
-  bytes_read = 0;
-  do {
-    bytes_to_read = std::min(file_size - bytes_read, sizeof(chunk));
-    ibf_ifs.read(reinterpret_cast<char*>(&chunk), bytes_to_read);
-    ibfData.push_back(chunk);
-    bytes_read += bytes_to_read;
-  } while (bytes_read < file_size);
+  min_ibf_fpga::io::read_in_binary_data(ibfData_filename, ibfData);
 
   std::string thresholds_filename = "thresholds_1e.bin";
   std::vector<HostSizeType> thresholds;
-  std::ifstream th_ifs(thresholds_filename, std::ios::binary);
-  HostSizeType threshold;
-  file_size = std::filesystem::file_size(thresholds_filename);
-  assert(file_size > 0);
-  bytes_read = 0;
-  do {
-    bytes_to_read = std::min(file_size - bytes_read, sizeof(threshold));
-    th_ifs.read(reinterpret_cast<char*>(&threshold), bytes_to_read);
-    thresholds.push_back(threshold);
-    bytes_read += bytes_to_read;
-  } while (bytes_read < file_size);
+  min_ibf_fpga::io::read_in_binary_data(thresholds_filename, thresholds);
 
   std::vector<Chunk> results;
   results.resize(querySizes.size()); // numberOfQueries
