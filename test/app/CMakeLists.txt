@@ -10,3 +10,11 @@ if (TARGET min-ibf-fpga-oneapi.fpga_emu)
 add_test(NAME app_w23_k19_b64_e1.fpga_emu COMMAND min-ibf-fpga-oneapi.fpga_emu WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
 set_tests_properties(app_w23_k19_b64_e1.fpga_emu PROPERTIES PASS_REGULAR_EXPRESSION "${app_w23_k19_b64_e1_cout}")
 endif ()
+
+if (TARGET min-ibf-fpga-oneapi.fpga)
+# See https://stackoverflow.com/a/61573823
+add_test(NAME app_w23_k19_b64_e1.fpga
+    COMMAND sh -c "if [ -f \"$<TARGET_FILE:min-ibf-fpga-oneapi.fpga>\" ]; then $<TARGET_FILE:min-ibf-fpga-oneapi.fpga>; else exit 127; fi"
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
+set_tests_properties(app_w23_k19_b64_e1.fpga PROPERTIES PASS_REGULAR_EXPRESSION "${app_w23_k19_b64_e1_cout}" SKIP_RETURN_CODE 127)
+endif ()
