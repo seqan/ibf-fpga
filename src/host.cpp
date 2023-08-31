@@ -5,6 +5,8 @@
 #include <sycl/sycl.hpp>
 #include <sycl/ext/intel/fpga_extensions.hpp>
 
+#include <min_ibf_fpga/fastq/fastq_parser.hpp>
+
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
 #include <min_ibf_fpga/backend_sycl/kernel.hpp>
 
@@ -40,14 +42,15 @@ int main() {
   std::vector<char> queries;
   std::vector<HostSizeType> querySizes;
   std::ifstream queries_ifs(queries_filename, std::ios::binary);
-  while (std::getline(queries_ifs, id)) {
+
+  min_ibf_fpga::fastq::fastq_parser parser{.inputStream = std::move(queries_ifs)};
+  parser([&](auto && id, auto && query)
+  {
     ids.push_back(id);
-    std::getline(queries_ifs, query);
+
     queries.insert(queries.end(), query.begin(), query.end());
     querySizes.push_back(query.size());
-    std::getline(queries_ifs, query); // ignore delimiter
-    std::getline(queries_ifs, query); // ignore quality
-  }
+  });
 
   size_t file_size, bytes_read, bytes_to_read;
 
