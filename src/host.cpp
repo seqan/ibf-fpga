@@ -55,13 +55,19 @@ int main() {
     querySizes.push_back(query.size());
   });
 
-  std::string ibfData_filename = "ibfdata.bin";
   std::vector<Chunk> ibfData;
-  min_ibf_fpga::io::read_in_binary_data(ibfData_filename, ibfData);
+  {
+    std::string ibfData_filename = "ibfdata.bin";
+    std::ifstream ibfData_ifs(ibfData_filename, std::ios::binary);
+    min_ibf_fpga::io::read_in_binary_data(ibfData_ifs, ibfData);
+  }
 
-  std::string thresholds_filename = "thresholds_1e.bin";
   std::vector<HostSizeType> thresholds;
-  min_ibf_fpga::io::read_in_binary_data(thresholds_filename, thresholds);
+  {
+    std::string thresholds_filename = "thresholds_1e.bin";
+    std::ifstream thresholds_ifs(thresholds_filename, std::ios::binary);
+    min_ibf_fpga::io::read_in_binary_data(thresholds_ifs, thresholds);
+  }
 
   std::vector<Chunk> results;
   results.resize(querySizes.size()); // numberOfQueries

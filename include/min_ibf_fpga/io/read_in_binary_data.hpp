@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cassert>
-#include <fstream>
+#include <iosfwd>
 #include <string>
 #include <vector>
 #include <filesystem>
@@ -12,10 +12,8 @@ namespace min_ibf_fpga::io
 {
 
 template <typename value_t, size_t buffer_size = 1024>
-void read_in_binary_data(std::string const & filename, std::vector<value_t> & output_data)
+void read_in_binary_data(std::istream & ifs, std::vector<value_t> & output_data)
 {
-  std::ifstream ifs(filename, std::ios::binary);
-  assert(ifs.is_open());
 
   char buffer[buffer_size];
 

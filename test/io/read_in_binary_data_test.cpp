@@ -1,3 +1,4 @@
+#include <fstream>
 
 #include <min_ibf_fpga/io/read_in_binary_data.hpp>
 
@@ -36,7 +37,9 @@ int main()
 
     {
         std::vector<uint64_t> thresholds_0e;
-        min_ibf_fpga::io::read_in_binary_data("thresholds_0e.bin", thresholds_0e);
+        std::ifstream ifs("thresholds_0e.bin", std::ios::binary);
+        assert(ifs.is_open());
+        min_ibf_fpga::io::read_in_binary_data(ifs, thresholds_0e);
 
         min_ibf_fpga::test::assert_equal(thresholds_0e.size(), thresholds_0e_bin_len, "sizes of thresholds_0e and thresholds_0e_bin should match");
         for(size_t i = 0; i < thresholds_0e_bin_len; ++i)
@@ -47,7 +50,9 @@ int main()
 
     {
         std::vector<uint64_t> thresholds_1e;
-        min_ibf_fpga::io::read_in_binary_data<uint64_t, 64>("thresholds_1e.bin", thresholds_1e);
+        std::ifstream ifs("thresholds_1e.bin", std::ios::binary);
+        assert(ifs.is_open());
+        min_ibf_fpga::io::read_in_binary_data<uint64_t, 64>(ifs, thresholds_1e);
 
         min_ibf_fpga::test::assert_equal(thresholds_1e.size(), thresholds_1e_bin_len, "sizes of thresholds_1e and thresholds_1e_bin should match");
         for(size_t i = 0; i < thresholds_1e_bin_len; ++i)
@@ -59,7 +64,9 @@ int main()
     // special case: input is 3 byte and smaller than 8 byte
     {
         std::vector<uint64_t> three_char;
-        min_ibf_fpga::io::read_in_binary_data("three_char.bin", three_char);
+        std::ifstream ifs("three_char.bin", std::ios::binary);
+        assert(ifs.is_open());
+        min_ibf_fpga::io::read_in_binary_data(ifs, three_char);
 
         min_ibf_fpga::test::assert_equal(three_char.size(), three_char_bin_len, "sizes of three_char and three_char_bin should match");
         for(size_t i = 0; i < three_char_bin_len; ++i)
