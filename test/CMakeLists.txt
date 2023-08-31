@@ -25,6 +25,7 @@ endif ()
 
 add_subdirectory(../external/min-ibf-fpga external-min-ibf-fpga-build)
 
+add_subdirectory(app)
 add_subdirectory(ibf)
 add_subdirectory(minimizer)
 add_subdirectory(test)
