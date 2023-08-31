@@ -47,7 +47,7 @@ int main()
 
     {
         std::vector<uint64_t> thresholds_1e;
-        min_ibf_fpga::io::read_in_binary_data("thresholds_1e.bin", thresholds_1e);
+        min_ibf_fpga::io::read_in_binary_data<uint64_t, 64>("thresholds_1e.bin", thresholds_1e);
 
         min_ibf_fpga::test::assert_equal(thresholds_1e.size(), thresholds_1e_bin_len, "sizes of thresholds_1e and thresholds_1e_bin should match");
         for(size_t i = 0; i < thresholds_1e_bin_len; ++i)
