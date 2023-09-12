@@ -19,12 +19,12 @@ void RunKernel(sycl::queue& queue,
 	sycl::buffer<typename SyclMinimizerKernel::type::HostSizeType, 1>& querySizes_buffer,
 	const typename SyclMinimizerKernel::type::HostSizeType querySizesOffset,
 	const typename SyclMinimizerKernel::type::HostSizeType numberOfQueries,
-	sycl::buffer<typename SyclIbfKernel::type::Chunk, 1>& ibfData_buffer,
+	const typename SyclIbfKernel::type::Chunk* ibfData_device_ptr,
 	const typename SyclIbfKernel::type::HostSizeType binSize,
 	const typename SyclIbfKernel::type::HostSizeType hashShift,
 	const typename SyclIbfKernel::type::HostSizeType minimalNumberOfMinimizers,
 	const typename SyclIbfKernel::type::HostSizeType maximalNumberOfMinimizers,
-	sycl::buffer<typename SyclIbfKernel::type::HostSizeType, 1>& thresholds_buffer,
+	const typename SyclIbfKernel::type::HostSizeType* thresholds_device_ptr,
 	sycl::buffer<typename SyclIbfKernel::type::Chunk, 1>& result_buffer)
 {
 	using sycl_minimizer_kernel_t = typename SyclMinimizerKernel::type;
@@ -53,13 +53,13 @@ void RunKernel(sycl::queue& queue,
 		queue.submit([&](sycl::handler &handler)
 		{
 			sycl_ibf_kernel_t ibf_kernel{
-				.ibfData{ibfData_buffer, handler, sycl::read_only},
+				.ibfData{ibfData_device_ptr},
 				.binSize{binSize},
 				.hashShift{hashShift},
 				.numberOfQueries{numberOfQueries},
 				.minimalNumberOfMinimizers{minimalNumberOfMinimizers},
 				.maximalNumberOfMinimizers{maximalNumberOfMinimizers},
-				.thresholds{thresholds_buffer, handler, sycl::read_only},
+				.thresholds{thresholds_device_ptr},
 				.result{result_buffer, handler, sycl::write_only},
 			};
 			handler.single_task<SyclIbfKernel>([ibf_kernel]() [[intel::kernel_args_restrict]]

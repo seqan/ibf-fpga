@@ -36,10 +36,10 @@ void min_ibf_fpga::backend_sycl::RunKernel<MinimizerKernel_w23_k19_b64, IbfKerne
   sycl::buffer<typename MinimizerKernel_w23_k19_b64::type::HostSizeType, 1>& querySizes_buffer,
   const typename MinimizerKernel_w23_k19_b64::type::HostSizeType querySizesOffset,
   const typename MinimizerKernel_w23_k19_b64::type::HostSizeType numberOfQueries,
-  sycl::buffer<typename IbfKernel_w23_k19_b64::type::Chunk, 1>& ibfData_buffer,
+  const typename IbfKernel_w23_k19_b64::type::Chunk * ibfData_device_ptr,
   const typename IbfKernel_w23_k19_b64::type::HostSizeType binSize,
   const typename IbfKernel_w23_k19_b64::type::HostSizeType hashShift,
   const typename IbfKernel_w23_k19_b64::type::HostSizeType minimalNumberOfMinimizers,
   const typename IbfKernel_w23_k19_b64::type::HostSizeType maximalNumberOfMinimizers,
-  sycl::buffer<typename IbfKernel_w23_k19_b64::type::HostSizeType, 1>& thresholds_buffer,
+  const typename IbfKernel_w23_k19_b64::type::HostSizeType * thresholds_device_ptr,
   sycl::buffer<typename IbfKernel_w23_k19_b64::type::Chunk, 1>& result_buffer);

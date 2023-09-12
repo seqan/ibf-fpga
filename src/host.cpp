@@ -91,12 +91,21 @@ int main() {
     // Note: SYCL queues are out of order by default
     sycl::queue q(device_selector, fpga_tools::exception_handler);
 
+    // Transfer Device Data
+    auto ibfData_device_ptr = sycl::malloc_device<Chunk>(ibfData.size(), q);
+    static_assert(std::is_same_v<decltype(ibfData_device_ptr), Chunk *>);
+    q.memcpy(ibfData_device_ptr, ibfData.data(), ibfData.size() * sizeof(Chunk));
+
+    auto thresholds_device_ptr = sycl::malloc_device<HostSizeType>(thresholds.size(), q);
+    static_assert(std::is_same_v<decltype(thresholds_device_ptr), HostSizeType *>);
+    q.memcpy(thresholds_device_ptr, thresholds.data(), thresholds.size() * sizeof(HostSizeType));
+
     // Create the device buffers
     sycl::buffer queries_buffer(queries);
     sycl::buffer querySizes_buffer(querySizes);
-    sycl::buffer ibfData_buffer(ibfData);
-    sycl::buffer thresholds_buffer(thresholds);
     sycl::buffer results_buffer(results);
+
+    q.wait(); // wait that USM buffers are copied
 
     // The definition of this function is in a different compilation unit,
     // so host and device code can be separately compiled.
@@ -106,13 +115,18 @@ int main() {
       querySizes_buffer,
       querySizesOffset,
       querySizes.size(), // numberOfQueries
-      ibfData_buffer,
+      ibfData_device_ptr,
       bin_size,
       hash_shift,
       minimalNumberOfMinimizers,
       maximalNumberOfMinimizers,
-      thresholds_buffer,
+      thresholds_device_ptr,
       results_buffer);
+
+    q.wait(); // wait that RunKernel finished and afterwards free device memory
+
+    sycl::free(ibfData_device_ptr, q);
+    sycl::free(thresholds_device_ptr, q);
 
 #ifdef DEBUG
   }

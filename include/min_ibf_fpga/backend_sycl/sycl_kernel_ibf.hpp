@@ -25,13 +25,13 @@ struct sycl_ibf_kernel
 	using MinimizerToIBFData = typename types::MinimizerToIBFData;
 	using MinimizerToIBFPipes = _MinimizerToIBFPipes;
 
-	sycl::accessor<Chunk, 1, sycl::access_mode::read> ibfData;
+	const Chunk* ibfData{};
 	HostSizeType binSize{};
 	HostSizeType hashShift{};
 	HostSizeType numberOfQueries{};
 	HostSizeType minimalNumberOfMinimizers{};
 	HostSizeType maximalNumberOfMinimizers{};
-	sycl::accessor<HostSizeType, 1, sycl::access_mode::read> thresholds;
+	const HostSizeType* thresholds{};
 	sycl::accessor<Chunk, 1, sycl::access_mode::write> result;
 
 	template <size_t pipe_id>

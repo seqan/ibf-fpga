@@ -95,21 +95,33 @@ void sycl_test(min_ibf_fpga::index::ibf_metadata const & ibf_meta, min_ibf_fpga:
         std::vector<Chunk> result(numberOfQueries, 0);
 
         { // device buffer scope
+            auto ibfData_device_ptr = sycl::malloc_device<Chunk>(ibfData.size(), q);
+            static_assert(std::is_same_v<decltype(ibfData_device_ptr), Chunk *>);
+            q.memcpy(ibfData_device_ptr, ibfData.data(), ibfData.size() * sizeof(Chunk));
+
+            auto thresholds_device_ptr = sycl::malloc_device<HostSizeType>(thresholds.size(), q);
+            static_assert(std::is_same_v<decltype(thresholds_device_ptr), HostSizeType *>);
+            q.memcpy(thresholds_device_ptr, thresholds.data(), thresholds.size() * sizeof(HostSizeType));
+
             sycl::buffer minimizerToIbf_buffer(minimizerToIbf);
-            sycl::buffer ibfData_buffer(ibfData);
             sycl::buffer thresholds_buffer(thresholds);
             sycl::buffer result_buffer(result);
 
+            q.wait();
             min_ibf_fpga::backend_sycl::RunIBFKernel<IbfKernel, HostToKernelPipe>(q,
                     minimizerToIbf_buffer,
-                    ibfData_buffer,
+                    ibfData_device_ptr,
                     binSize,
                     hashShift,
                     numberOfQueries,
                     minimalNumberOfMinimizers,
                     maximalNumberOfMinimizers,
-                    thresholds_buffer,
+                    thresholds_device_ptr,
                     result_buffer);
+            q.wait();
+
+            sycl::free(ibfData_device_ptr, q);
+            sycl::free(thresholds_device_ptr, q);
         } // device buffer scope
 
         // TODO: this needs adjustment if bin_count > 64
