@@ -18,12 +18,12 @@ void RunKernel(sycl::queue& queue,
        sycl::buffer<typename SyclMinimizerKernel::type::HostSizeType, 1>& querySizes_buffer,
        const typename SyclMinimizerKernel::type::HostSizeType querySizesOffset,
        const typename SyclMinimizerKernel::type::HostSizeType numberOfQueries,
-       sycl::buffer<typename SyclIbfKernel::type::Chunk, 1>& ibfData_buffer,
+       const typename SyclIbfKernel::type::Chunk* ibfData_device_ptr,
        const typename SyclIbfKernel::type::HostSizeType binSize,
        const typename SyclIbfKernel::type::HostSizeType hashShift,
        const typename SyclIbfKernel::type::HostSizeType minimalNumberOfMinimizers,
        const typename SyclIbfKernel::type::HostSizeType maximalNumberOfMinimizers,
-       sycl::buffer<typename SyclIbfKernel::type::HostSizeType, 1>& thresholds_buffer,
+       const typename SyclIbfKernel::type::HostSizeType* thresholds_device_ptr,
        sycl::buffer<typename SyclIbfKernel::type::Chunk, 1>& result_buffer);
 
 } // namespace min_ibf_fpga::backend_sycl
