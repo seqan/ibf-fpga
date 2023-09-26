@@ -14,9 +14,9 @@ namespace min_ibf_fpga::backend_sycl
 
 template <typename SyclMinimizerKernel, typename SyclIbfKernel>
 void RunKernel(sycl::queue& queue,
-	sycl::buffer<char, 1>& queries_buffer,
+	char* queries_device_ptr,
 	const typename SyclMinimizerKernel::type::HostSizeType queriesOffset,
-	sycl::buffer<typename SyclMinimizerKernel::type::HostSizeType, 1>& querySizes_buffer,
+	const typename SyclMinimizerKernel::type::HostSizeType* querySizes_device_ptr,
 	const typename SyclMinimizerKernel::type::HostSizeType querySizesOffset,
 	const typename SyclMinimizerKernel::type::HostSizeType numberOfQueries,
 	const typename SyclIbfKernel::type::Chunk* ibfData_device_ptr,
@@ -25,7 +25,9 @@ void RunKernel(sycl::queue& queue,
 	const typename SyclIbfKernel::type::HostSizeType minimalNumberOfMinimizers,
 	const typename SyclIbfKernel::type::HostSizeType maximalNumberOfMinimizers,
 	const typename SyclIbfKernel::type::HostSizeType* thresholds_device_ptr,
-	sycl::buffer<typename SyclIbfKernel::type::Chunk, 1>& result_buffer)
+	typename SyclIbfKernel::type::Chunk* result_device_ptr,
+	sycl::event* minimizer_kernel_event,
+	sycl::event* ibf_kernel_event)
 {
 	using sycl_minimizer_kernel_t = typename SyclMinimizerKernel::type;
 	using sycl_ibf_kernel_t = typename SyclIbfKernel::type;
@@ -35,12 +37,12 @@ void RunKernel(sycl::queue& queue,
 	{
 		static constexpr size_t pipe_id = id;
 
-		queue.submit([&](sycl::handler &handler)
+		/*minimizer_kernel_event =*/ queue.submit([&](sycl::handler &handler)
 		{
 			sycl_minimizer_kernel_t minimizer_kernel{
-				.queries{queries_buffer, handler, sycl::read_only},
+				.queries{queries_device_ptr},
 				.queriesOffset{queriesOffset},
-				.querySizes{querySizes_buffer, handler, sycl::read_only},
+				.querySizes{querySizes_device_ptr},
 				.querySizesOffset{querySizesOffset},
 				.numberOfQueries{numberOfQueries}
 			};
@@ -50,7 +52,7 @@ void RunKernel(sycl::queue& queue,
 			});
 		});
 
-		queue.submit([&](sycl::handler &handler)
+		/*ibf_kernel_event =*/ queue.submit([&](sycl::handler &handler)
 		{
 			sycl_ibf_kernel_t ibf_kernel{
 				.ibfData{ibfData_device_ptr},
@@ -60,7 +62,7 @@ void RunKernel(sycl::queue& queue,
 				.minimalNumberOfMinimizers{minimalNumberOfMinimizers},
 				.maximalNumberOfMinimizers{maximalNumberOfMinimizers},
 				.thresholds{thresholds_device_ptr},
-				.result{result_buffer, handler, sycl::write_only},
+				.result{result_device_ptr},
 			};
 			handler.single_task<SyclIbfKernel>([ibf_kernel]() [[intel::kernel_args_restrict]]
 			{

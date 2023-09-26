@@ -31,15 +31,17 @@ extern
 #endif // MIN_IBF_FPGA_DEVICE_SOURCE
 template
 void min_ibf_fpga::backend_sycl::RunKernel<MinimizerKernel_w23_k19_b64, IbfKernel_w23_k19_b64>(sycl::queue& queue,
-  sycl::buffer<char, 1>& queries_buffer,
+  char* queries_device_ptr,
   const typename MinimizerKernel_w23_k19_b64::type::HostSizeType queriesOffset,
-  sycl::buffer<typename MinimizerKernel_w23_k19_b64::type::HostSizeType, 1>& querySizes_buffer,
+  const typename MinimizerKernel_w23_k19_b64::type::HostSizeType* querySizes_device_ptr,
   const typename MinimizerKernel_w23_k19_b64::type::HostSizeType querySizesOffset,
   const typename MinimizerKernel_w23_k19_b64::type::HostSizeType numberOfQueries,
-  const typename IbfKernel_w23_k19_b64::type::Chunk * ibfData_device_ptr,
+  const typename IbfKernel_w23_k19_b64::type::Chunk* ibfData_device_ptr,
   const typename IbfKernel_w23_k19_b64::type::HostSizeType binSize,
   const typename IbfKernel_w23_k19_b64::type::HostSizeType hashShift,
   const typename IbfKernel_w23_k19_b64::type::HostSizeType minimalNumberOfMinimizers,
   const typename IbfKernel_w23_k19_b64::type::HostSizeType maximalNumberOfMinimizers,
-  const typename IbfKernel_w23_k19_b64::type::HostSizeType * thresholds_device_ptr,
-  sycl::buffer<typename IbfKernel_w23_k19_b64::type::Chunk, 1>& result_buffer);
+  const typename IbfKernel_w23_k19_b64::type::HostSizeType* thresholds_device_ptr,
+  typename IbfKernel_w23_k19_b64::type::Chunk* result_device_ptr,
+  sycl::event* minimizer_kernel_event,
+  sycl::event* ibf_kernel_event);

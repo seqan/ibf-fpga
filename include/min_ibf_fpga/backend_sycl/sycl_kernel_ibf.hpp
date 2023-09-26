@@ -32,7 +32,7 @@ struct sycl_ibf_kernel
 	HostSizeType minimalNumberOfMinimizers{};
 	HostSizeType maximalNumberOfMinimizers{};
 	const HostSizeType* thresholds{};
-	sycl::accessor<Chunk, 1, sycl::access_mode::write> result;
+	Chunk* result{};
 
 	template <size_t pipe_id>
 	void execute() const
@@ -57,7 +57,7 @@ struct sycl_ibf_kernel
 				using pipe_t = typename MinimizerToIBFPipes::template PipeAt<pipe_id>;
 				return pipe_t::read();
 			}, [&](size_t const chunkIndex, Chunk const & localResult) {
-				size_t result_idx = (size_t)queryIndex * constants::chunks + chunkIndex;
+				size_t result_idx = static_cast<size_t>(queryIndex) * constants::chunks + chunkIndex;
 				result[result_idx] = localResult;
 			}, [&](unsigned char const chunk_idx, Hash const & minimizer, Chunk const & minimizer_membership) {
 				// no-op this is for debugging
