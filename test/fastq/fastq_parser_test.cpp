@@ -8,7 +8,7 @@
 
 int main()
 {
-    std::vector<std::string> ids{"@query0_only123error1also4", "@query1_only2", "@query2_only4error1also3", "@query3_never"};
+    std::vector<std::string> ids{"@query0_e0_012_e1_0123", "@query1_e0_1_e1_1", "@query2_e0_3_e1_23", "@query3_never"};
     std::vector<std::string> sequences{"ACGATCGACTAGGAGCGATTACGACTGACTACATCTAGCTAGCTAGAGATTCTTCAGAGCTTAGC", "AGCGAGGCAGGCAGCGATCGAGCGAGCGCATGCAGCGACTAGCTACGACAGCTACTATCAGCAGC", "CGAGCGATATCTTATGGTAGGCATCGAGCATCGAGGAGCGATCTATCTATCTATCATCTATCTAT", "AGCGTAGCGATACGTCTCAAATATTATAACGGCATTACGAGTCAGCTGACTGACATCGTAGCCGT"};
     std::ifstream ifstream("query.fq", std::ios::in | std::ios::binary);
 
