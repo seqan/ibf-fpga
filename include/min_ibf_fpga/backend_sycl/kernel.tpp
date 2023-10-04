@@ -13,7 +13,7 @@ namespace min_ibf_fpga::backend_sycl
 {
 
 template <typename SyclMinimizerKernel, typename SyclIbfKernel>
-void RunKernel(sycl::queue& queue,
+std::pair<sycl::event, sycl::event> RunKernel(sycl::queue& queue,
 	char* queries_device_ptr,
 	const typename SyclMinimizerKernel::type::HostSizeType queriesOffset,
 	const typename SyclMinimizerKernel::type::HostSizeType* querySizes_device_ptr,
@@ -26,18 +26,19 @@ void RunKernel(sycl::queue& queue,
 	const typename SyclIbfKernel::type::HostSizeType maximalNumberOfMinimizers,
 	const typename SyclIbfKernel::type::HostSizeType* thresholds_device_ptr,
 	typename SyclIbfKernel::type::Chunk* result_device_ptr,
-	sycl::event* minimizer_kernel_event,
-	sycl::event* ibf_kernel_event)
+	std::vector<sycl::event>* kernelDependencies)
 {
 	using sycl_minimizer_kernel_t = typename SyclMinimizerKernel::type;
 	using sycl_ibf_kernel_t = typename SyclIbfKernel::type;
 	using constants = typename sycl_minimizer_kernel_t::constants;
 
+	std::pair<sycl::event, sycl::event> events;
+
 	fpga_tools::UnrolledLoop<constants::number_of_kernels>([&](auto id)
 	{
 		static constexpr size_t pipe_id = id;
 
-		/*minimizer_kernel_event =*/ queue.submit([&](sycl::handler &handler)
+		events.first = queue.submit([&](sycl::handler &handler)
 		{
 			sycl_minimizer_kernel_t minimizer_kernel{
 				.queries{queries_device_ptr},
@@ -46,13 +47,14 @@ void RunKernel(sycl::queue& queue,
 				.querySizesOffset{querySizesOffset},
 				.numberOfQueries{numberOfQueries}
 			};
+			handler.depends_on(*kernelDependencies);
 			handler.single_task<SyclMinimizerKernel>([minimizer_kernel]() [[intel::kernel_args_restrict]]
 			{
 				minimizer_kernel.template execute<pipe_id>();
 			});
 		});
 
-		/*ibf_kernel_event =*/ queue.submit([&](sycl::handler &handler)
+		events.second = queue.submit([&](sycl::handler &handler)
 		{
 			sycl_ibf_kernel_t ibf_kernel{
 				.ibfData{ibfData_device_ptr},
@@ -64,6 +66,7 @@ void RunKernel(sycl::queue& queue,
 				.thresholds{thresholds_device_ptr},
 				.result{result_device_ptr},
 			};
+			handler.depends_on(*kernelDependencies);
 			handler.single_task<SyclIbfKernel>([ibf_kernel]() [[intel::kernel_args_restrict]]
 			{
 				ibf_kernel.template execute<pipe_id>();
@@ -71,6 +74,8 @@ void RunKernel(sycl::queue& queue,
 		});
 
 	});
+
+	return events;
 }
 
 } // namespace min_ibf_fpga::backend_sycl

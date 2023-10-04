@@ -30,7 +30,7 @@ struct IbfKernel_w23_k19_b64
 extern
 #endif // MIN_IBF_FPGA_DEVICE_SOURCE
 template
-void min_ibf_fpga::backend_sycl::RunKernel<MinimizerKernel_w23_k19_b64, IbfKernel_w23_k19_b64>(sycl::queue& queue,
+std::pair<sycl::event, sycl::event> min_ibf_fpga::backend_sycl::RunKernel<MinimizerKernel_w23_k19_b64, IbfKernel_w23_k19_b64>(sycl::queue& queue,
   char* queries_device_ptr,
   const typename MinimizerKernel_w23_k19_b64::type::HostSizeType queriesOffset,
   const typename MinimizerKernel_w23_k19_b64::type::HostSizeType* querySizes_device_ptr,
@@ -43,5 +43,4 @@ void min_ibf_fpga::backend_sycl::RunKernel<MinimizerKernel_w23_k19_b64, IbfKerne
   const typename IbfKernel_w23_k19_b64::type::HostSizeType maximalNumberOfMinimizers,
   const typename IbfKernel_w23_k19_b64::type::HostSizeType* thresholds_device_ptr,
   typename IbfKernel_w23_k19_b64::type::Chunk* result_device_ptr,
-  sycl::event* minimizer_kernel_event,
-  sycl::event* ibf_kernel_event);
+  std::vector<sycl::event>* kernelDependencies);

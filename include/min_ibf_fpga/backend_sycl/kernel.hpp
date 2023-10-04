@@ -12,7 +12,7 @@ namespace min_ibf_fpga::backend_sycl
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template <typename SyclMinimizerKernel, typename SyclIbfKernel>
-void RunKernel(sycl::queue& queue,
+std::pair<sycl::event, sycl::event> RunKernel(sycl::queue& queue,
 	char* queries_device_ptr,
 	const typename SyclMinimizerKernel::type::HostSizeType queriesOffset,
 	const typename SyclMinimizerKernel::type::HostSizeType* querySizes_device_ptr,
@@ -25,7 +25,6 @@ void RunKernel(sycl::queue& queue,
 	const typename SyclIbfKernel::type::HostSizeType maximalNumberOfMinimizers,
 	const typename SyclIbfKernel::type::HostSizeType* thresholds_device_ptr,
 	typename SyclIbfKernel::type::Chunk* result_device_ptr,
-	sycl::event* minimizer_kernel_event,
-	sycl::event* ibf_kernel_event);
+	std::vector<sycl::event>* kernelDependencies);
 
 } // namespace min_ibf_fpga::backend_sycl
