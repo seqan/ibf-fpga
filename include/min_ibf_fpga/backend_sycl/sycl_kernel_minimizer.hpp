@@ -34,20 +34,20 @@ struct sycl_minimizer_kernel
 	template <size_t pipe_id>
 	void execute() const
 	{
-		//sycl::device_ptr<const char*> queries_ptr(queries);
-		//sycl::device_ptr<HostSizeType*> querySizes_ptr(querySizes);
+		sycl::device_ptr<const char> queries_ptr(queries);
+		sycl::device_ptr<const HostSizeType> querySizes_ptr(querySizes);
 
 		QueryIndex queryOffset = queriesOffset;
 
 		for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 		{
-			const QueryIndex querySize = querySizes[static_cast<size_t>(querySizesOffset) + static_cast<size_t>(queryIndex)]; //PrefetchingLSU::load(querySizes_ptr + static_cast<size_t>(querySizesOffset) + static_cast<size_t>(queryIndex));
+			const QueryIndex querySize = PrefetchingLSU::load(querySizes_ptr + static_cast<size_t>(querySizesOffset) + static_cast<size_t>(queryIndex));
 
 			const QueryIndex localQueryOffset = queryOffset;
 			queryOffset += querySize;
 
 			minimizer_kernel_t::compute_minimizer(querySize, [&](QueryIndex const iteration){
-				return queries[static_cast<size_t>(localQueryOffset + iteration)]; //return PrefetchingLSU::load(queries_ptr + static_cast<size_t>(localQueryOffset + iteration));
+				return PrefetchingLSU::load(queries_ptr + static_cast<size_t>(localQueryOffset + iteration));
 			}, [&](auto && data)
 			{
 				using pipe_t = typename MinimizerToIBFPipes::template PipeAt<pipe_id>;
