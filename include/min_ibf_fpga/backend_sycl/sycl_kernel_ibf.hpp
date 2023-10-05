@@ -37,10 +37,13 @@ struct sycl_ibf_kernel
 	template <size_t pipe_id>
 	void execute() const
 	{
+		sycl::device_ptr<const HostSizeType> thresholds_ptr(thresholds);
+		sycl::device_ptr<const Chunk> ibfData_ptr(ibfData);
+
 		for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 		{
 			ibf_kernel_t::compute_ibf(
-				ibfData,
+				ibfData_ptr,
 				binSize,
 				hashShift,
 			[&](const QueryIndex localNumberOfHashes){
@@ -51,7 +54,7 @@ struct sycl_ibf_kernel
 				HostSizeType index = localNumberOfHashes < minimalNumberOfMinimizers? 0 : localNumberOfHashes - minimalNumberOfMinimizers;
 				index = index < maximalIndex? index : maximalIndex;
 
-				Counter threshold = (thresholds[static_cast<size_t>(index)] + 2).to_uint();
+				Counter threshold = (thresholds_ptr[static_cast<size_t>(index)] + 2).to_uint();
 				return threshold;
 			}, [&]() -> MinimizerToIBFData {
 				using pipe_t = typename MinimizerToIBFPipes::template PipeAt<pipe_id>;
