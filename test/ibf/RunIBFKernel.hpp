@@ -21,7 +21,7 @@ void RunIBFKernel(sycl::queue& queue,
 	const typename SyclIbfKernel::type::HostSizeType minimalNumberOfMinimizers,
 	const typename SyclIbfKernel::type::HostSizeType maximalNumberOfMinimizers,
 	const typename SyclIbfKernel::type::HostSizeType * thresholds_device_ptr,
-	sycl::buffer<typename SyclIbfKernel::type::Chunk, 1>& result_buffer)
+	typename SyclIbfKernel::type::Chunk * result_device_ptr)
 {
 	using sycl_ibf_kernel_t = typename SyclIbfKernel::type;
 	using constants = typename sycl_ibf_kernel_t::constants;
@@ -56,7 +56,7 @@ void RunIBFKernel(sycl::queue& queue,
 				.minimalNumberOfMinimizers{minimalNumberOfMinimizers},
 				.maximalNumberOfMinimizers{maximalNumberOfMinimizers},
 				.thresholds{thresholds_device_ptr},
-				.result{result_buffer, handler, sycl::write_only},
+				.result{result_device_ptr}
 			};
 			handler.single_task<SyclIbfKernel>([ibf_kernel]() [[intel::kernel_args_restrict]]
 			{

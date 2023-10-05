@@ -65,14 +65,22 @@ void sycl_test(minimizer_test_fixture test)
     std::vector<uint64_t> minimizer{};
 
     { // device buffer scope
-        sycl::buffer queries_buffer(queries);
-        sycl::buffer querySizes_buffer(querySizes);
+        auto queries_device_ptr = sycl::malloc_device<char>(queries.size(), q);
+        static_assert(std::is_same_v<decltype(queries_device_ptr), char *>);
+        q.memcpy(queries_device_ptr, queries.data(), queries.size() * sizeof(char));
+
+        auto querySizes_device_ptr = sycl::malloc_device<HostSizeType>(querySizes.size(), q);
+        static_assert(std::is_same_v<decltype(querySizes_device_ptr), HostSizeType *>);
+        q.memcpy(querySizes_device_ptr, querySizes.data(), querySizes.size() * sizeof(HostSizeType));
+
         sycl::buffer minimizerToIbf_buffer(pipe_results);
 
+        q.wait();
+
         min_ibf_fpga::backend_sycl::test::RunMinimizerKernel<MinimizerKernel, PipeToHostKernel>(q,
-                queries_buffer,
+                queries_device_ptr,
                 queriesOffset,
-                querySizes_buffer,
+                querySizes_device_ptr,
                 querySizesOffset,
                 numberOfQueries,
                 minimizerToIbf_buffer);

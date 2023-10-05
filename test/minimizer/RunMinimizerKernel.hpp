@@ -14,9 +14,9 @@ namespace min_ibf_fpga::backend_sycl::test
 
 template <typename SyclMinimizerKernel, typename pipe_to_host_kernel_t>
 void RunMinimizerKernel(sycl::queue& queue,
-	sycl::buffer<char, 1>& queries_buffer,
+	const char * queries_device_ptr,
 	const typename SyclMinimizerKernel::type::HostSizeType queriesOffset,
-	sycl::buffer<typename SyclMinimizerKernel::type::HostSizeType, 1>& querySizes_buffer,
+	const typename SyclMinimizerKernel::type::HostSizeType * querySizes_device_ptr,
 	const typename SyclMinimizerKernel::type::HostSizeType querySizesOffset,
 	const typename SyclMinimizerKernel::type::HostSizeType numberOfQueries,
 	sycl::buffer<typename SyclMinimizerKernel::type::MinimizerToIBFData, 1>& minimizerToIbf_buffer)
@@ -34,9 +34,9 @@ void RunMinimizerKernel(sycl::queue& queue,
 		queue.submit([&](sycl::handler &handler)
 		{
 			sycl_minimizer_kernel_t minimizer_kernel{
-				/*.queries*/sycl::accessor{queries_buffer, handler, sycl::read_only},
+				/*.queries*/{queries_device_ptr},
 				/*.queriesOffset*/{queriesOffset},
-				/*.querySizes*/sycl::accessor{querySizes_buffer, handler, sycl::read_only},
+				/*.querySizes*/{querySizes_device_ptr},
 				/*.querySizesOffset*/{querySizesOffset},
 				/*.numberOfQueries*/{numberOfQueries}
 			};
