@@ -2,6 +2,10 @@ cmake_minimum_required (VERSION 3.4)
 
 project(MinIBFFPGAoneAPI CXX)
 
+if(NOT CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
+    message (FATAL_ERROR "Used compiler is not ICPX; please set -DCMAKE_CXX_COMPILER=icpx")
+endif()
+
 include("cmake/add_library_sycl_fpga.cmake")
 include("cmake/sycl_fpga_report_of.cmake")
 
