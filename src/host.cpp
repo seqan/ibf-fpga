@@ -72,6 +72,9 @@ int main() {
   std::vector<Chunk> results;
   results.resize(querySizes.size()); // numberOfQueries
 
+  // Empty vector to pass to the kernel as we do not use events to specify dependencies
+  std::vector<sycl::event> kernelDependencies;
+
 #if FPGA_SIMULATOR
   auto device_selector = sycl::ext::intel::fpga_simulator_selector_v;
 #elif FPGA_HARDWARE
@@ -91,7 +94,7 @@ int main() {
     // Note: SYCL queues are out of order by default
     sycl::queue q(device_selector, fpga_tools::exception_handler);
 
-    // Transfer Device Data
+    // Malloc on device and transfer data
     auto ibfData_device_ptr = sycl::malloc_device<Chunk>(ibfData.size(), q);
     static_assert(std::is_same_v<decltype(ibfData_device_ptr), Chunk *>);
     q.memcpy(ibfData_device_ptr, ibfData.data(), ibfData.size() * sizeof(Chunk));
@@ -100,19 +103,24 @@ int main() {
     static_assert(std::is_same_v<decltype(thresholds_device_ptr), HostSizeType *>);
     q.memcpy(thresholds_device_ptr, thresholds.data(), thresholds.size() * sizeof(HostSizeType));
 
-    // Create the device buffers
-    sycl::buffer queries_buffer(queries);
-    sycl::buffer querySizes_buffer(querySizes);
-    sycl::buffer results_buffer(results);
+    auto queries_device_ptr = sycl::malloc_device<char>(queries.size(), q);
+    static_assert(std::is_same_v<decltype(queries_device_ptr), char *>);
+    q.memcpy(queries_device_ptr, queries.data(), queries.size() * sizeof(char));
 
-    q.wait(); // wait that USM buffers are copied
+    auto querySizes_device_ptr = sycl::malloc_device<HostSizeType>(querySizes.size(), q);
+    static_assert(std::is_same_v<decltype(querySizes_device_ptr), HostSizeType *>);
+    q.memcpy(querySizes_device_ptr, querySizes.data(), querySizes.size() * sizeof(HostSizeType));
 
-    // The definition of this function is in a different compilation unit,
-    // so host and device code can be separately compiled.
+    auto results_device_ptr = sycl::malloc_device<Chunk>(results.size(), q);
+    static_assert(std::is_same_v<decltype(results_device_ptr), Chunk *>);
+
+    q.wait(); // Wait for data transfers to finish (USM)
+
+    // The definition of this function is in a different compilation unit, so host and device code can be separately compiled.
     min_ibf_fpga::backend_sycl::RunKernel<MinimizerKernel_w23_k19_b64, IbfKernel_w23_k19_b64>(q,
-      queries_buffer,
+      queries_device_ptr,
       queriesOffset,
-      querySizes_buffer,
+      querySizes_device_ptr,
       querySizesOffset,
       querySizes.size(), // numberOfQueries
       ibfData_device_ptr,
@@ -121,12 +129,21 @@ int main() {
       minimalNumberOfMinimizers,
       maximalNumberOfMinimizers,
       thresholds_device_ptr,
-      results_buffer);
+      results_device_ptr,
+      &kernelDependencies);
 
-    q.wait(); // wait that RunKernel finished and afterwards free device memory
+    q.wait(); // Wait for RunKernel to finish before copying back results
 
+    // Copy back results
+    q.memcpy(results.data(), results_device_ptr, results.size() * sizeof(Chunk));
+
+    q.wait(); // Wait for results to be copied back before freeing device memory
+
+    sycl::free(queries_device_ptr, q);
+    sycl::free(querySizes_device_ptr, q);
     sycl::free(ibfData_device_ptr, q);
     sycl::free(thresholds_device_ptr, q);
+    sycl::free(results_device_ptr, q);
 
 #ifdef DEBUG
   }
@@ -146,10 +163,6 @@ int main() {
     std::terminate();
   }
 #endif
-
-  // At this point, the device buffers have gone out of scope and the kernel
-  // has been synchronized. Therefore, the output data has been updated
-  // with the results of the kernel and is safely accessible by the host CPU.
 
   // Dump results to binary file
   std::ofstream ostrm("results.bin", std::ios::binary);
