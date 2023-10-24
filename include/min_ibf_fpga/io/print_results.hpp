@@ -12,6 +12,8 @@ namespace min_ibf_fpga::io
 template <typename chunk_t>
 void print_results(std::vector<std::string> const & ids, std::vector<chunk_t> const & results, std::ostream & cout)
 {
+  static_assert(sizeof(chunk_t) <= sizeof(uint64_t));
+
   for (size_t i = 0; i < ids.size(); i++) {
     cout << ids[i].substr(1, std::string::npos) << "\t";
     uint64_t result = results[i];
