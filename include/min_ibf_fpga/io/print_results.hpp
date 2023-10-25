@@ -21,10 +21,11 @@ void print_results(std::vector<std::string> const & ids, std::vector<chunk_t> co
     for (size_t byteOffset = 0; byteOffset < sizeof(uint64_t); ++byteOffset) {
       uint8_t& value = ((uint8_t*)&result)[byteOffset];
 
+      uint8_t mask = 1;
       for (size_t bitOffset = 0; bitOffset < 8; ++bitOffset) {
-        if (value & (1 << 7))
+        if (value & mask)
           cout << byteOffset * 8 + bitOffset << ",";
-        value <<= 1;
+        mask <<= 1;
       }
     }
     cout << std::endl;

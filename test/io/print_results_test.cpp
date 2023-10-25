@@ -21,19 +21,19 @@ int main()
 
     ids.push_back(">id1");
     results.push_back(0b0000'0001);
-    expected += "id1\t7,\n";
+    expected += "id1\t0,\n";
 
     ids.push_back(">id2");
     results.push_back(0b0101'0101);
-    expected += "id2\t1,3,5,7,\n";
+    expected += "id2\t0,2,4,6,\n";
 
     ids.push_back(">id3");
     results.push_back(0b1010'0011);
-    expected += "id3\t0,2,6,7,\n";
+    expected += "id3\t0,1,5,7,\n";
 
     ids.push_back(">id4");
     results.push_back(0b0101'1100'1010'0011);
-    expected += "id4\t0,2,6,7,9,11,12,13,\n";
+    expected += "id4\t0,1,5,7,10,11,12,14,\n";
 
     std::stringstream ostr{};
     min_ibf_fpga::io::print_results(ids, results, ostr);
