@@ -41,6 +41,10 @@ struct sycl_ibf_kernel
 		sycl::device_ptr<const Chunk> ibfData_ptr(ibfData);
 		sycl::device_ptr<Chunk> result_ptr(result);
 
+		// TODO: adjust register size
+		[[intel::fpga_register]] size_t idx_reg[1000];
+		[[intel::fpga_register]] Chunk result_reg[1000];
+
 		for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 		{
 			ibf_kernel_t::compute_ibf(
@@ -62,12 +66,19 @@ struct sycl_ibf_kernel
 				return pipe_t::read();
 			}, [&](size_t const chunkIndex, Chunk const & localResult) {
 				size_t result_idx = static_cast<size_t>(queryIndex) * constants::chunks + chunkIndex;
-				result_ptr[result_idx] = localResult;
+
+				idx_reg[queryIndex] = result_idx;
+				result_reg[queryIndex] = localResult;
+
 			}, [&](unsigned char const chunk_idx, Hash const & minimizer, Chunk const & minimizer_membership) {
 				// no-op this is for debugging
 			}, [&](unsigned char const chunk_idx, Counter const * counters, size_t const counters_size) {
 				// no-op this is for debugging
 			});
+		}
+
+		for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++) {
+			result_ptr[idx_reg[queryIndex]] = result_reg[queryIndex];
 		}
 	}
 };
