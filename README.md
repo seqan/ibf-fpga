@@ -3,6 +3,28 @@
 - SYCL adaption of [min-ibf-fpga](https://git.zib.de/hpc-research/Projects/seqanatfpga/min-ibf-fpga)
 - includes tests for OpenCL and SYCL variant
 
+### clone:
+
+```
+git clone --recurse-submodules git@git.zib.de:hpc-research/Projects/seqanatfpga/min-ibf-fpga-oneapi.git
+```
+
+### build:
+
+```
+mkdir build
+cd build
+cmake -DCMAKE_CXX_COMPILER=icpx ..
+make
+```
+### run tests:
+
+```
+cd build/test
+ctest --output-on-failure
+```
+
+
 ## Folder Structure
 
 - `src` - minimalistic SYCL host code
