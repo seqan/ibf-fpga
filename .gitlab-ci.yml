@@ -1,4 +1,5 @@
 variables:
+  GIT_STRATEGY: clone
   # use custom version below that can handle private repositories
   # GIT_SUBMODULE_STRATEGY: recursive
 
