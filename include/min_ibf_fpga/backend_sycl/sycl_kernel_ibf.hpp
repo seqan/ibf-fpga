@@ -41,10 +41,11 @@ struct sycl_ibf_kernel
 		sycl::device_ptr<const Chunk> ibfData_ptr(ibfData);
 		sycl::device_ptr<Chunk> result_ptr(result);
 
-		// TODO: adjust register size
-		[[intel::fpga_register]] size_t idx_reg[1000];
-		[[intel::fpga_register]] Chunk result_reg[1000];
+		// TODO: adjust size
+		[[intel::fpga_memory]] size_t idx_reg[10000];
+		[[intel::fpga_memory]] Chunk result_reg[10000];
 
+		[[intel::initiation_interval(1)]]
 		for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 		{
 			ibf_kernel_t::compute_ibf(
