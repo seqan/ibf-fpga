@@ -1,18 +1,14 @@
-			sycl::accessor queries(queries_buffer, handler, sycl::read_only);
-			sycl::accessor querySizes(querySizes_buffer, handler, sycl::read_only);
+			sycl::device_ptr<const char> queries_device_ptr(queries_ptr);
+			sycl::device_ptr<const HostSizeType> querySizes_device_ptr(querySizes_ptr);
 
 			//sycl::stream out(65536, 256, handler); // DEBUG
 			handler.single_task<MinimizerKernel>([=]() [[intel::kernel_args_restrict]]
 			{
-				// Prefetching requires pointer
-				auto querySizes_ptr = querySizes.get_pointer();
-				auto queries_ptr = queries.get_pointer();
-
 				QueryIndex queryOffset = queriesOffset;
 
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
-					const QueryIndex querySize = PrefetchingLSU::load(querySizes_ptr + static_cast<size_t>(querySizesOffset) + static_cast<size_t>(queryIndex));
+					const QueryIndex querySize = PrefetchingLSU::load(querySizes_device_ptr + static_cast<size_t>(querySizesOffset) + static_cast<size_t>(queryIndex));
 
 					const QueryIndex localQueryOffset = queryOffset;
 					queryOffset += querySize;
@@ -47,7 +43,7 @@
 
 						// Query as long as elements are left, then only do calculations (end phase)
 						if (iteration < querySize)
-							queryBuffer[MIN_IBF_K - 1] = PrefetchingLSU::load(queries_ptr + static_cast<size_t>(localQueryOffset + iteration));
+							queryBuffer[MIN_IBF_K - 1] = PrefetchingLSU::load(queries_device_ptr + static_cast<size_t>(localQueryOffset + iteration));
 
 						// Shift register: hash buffer
 						#pragma unroll

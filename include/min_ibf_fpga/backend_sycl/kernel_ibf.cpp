@@ -1,6 +1,6 @@
-			sycl::accessor ibfData(ibfData_buffer, handler, sycl::read_only);
-			sycl::accessor thresholds(thresholds_buffer, handler, sycl::read_only);
-			sycl::accessor result(result_buffer, handler, sycl::write_only);
+			sycl::device_ptr<const HostSizeType> thresholds_device_ptr(thresholds_ptr);
+			sycl::device_ptr<const Chunk> ibfData_device_ptr(ibfData_ptr);
+			sycl::device_ptr<Chunk> result_device_ptr(result_ptr);
 
 			handler.single_task<IbfKernel>([=]() [[intel::kernel_args_restrict]]
 			{
@@ -64,7 +64,7 @@
 							#pragma unroll
 							for (unsigned char seedIndex = 0; seedIndex < HASH_COUNT; ++seedIndex)
 								bitvector &= //__burst_coalesced_cached_load(
-									/*&*/ibfData[static_cast<size_t>(binOffsets[seedIndex]) + chunkIndex];//,
+									/*&*/ibfData_device_ptr[static_cast<size_t>(binOffsets[seedIndex]) + chunkIndex];//,
 									//1048576); // 1 MiB = 8 megabit
 									//65536); // 65536 byte = 512 kilobit (default)
 
@@ -85,7 +85,10 @@
 							}
 
 							if (data.isLastElement)
-								result[static_cast<size_t>(queryIndex * CHUNKS + chunkIndex)] = localResult;
+							{
+								// TODO: Use result_device_ptr
+								result_ptr[static_cast<size_t>(queryIndex * CHUNKS + chunkIndex)] = localResult;
+							}
 						}
 
 						countersInitialized = 1;
