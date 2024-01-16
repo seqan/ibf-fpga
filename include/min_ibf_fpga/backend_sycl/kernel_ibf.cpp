@@ -37,23 +37,18 @@
 
 						Counter threshold;
 
-						if (data.isLastElement) {
-								//threshold = getThreshold(localNumberOfHashes, minimalNumberOfMinimizers, maximalNumberOfMinimizers, thresholds);
-								// manual inline of getThreshold() because of thresholds accessor
-								const HostSizeType maximalIndex = maximalNumberOfMinimizers - minimalNumberOfMinimizers;
-
-								HostSizeType index = localNumberOfHashes < minimalNumberOfMinimizers? 0 : localNumberOfHashes - minimalNumberOfMinimizers;
-								index = index < maximalIndex? index : maximalIndex;
-
-								threshold = (thresholds[static_cast<size_t>(index)] + 2).to_uint();
+						if (data.isLastElement)
+						{
+							threshold = getThreshold(localNumberOfHashes, minimalNumberOfMinimizers, maximalNumberOfMinimizers, thresholds_device_ptr);
 						}
 
 						HostSizeType binOffsets[HASH_COUNT];
 
 						#pragma unroll
 						for (unsigned char seedIndex = 0; seedIndex < HASH_COUNT; ++seedIndex)
-							binOffsets[seedIndex] = calculateBinIndex(data.hash,
-								seedIndex, hashShift, binSize) * CHUNKS_PER_BIN;
+						{
+							binOffsets[seedIndex] = calculateBinIndex(data.hash, seedIndex, hashShift, binSize) * CHUNKS_PER_BIN;
+						}
 
 						for (unsigned char chunkIndex = 0; chunkIndex < CHUNKS; chunkIndex++)
 						{
@@ -63,10 +58,12 @@
 							// Unroll: Burst-coalesced over chunks per seed
 							#pragma unroll
 							for (unsigned char seedIndex = 0; seedIndex < HASH_COUNT; ++seedIndex)
+							{
 								bitvector &= //__burst_coalesced_cached_load(
 									/*&*/ibfData_device_ptr[static_cast<size_t>(binOffsets[seedIndex]) + chunkIndex];//,
 									//1048576); // 1 MiB = 8 megabit
 									//65536); // 65536 byte = 512 kilobit (default)
+							}
 
 							#pragma unroll
 							for (ushort bitOffset = 0; bitOffset < CHUNK_BITS; ++bitOffset)
