@@ -13,14 +13,9 @@
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
 #include <min_ibf_fpga/backend_sycl/kernel.hpp>
 
-#include <min_ibf_fpga/backend_sycl/sycl_kernel_ibf.hpp>
-#include <min_ibf_fpga/backend_sycl/sycl_kernel_minimizer.hpp>
-
-#include "kernel_w23_k19_b64.hpp"
-
 int main() {
-  using HostSizeType = MinimizerKernel_w23_k19_b64::type::HostSizeType;
-  using Chunk = IbfKernel_w23_k19_b64::type::Chunk;
+  using HostSizeType = min_ibf_fpga::backend_sycl::HostSizeType;
+  using Chunk = min_ibf_fpga::backend_sycl::Chunk;
 
   static_assert(sizeof(size_t) == 8);
 
@@ -117,7 +112,7 @@ int main() {
     q.wait(); // Wait for data transfers to finish (USM)
 
     // The definition of this function is in a different compilation unit, so host and device code can be separately compiled.
-    min_ibf_fpga::backend_sycl::RunKernel<MinimizerKernel_w23_k19_b64, IbfKernel_w23_k19_b64>(q,
+    min_ibf_fpga::backend_sycl::RunKernel(q,
       queries_device_ptr,
       queriesOffset,
       querySizes_device_ptr,
