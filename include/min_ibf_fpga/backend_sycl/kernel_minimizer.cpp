@@ -3,7 +3,7 @@
 			sycl::accessor queries(queries_buffer, handler, sycl::read_only);
 			sycl::accessor querySizes(querySizes_buffer, handler, sycl::read_only);
 
-			sycl::stream out(65536, 256, handler); // DEBUG
+			//sycl::stream out(65536, 256, handler); // DEBUG
 			handler.single_task<MinimizerKernel>([=]() [[intel::kernel_args_restrict]]
 			{
 				// Prefetching requires pointer
