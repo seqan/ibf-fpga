@@ -40,11 +40,15 @@ std::pair<sycl::event, sycl::event> RunKernel(sycl::queue& queue,
 
 	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
 	{
-		
-	#include "kernel_minimizer.cpp"
+		events.first = queue.submit([&](sycl::handler &handler)
+		{
+			#include "kernel_minimizer.cpp"
+		});
 
-	#include "kernel_ibf.cpp"
-
+		events.second = queue.submit([&](sycl::handler &handler)
+		{
+			#include "kernel_ibf.cpp"
+		});
 	});
 
 	return events;

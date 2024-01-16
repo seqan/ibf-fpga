@@ -1,5 +1,3 @@
-		queue.submit([&](sycl::handler &handler)
-		{
 			sycl::accessor ibfData(ibfData_buffer, handler, sycl::read_only);
 			sycl::accessor thresholds(thresholds_buffer, handler, sycl::read_only);
 			sycl::accessor result(result_buffer, handler, sycl::write_only);
@@ -95,4 +93,3 @@
 					while(!data.isLastElement);
 				}
 			});
-		});

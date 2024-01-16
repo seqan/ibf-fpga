@@ -1,5 +1,3 @@
-		queue.submit([&](sycl::handler &handler)
-		{
 			sycl::accessor queries(queries_buffer, handler, sycl::read_only);
 			sycl::accessor querySizes(querySizes_buffer, handler, sycl::read_only);
 
@@ -86,4 +84,3 @@
 					}
 				}
 			});
-		});
