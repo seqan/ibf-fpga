@@ -1,30 +1,51 @@
-#pragma once
+#include "shared.hpp"
 
-#include <sycl/sycl.hpp>
-
-// Note: This header only contains code that can easily be shared between host and device.
+// Note: This header only contains code that depends of WINDOW_SIZE and MIN_IBF_K. All other code is in shared.hpp.
 
 namespace min_ibf_fpga::backend_sycl
 {
 
+#ifndef WINDOW_SIZE
+	#define WINDOW_SIZE 23
+#endif
+
+#ifndef MIN_IBF_K
+	#define MIN_IBF_K 19
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Function declarations
+// Asserts
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-template <typename SyclMinimizerKernel, typename SyclIbfKernel>
-std::pair<sycl::event, sycl::event> RunKernel(sycl::queue& queue,
-	char* queries_device_ptr,
-	const typename SyclMinimizerKernel::type::HostSizeType queriesOffset,
-	const typename SyclMinimizerKernel::type::HostSizeType* querySizes_device_ptr,
-	const typename SyclMinimizerKernel::type::HostSizeType querySizesOffset,
-	const typename SyclMinimizerKernel::type::HostSizeType numberOfQueries,
-	const typename SyclIbfKernel::type::Chunk* ibfData_device_ptr,
-	const typename SyclIbfKernel::type::HostSizeType binSize,
-	const typename SyclIbfKernel::type::HostSizeType hashShift,
-	const typename SyclIbfKernel::type::HostSizeType minimalNumberOfMinimizers,
-	const typename SyclIbfKernel::type::HostSizeType maximalNumberOfMinimizers,
-	const typename SyclIbfKernel::type::HostSizeType* thresholds_device_ptr,
-	typename SyclIbfKernel::type::Chunk* result_device_ptr,
-	std::vector<sycl::event>* kernelDependencies);
+static_assert(WINDOW_SIZE >= MIN_IBF_K, "Window size needs to be greater or equal K-mer size");
+static_assert(sizeof(HostHash) * 8 >= 2 * MIN_IBF_K, "K-mer doesn't fit Hash type");
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Static Helper
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+constexpr auto NUMBER_OF_KMERS_PER_WINDOW = WINDOW_SIZE - MIN_IBF_K + 1;
+
+constexpr auto INITIALIZATION_ITERATIONS = (MIN_IBF_K - 1) + (NUMBER_OF_KMERS_PER_WINDOW - 1);
+
+constexpr auto MINIMIZER_SEED_ADJUSTED = MINIMIZER_SEED >> (64 - 2 * MIN_IBF_K);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Types & Conversions
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+using Hash = ac_int<2 * MIN_IBF_K, false>;
+
+using Minimizer = struct
+{
+	Hash hash;
+	unsigned char position;
+};
+
+using MinimizerToIBFData = struct //__attribute__((__packed__))
+{
+	bool isLastElement;
+	Hash hash;
+};
 
 } // namespace min_ibf_fpga::backend_sycl
