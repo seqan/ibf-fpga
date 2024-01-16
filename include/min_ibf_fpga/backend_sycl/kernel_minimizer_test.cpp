@@ -16,9 +16,9 @@ class MinimizerKernel;
 class PipeToHostKernel;
 
 void RunMinimizerKernel(sycl::queue& queue,
-	sycl::buffer<char, 1>& queries_buffer,
+	const char* queries_ptr,
 	const HostSizeType queriesOffset,
-	sycl::buffer<HostSizeType, 1>& querySizes_buffer,
+	const HostSizeType* querySizes_ptr,
 	const HostSizeType querySizesOffset,
 	const HostSizeType numberOfQueries,
 	sycl::buffer<MinimizerToIBFData, 1>& minimizerToIbf_buffer)
@@ -29,8 +29,10 @@ void RunMinimizerKernel(sycl::queue& queue,
 
 	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
 	{
-
-		#include "kernel_minimizer.cpp"
+		queue.submit([&](sycl::handler &handler)
+		{
+			#include "kernel_minimizer.cpp"
+		});
 
 		queue.submit([&](sycl::handler &handler)
 		{

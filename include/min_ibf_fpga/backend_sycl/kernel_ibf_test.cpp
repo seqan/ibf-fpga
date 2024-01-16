@@ -17,14 +17,14 @@ class IbfKernel;
 
 void RunIBFKernel(sycl::queue& queue,
 	sycl::buffer<MinimizerToIBFData, 1>& minimizerToIbf_buffer,
-	sycl::buffer<Chunk, 1>& ibfData_buffer,
+	const Chunk* ibfData_ptr,
 	const HostSizeType binSize,
 	const HostSizeType hashShift,
 	const HostSizeType numberOfQueries,
 	const HostSizeType minimalNumberOfMinimizers,
 	const HostSizeType maximalNumberOfMinimizers,
-	sycl::buffer<HostSizeType, 1>& thresholds_buffer,
-	sycl::buffer<Chunk, 1>& result_buffer)
+	const HostSizeType* thresholds_ptr,
+	Chunk* result_ptr)
 {
 	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
 
@@ -43,8 +43,10 @@ void RunIBFKernel(sycl::queue& queue,
 			});
 		});
 
-		#include "kernel_ibf.cpp"
-
+		queue.submit([&](sycl::handler &handler)
+		{
+			#include "kernel_ibf.cpp"
+		});
 	});
 }
 
