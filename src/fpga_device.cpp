@@ -2,4 +2,4 @@
 
 #include <min_ibf_fpga/backend_sycl/kernel.tpp>
 
-#include "kernel_w23_k19_b64.hpp"
+#include "gen_kernel_types.hpp"

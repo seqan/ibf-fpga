@@ -2,8 +2,6 @@
 
 #include <sycl/sycl.hpp>
 
-// Note: This header only contains code that can easily be shared between host and device.
-
 namespace min_ibf_fpga::backend_sycl
 {
 

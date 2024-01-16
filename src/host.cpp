@@ -3,7 +3,6 @@
 #include <vector>
 
 #include <sycl/sycl.hpp>
-#include <sycl/ext/intel/fpga_extensions.hpp>
 
 #include <min_ibf_fpga/fastq/fastq_parser.hpp>
 #include <min_ibf_fpga/io/print_results.hpp>
@@ -16,12 +15,11 @@
 #include <min_ibf_fpga/backend_sycl/sycl_kernel_ibf.hpp>
 #include <min_ibf_fpga/backend_sycl/sycl_kernel_minimizer.hpp>
 
-#include "kernel_w23_k19_b64.hpp"
-
-int main() {
-  using HostSizeType = MinimizerKernel_w23_k19_b64::type::HostSizeType;
-  using Chunk = IbfKernel_w23_k19_b64::type::Chunk;
-
+template <typename SyclMinimizerKernel, typename SyclIbfKernel>
+int RunHost()
+{
+  using HostSizeType = typename SyclMinimizerKernel::types::HostSizeType;
+  using Chunk = typename SyclMinimizerKernel::types::Chunk;
   static_assert(sizeof(size_t) == 8);
 
   size_t const window_size = 23;
@@ -117,7 +115,7 @@ int main() {
     q.wait(); // Wait for data transfers to finish (USM)
 
     // The definition of this function is in a different compilation unit, so host and device code can be separately compiled.
-    min_ibf_fpga::backend_sycl::RunKernel<MinimizerKernel_w23_k19_b64, IbfKernel_w23_k19_b64>(q,
+    min_ibf_fpga::backend_sycl::RunKernel<SyclMinimizerKernel, SyclIbfKernel>(q,
       queries_device_ptr,
       queriesOffset,
       querySizes_device_ptr,
