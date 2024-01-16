@@ -87,18 +87,19 @@ using Chunk = ac_int<CHUNK_BITS, false>;
 // Function declarations
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void RunKernel(sycl::queue& queue,
-       sycl::buffer<char, 1>& queries_buffer,
-       const HostSizeType queriesOffset,
-       sycl::buffer<HostSizeType, 1>& querySizes_buffer,
-       const HostSizeType querySizesOffset,
-       const HostSizeType numberOfQueries,
-       sycl::buffer<Chunk, 1>& ibfData_buffer,
-       const HostSizeType binSize,
-       const HostSizeType hashShift,
-       const HostSizeType minimalNumberOfMinimizers,
-       const HostSizeType maximalNumberOfMinimizers,
-       sycl::buffer<HostSizeType, 1>& thresholds_buffer,
-       sycl::buffer<Chunk, 1>& result_buffer);
+std::pair<sycl::event, sycl::event> RunKernel(sycl::queue& queue,
+	const char* queries_ptr,
+	const HostSizeType queriesOffset,
+	const HostSizeType* querySizes_ptr,
+	const HostSizeType querySizesOffset,
+	const HostSizeType numberOfQueries,
+	const Chunk* ibfData_ptr,
+	const HostSizeType binSize,
+	const HostSizeType hashShift,
+	const HostSizeType minimalNumberOfMinimizers,
+	const HostSizeType maximalNumberOfMinimizers,
+	const HostSizeType* thresholds_ptr,
+	Chunk* result_ptr,
+	std::vector<sycl::event>* kernelDependencies);
 
 } // namespace min_ibf_fpga::backend_sycl
