@@ -7,8 +7,10 @@ set(REPORT_NAME "min-ibf-fpga-oneapi_report")
 # The compile output is not an executable, but an intermediate compilation result unique to SYCL.
 add_executable(${REPORT_NAME} ../host.cpp ../fpga_device.cpp)
 target_include_directories(${REPORT_NAME} PRIVATE ../../include)
-target_link_libraries(${REPORT_NAME} PRIVATE intel_fpga_device)
-target_link_options(${REPORT_NAME} PRIVATE -fsycl-link=early)
+add_custom_target(report DEPENDS ${REPORT_NAME})
+target_compile_definitions(${REPORT_NAME} PRIVATE -DFPGA_HARDWARE)
+target_compile_options(${REPORT_NAME} PRIVATE -fsycl -fintelfpga -qactypes -Wall -Xshyper-optimized-handshaking=off)
+target_link_options(${REPORT_NAME} PRIVATE -fsycl -fintelfpga -qactypes -Xshardware -Xstarget=${FPGA_DEVICE} ${USER_HARDWARE_FLAGS} -Xshyper-optimized-handshaking=off -fsycl-link=early)
 # fsycl-link=early stops the compiler after RTL generation, before invoking Quartus®
 
 cmake_policy(PUSH)
@@ -29,5 +31,3 @@ add_custom_target(
     DEPENDS "${REPORT_NAME}"
 )
 cmake_policy(POP)
-
-add_custom_target(report DEPENDS ${REPORT_NAME})
