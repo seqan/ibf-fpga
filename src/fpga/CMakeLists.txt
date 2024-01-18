@@ -1,3 +1,5 @@
+set(FPGA_TARGET ${TARGET_NAME}.fpga)
+
 ###############################################################################
 ### FPGA Hardware
 ###############################################################################
@@ -10,11 +12,8 @@ add_library(fpga_device.fpga SHARED ../fpga_device.cpp)
 target_include_directories(fpga_device.fpga PRIVATE ../../include)
 target_link_libraries(fpga_device.fpga PRIVATE intel_fpga_device)
 
-add_executable(min-ibf-fpga-oneapi.fpga ../host.cpp)
-target_include_directories(min-ibf-fpga-oneapi.fpga PRIVATE ../../include)
-target_compile_definitions(min-ibf-fpga-oneapi.fpga PRIVATE -DFPGA_HARDWARE)
-target_compile_options(min-ibf-fpga-oneapi.fpga PRIVATE -fsycl -fintelfpga -qactypes -Wall -Xshyper-optimized-handshaking=off)
-target_link_options(min-ibf-fpga-oneapi.fpga PRIVATE -fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off)
-target_link_libraries(min-ibf-fpga-oneapi.fpga PRIVATE fpga_device.fpga)
-
-add_custom_target(fpga DEPENDS min-ibf-fpga-oneapi.fpga)
+add_executable(${FPGA_TARGET} ${HOST_SOURCE_FILE})
+target_include_directories(${FPGA_TARGET} PRIVATE ../../include)
+target_compile_options(${FPGA_TARGET} PRIVATE ${HARDWARE_COMPILE_FLAGS})
+target_link_options(${FPGA_TARGET} PRIVATE -fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off)
+target_link_libraries(${FPGA_TARGET} PRIVATE fpga_device.fpga)
