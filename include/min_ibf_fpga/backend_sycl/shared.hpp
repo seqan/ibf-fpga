@@ -89,7 +89,7 @@ using Chunk = ac_int<CHUNK_BITS, false>;
 
 extern "C"
 {
-	std::pair<sycl::event, sycl::event> RunKernel(sycl::queue& queue,
+	void RunKernel(sycl::queue& queue,
 		const char* queries_ptr,
 		const HostSizeType queriesOffset,
 		const HostSizeType* querySizes_ptr,
@@ -102,7 +102,8 @@ extern "C"
 		const HostSizeType maximalNumberOfMinimizers,
 		const HostSizeType* thresholds_ptr,
 		Chunk* result_ptr,
-		std::vector<sycl::event>* kernelDependencies);
+		std::vector<sycl::event>* kernelDependencies,
+		std::pair<sycl::event, sycl::event>* kernelEvents);
 }
 
 } // namespace min_ibf_fpga::backend_sycl

@@ -17,7 +17,7 @@ namespace min_ibf_fpga::backend_sycl
 class MinimizerKernel;
 class IbfKernel;
 
-std::pair<sycl::event, sycl::event> RunKernel(sycl::queue& queue,
+void RunKernel(sycl::queue& queue,
 	const char* queries_ptr,
 	const HostSizeType queriesOffset,
 	const HostSizeType* querySizes_ptr,
@@ -30,28 +30,25 @@ std::pair<sycl::event, sycl::event> RunKernel(sycl::queue& queue,
 	const HostSizeType maximalNumberOfMinimizers,
 	const HostSizeType* thresholds_ptr,
 	Chunk* result_ptr,
-	std::vector<sycl::event>* kernelDependencies)
+	std::vector<sycl::event>* kernelDependencies,
+	std::pair<sycl::event, sycl::event>* kernelEvents)
 {
 	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
 
 	using PrefetchingLSU = sycl::ext::intel::lsu<sycl::ext::intel::prefetch<true>, sycl::ext::intel::statically_coalesce<false>>;
 
-	std::pair<sycl::event, sycl::event> events;
-
 	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
 	{
-		events.first = queue.submit([&](sycl::handler &handler)
+		kernelEvents->first = queue.submit([&](sycl::handler &handler)
 		{
 			#include "kernel_minimizer.cpp"
 		});
 
-		events.second = queue.submit([&](sycl::handler &handler)
+		kernelEvents->second = queue.submit([&](sycl::handler &handler)
 		{
 			#include "kernel_ibf.cpp"
 		});
 	});
-
-	return events;
 }
 
 } // namespace min_ibf_fpga::backend_sycl
