@@ -9,8 +9,9 @@ set(KERNEL_HEADER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/kernel_w23_k19_b64.hpp)
 set(HOST_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/host.cpp)
 set(TARGET_NAME min-ibf-fpga-oneapi)
 set(EMULATOR_TARGET ${TARGET_NAME}.fpga_emu)
+set(EMULATOR_DEVICE_TARGET ${TARGET_NAME}_kernel.fpga_emu)
 set(FPGA_TARGET ${TARGET_NAME}.fpga)
-set(FPGA_DEVICE_TARGET ${TARGET_NAME}_device.fpga)
+set(FPGA_DEVICE_TARGET ${TARGET_NAME}_kernel.fpga)
 
 # Create symlinks to the required binary files and query file
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/query.fq ${CMAKE_CURRENT_BINARY_DIR}/../query.fq)
@@ -36,7 +37,13 @@ set(HARDWARE_LINK_FLAGS -Xshardware -Xstarget=${FPGA_DEVICE} ${USER_HARDWARE_FLA
 #    [compile] icpx -fsycl -fintelfpga -qactypes -DFPGA_EMULATOR -o host.cpp.o -c host.cpp
 #    [compile] icpx -fsycl -fintelfpga -qactypes -DFPGA_EMULATOR -o kernel/kernel.cpp.o -c kernel/kernel.cpp
 #    [link]    icpx -fsycl -fintelfpga -qactypes host.cpp.o kernel/kernel.cpp.o -o min-ibf-fpga-oneapi.fpga_emu
-add_executable(${EMULATOR_TARGET} ${HOST_SOURCE_FILE} ${DEVICE_SOURCE_FILE})
+add_library(${EMULATOR_DEVICE_TARGET} SHARED ${DEVICE_SOURCE_FILE})
+target_include_directories(${EMULATOR_DEVICE_TARGET} PRIVATE ../include)
+target_compile_definitions(${EMULATOR_DEVICE_TARGET} PRIVATE -DFPGA_EMULATOR)
+target_compile_options(${EMULATOR_DEVICE_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS})
+target_link_options(${EMULATOR_DEVICE_TARGET} PRIVATE ${COMMON_LINK_FLAGS})
+
+add_executable(${EMULATOR_TARGET} ${HOST_SOURCE_FILE})
 target_include_directories(${EMULATOR_TARGET} PRIVATE ../include)
 target_compile_definitions(${EMULATOR_TARGET} PRIVATE -DFPGA_EMULATOR)
 target_compile_options(${EMULATOR_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS})
@@ -74,4 +81,4 @@ target_include_directories(${FPGA_TARGET} PRIVATE ../include)
 target_compile_definitions(${FPGA_TARGET} PRIVATE -DFPGA_HARDWARE)
 target_compile_options(${FPGA_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS})
 target_link_options(${FPGA_TARGET} PRIVATE ${COMMON_LINK_FLAGS})
-target_link_libraries(${FPGA_TARGET} PRIVATE ${FPGA_DEVICE_TARGET})
+# target_link_libraries(${FPGA_TARGET} PRIVATE ${FPGA_DEVICE_TARGET})

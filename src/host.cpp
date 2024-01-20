@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 
+#include <dlfcn.h>
+
 #include <sycl/sycl.hpp>
 #include <sycl/ext/intel/fpga_extensions.hpp>
 
@@ -11,7 +13,7 @@
 #include <min_ibf_fpga/io/write_out_binary_data.hpp>
 
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
-#include <min_ibf_fpga/backend_sycl/kernel.hpp>
+#include <min_ibf_fpga/backend_sycl/shared.hpp>
 
 int main() {
   using HostSizeType = min_ibf_fpga::backend_sycl::HostSizeType;
@@ -109,10 +111,31 @@ int main() {
     auto results_device_ptr = sycl::malloc_device<Chunk>(results.size(), q);
     static_assert(std::is_same_v<decltype(results_device_ptr), Chunk *>);
 
+    // std::string name = "libmin-ibf-fpga-oneapi_kernel_w" + std::to_string(window_size) + "_k" + std::to_string(kmer_size) + ".fpga_emu.so";
+    // std::filesystem::path library_path = std::filesystem::current_path() / name;
+
+    auto kernel_lib = dlopen("libmin-ibf-fpga-oneapi_kernel.fpga_emu.so"/*library_path.c_str()*/, RTLD_NOW);
+    auto RunKernel = (std::pair<sycl::event, sycl::event> (*)(
+      sycl::queue&,
+      const char*,
+      const HostSizeType,
+      const HostSizeType*,
+      const HostSizeType,
+      const HostSizeType,
+      const Chunk*,
+      const HostSizeType,
+      const HostSizeType,
+      const HostSizeType,
+      const HostSizeType,
+      const HostSizeType*,
+      Chunk*,
+      std::vector<sycl::event>*
+      ))dlsym(kernel_lib, "RunKernel");
+
     q.wait(); // Wait for data transfers to finish (USM)
 
     // The definition of this function is in a different compilation unit, so host and device code can be separately compiled.
-    min_ibf_fpga::backend_sycl::RunKernel(q,
+    RunKernel(q,
       queries_device_ptr,
       queriesOffset,
       querySizes_device_ptr,
