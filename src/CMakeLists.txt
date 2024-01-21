@@ -9,9 +9,17 @@ set(KERNEL_HEADER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/kernel_w23_k19_b64.hpp)
 set(HOST_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/host.cpp)
 set(TARGET_NAME min-ibf-fpga-oneapi)
 set(EMULATOR_TARGET ${TARGET_NAME}.fpga_emu)
-set(EMULATOR_DEVICE_TARGET ${TARGET_NAME}_kernel.fpga_emu)
 set(FPGA_TARGET ${TARGET_NAME}.fpga)
-set(FPGA_DEVICE_TARGET ${TARGET_NAME}_kernel.fpga)
+
+if(NOT DEFINED WINDOW_SIZE_LIST)
+    message("No WINDOW_SIZE_LIST supplied. Defaulting to 23.")
+    set(WINDOW_SIZE_LIST "23")
+endif()
+
+if(NOT DEFINED MIN_IBF_K_LIST)
+    message("No MIN_IBF_K_LIST supplied. Defaulting to 19.")
+    set(MIN_IBF_K_LIST "19")
+endif()
 
 # Create symlinks to the required binary files and query file
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/query.fq ${CMAKE_CURRENT_BINARY_DIR}/../query.fq)
@@ -37,11 +45,21 @@ set(HARDWARE_LINK_FLAGS -Xshardware -Xstarget=${FPGA_DEVICE} ${USER_HARDWARE_FLA
 #    [compile] icpx -fsycl -fintelfpga -qactypes -DFPGA_EMULATOR -o host.cpp.o -c host.cpp
 #    [compile] icpx -fsycl -fintelfpga -qactypes -DFPGA_EMULATOR -o kernel/kernel.cpp.o -c kernel/kernel.cpp
 #    [link]    icpx -fsycl -fintelfpga -qactypes host.cpp.o kernel/kernel.cpp.o -o min-ibf-fpga-oneapi.fpga_emu
-add_library(${EMULATOR_DEVICE_TARGET} SHARED ${DEVICE_SOURCE_FILE})
-target_include_directories(${EMULATOR_DEVICE_TARGET} PRIVATE ../include)
-target_compile_definitions(${EMULATOR_DEVICE_TARGET} PRIVATE -DFPGA_EMULATOR)
-target_compile_options(${EMULATOR_DEVICE_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS})
-target_link_options(${EMULATOR_DEVICE_TARGET} PRIVATE ${COMMON_LINK_FLAGS})
+
+foreach(WINDOW_SIZE ${WINDOW_SIZE_LIST})
+    foreach(MIN_IBF_K ${MIN_IBF_K_LIST})
+        if(${WINDOW_SIZE} GREATER ${MIN_IBF_K})
+            set(EMULATOR_DEVICE_TARGET ${TARGET_NAME}_kernel_w${WINDOW_SIZE}_k${MIN_IBF_K}_b64.fpga_emu)
+            add_library(${EMULATOR_DEVICE_TARGET} SHARED ${DEVICE_SOURCE_FILE})
+            target_include_directories(${EMULATOR_DEVICE_TARGET} PRIVATE ../include)
+            target_compile_definitions(${EMULATOR_DEVICE_TARGET} PRIVATE -DFPGA_EMULATOR -DWINDOW_SIZE=${WINDOW_SIZE} -DMIN_IBF_K=${MIN_IBF_K})
+            target_compile_options(${EMULATOR_DEVICE_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS})
+            target_link_options(${EMULATOR_DEVICE_TARGET} PRIVATE ${COMMON_LINK_FLAGS})
+        else()
+            message(WARNING "Deselecting w${WINDOW_SIZE}_k${MIN_IBF_K} because window size is not bigger than k-mer size.")
+        endif()
+    endforeach()
+endforeach()
 
 add_executable(${EMULATOR_TARGET} ${HOST_SOURCE_FILE})
 target_include_directories(${EMULATOR_TARGET} PRIVATE ../include)
@@ -58,7 +76,7 @@ set(FPGA_EARLY_IMAGE ${TARGET_NAME}_report.a)
 # The compile output is not an executable, but an intermediate compilation result unique to SYCL.
 add_executable(${FPGA_EARLY_IMAGE} ${HOST_SOURCE_FILE} ${DEVICE_SOURCE_FILE})
 target_include_directories(${FPGA_EARLY_IMAGE} PRIVATE ../include)
-target_compile_definitions(${FPGA_EARLY_IMAGE} PRIVATE -DFPGA_HARDWARE)
+target_compile_definitions(${FPGA_EARLY_IMAGE} PRIVATE -DFPGA_HARDWARE -DWINDOW_SIZE=23 -DMIN_IBF_K=19)
 target_compile_options(${FPGA_EARLY_IMAGE} PRIVATE ${COMMON_COMPILE_FLAGS})
 target_link_options(${FPGA_EARLY_IMAGE} PRIVATE ${COMMON_LINK_FLAGS} ${HARDWARE_LINK_FLAGS} -fsycl-link=early)
 # fsycl-link=early stops the compiler after RTL generation, before invoking Quartus®
@@ -70,11 +88,19 @@ target_link_options(${FPGA_EARLY_IMAGE} PRIVATE ${COMMON_LINK_FLAGS} ${HARDWARE_
 #   icpx -fsycl -fintelfpga -qactypes -c host.cpp -o host.o
 #   icpx -fsycl -fintelfpga -qactypes -Xshardware -Xstarget=<FPGA_DEVICE> -fsycl-link=image kernel/kernel.cpp -o dev_image.a
 #   icpx -fsycl -fintelfpga -qactypes host.o dev_image.a -o min-ibf-fpga-oneapi.fpga
-add_library(${FPGA_DEVICE_TARGET} SHARED EXCLUDE_FROM_ALL ${DEVICE_SOURCE_FILE})
-target_include_directories(${FPGA_DEVICE_TARGET} PRIVATE ../include)
-target_compile_definitions(${FPGA_DEVICE_TARGET} PRIVATE -DFPGA_HARDWARE)
-target_compile_options(${FPGA_DEVICE_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS})
-target_link_options(${FPGA_DEVICE_TARGET} PRIVATE ${COMMON_LINK_FLAGS} ${HARDWARE_LINK_FLAGS} -fsycl-link=image)
+
+foreach(WINDOW_SIZE ${WINDOW_SIZE_LIST})
+    foreach(MIN_IBF_K ${MIN_IBF_K_LIST})
+        if(${WINDOW_SIZE} GREATER ${MIN_IBF_K})
+            set(FPGA_DEVICE_TARGET ${TARGET_NAME}_kernel_w${WINDOW_SIZE}_k${MIN_IBF_K}_b64.fpga)
+            add_library(${FPGA_DEVICE_TARGET} SHARED EXCLUDE_FROM_ALL ${DEVICE_SOURCE_FILE})
+            target_include_directories(${FPGA_DEVICE_TARGET} PRIVATE ../include)
+            target_compile_definitions(${FPGA_DEVICE_TARGET} PRIVATE -DFPGA_HARDWARE -DWINDOW_SIZE=${WINDOW_SIZE} -DMIN_IBF_K=${MIN_IBF_K})
+            target_compile_options(${FPGA_DEVICE_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS})
+            target_link_options(${FPGA_DEVICE_TARGET} PRIVATE ${COMMON_LINK_FLAGS} ${HARDWARE_LINK_FLAGS} -fsycl-link=image)
+        endif()
+    endforeach()
+endforeach()
 
 add_executable(${FPGA_TARGET} EXCLUDE_FROM_ALL ${HOST_SOURCE_FILE})
 target_include_directories(${FPGA_TARGET} PRIVATE ../include)

@@ -23,6 +23,7 @@ int main() {
 
   size_t const window_size = 23;
   size_t const kmer_size = 19;
+  size_t const number_of_bins = 64;
   size_t const pattern_size = 65;
 
   size_t const kmers_per_window = window_size - kmer_size + 1;
@@ -113,8 +114,13 @@ int main() {
 
     std::pair<sycl::event, sycl::event> events;
 
-    // std::string name = "libmin-ibf-fpga-oneapi_kernel_w" + std::to_string(window_size) + "_k" + std::to_string(kmer_size) + ".fpga_emu.so";
-    std::string name = "libmin-ibf-fpga-oneapi_kernel.fpga_emu.so";
+#if FPGA_HARDWARE
+    std::string library_suffix = ".fpga.so";
+#else
+    std::string library_suffix = ".fpga_emu.so";
+#endif
+
+    std::string name = "libmin-ibf-fpga-oneapi_kernel_w" + std::to_string(window_size) + "_k" + std::to_string(kmer_size) + "_b" + std::to_string(number_of_bins) + library_suffix;
     std::filesystem::path library_path = std::filesystem::current_path() / name;
 
     auto kernel_lib = dlopen(library_path.c_str(), RTLD_NOW);
