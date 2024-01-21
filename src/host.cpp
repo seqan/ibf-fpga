@@ -114,9 +114,10 @@ int main() {
     std::pair<sycl::event, sycl::event> events;
 
     // std::string name = "libmin-ibf-fpga-oneapi_kernel_w" + std::to_string(window_size) + "_k" + std::to_string(kmer_size) + ".fpga_emu.so";
-    // std::filesystem::path library_path = std::filesystem::current_path() / name;
+    std::string name = "libmin-ibf-fpga-oneapi_kernel.fpga_emu.so";
+    std::filesystem::path library_path = std::filesystem::current_path() / name;
 
-    auto kernel_lib = dlopen("libmin-ibf-fpga-oneapi_kernel.fpga_emu.so"/*library_path.c_str()*/, RTLD_NOW);
+    auto kernel_lib = dlopen(library_path.c_str(), RTLD_NOW);
     auto RunKernel = (void (*)(
       sycl::queue&,
       const char*,
