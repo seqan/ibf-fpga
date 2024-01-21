@@ -6,11 +6,11 @@ namespace min_ibf_fpga::backend_sycl
 {
 
 #ifndef WINDOW_SIZE
-	#define WINDOW_SIZE 23
+	#error "WINDOW_SIZE not defined"
 #endif
 
 #ifndef MIN_IBF_K
-	#define MIN_IBF_K 19
+	#error "MIN_IBF_K not defined"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
