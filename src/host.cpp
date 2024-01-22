@@ -15,9 +15,10 @@
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
 #include <min_ibf_fpga/backend_sycl/shared.hpp>
 
-int main() {
+template <size_t chunk_bits>
+int RunKernel() {
   using HostSizeType = min_ibf_fpga::backend_sycl::HostSizeType;
-  using Chunk = min_ibf_fpga::backend_sycl::Chunk;
+  using Chunk = ac_int<chunk_bits, false>;
 
   static_assert(sizeof(size_t) == 8);
 
@@ -200,4 +201,9 @@ int main() {
   // Print results
   min_ibf_fpga::io::print_results(ids, results, std::clog);
   return EXIT_SUCCESS;
+}
+
+int main() {
+    size_t const chunk_bits = 64;
+    RunKernel<chunk_bits>();
 }
