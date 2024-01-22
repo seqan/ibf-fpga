@@ -28,7 +28,7 @@ typedef ushort Counter;
 #endif
 
 #ifndef BIN_COUNT
-	#define BIN_COUNT 64
+	#error "BIN_COUNT not defined"
 #endif
 
 #ifndef HASH_COUNT
