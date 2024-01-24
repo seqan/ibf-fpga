@@ -16,7 +16,7 @@
 #include <min_ibf_fpga/backend_sycl/shared.hpp>
 
 template <size_t chunk_bits>
-int RunKernel() {
+int RunHost() {
   using HostSizeType = min_ibf_fpga::backend_sycl::HostSizeType;
   using Chunk = ac_int<chunk_bits, false>;
 
@@ -205,5 +205,5 @@ int RunKernel() {
 
 int main() {
     size_t const chunk_bits = 64;
-    RunKernel<chunk_bits>();
+    RunHost<chunk_bits>();
 }
