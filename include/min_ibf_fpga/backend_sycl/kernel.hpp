@@ -63,12 +63,6 @@ static_assert(sizeof(HostHash) * 8 >= 2 * MIN_IBF_K, "K-mer doesn't fit Hash typ
 // Static Helper
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-template<class LHS, class RHS>
-constexpr auto INTEGER_DIVISION_CEIL(const LHS lhs, const RHS rhs)
-{
-	return (lhs + rhs - 1) / rhs;
-}
-
 constexpr auto NUMBER_OF_KMERS_PER_WINDOW = WINDOW_SIZE - MIN_IBF_K + 1;
 
 constexpr auto INITIALIZATION_ITERATIONS = (MIN_IBF_K - 1) + (NUMBER_OF_KMERS_PER_WINDOW - 1);
