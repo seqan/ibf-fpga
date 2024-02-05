@@ -31,4 +31,14 @@ inline Counter getThreshold(const HostSizeType numberOfHashes,
 	return (thresholds[index] + 2).to_uint();
 }
 
+inline void printLocalResult(const uint64_t* localResult, sycl::stream out)
+{
+	for (HostSizeType i = 0; i < CHUNK_BITS / 64; i++)
+	{
+		uint64_t element = localResult[i];
+		out << " " << element;
+	}
+	out << sycl::endl;
+}
+
 } // namespace min_ibf_fpga::backend_sycl

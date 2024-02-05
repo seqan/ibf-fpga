@@ -1,9 +1,12 @@
+			//sycl::stream out(65536, 256, handler); // DEBUG
 			handler.single_task<MinimizerKernel<id>>([=]() [[intel::kernel_args_restrict]]
 			{
 				for (QueryIndex queryIndex = 0; queryIndex < localNumberOfQueries; queryIndex++)
 				{
 					DistributorToMinimizerData query;
 					query = DistributorPipes::PipeAt<id>::read();
+
+					//out << INITIALIZATION_ITERATIONS << " + " << (unsigned)query.size << " - " << WINDOW_SIZE << " + 1" << sycl::endl; // DEBUG
 
 					const QueryIndex iterations =
 						INITIALIZATION_ITERATIONS // Fill query and hash buffer initially
@@ -17,6 +20,15 @@
 
 					for (QueryIndex iteration = 0; iteration <= iterations; iteration++)
 					{
+						// DEBUG
+						//out << static_cast<unsigned>(iteration) << ": " << queryBuffer << " - ";
+						//for (size_t i = 0; i < MIN_IBF_K; i++)
+						//	out << queryBuffer[i];
+						//out << " - ";
+						//for (size_t i = 0; i < NUMBER_OF_KMERS_PER_WINDOW; i++)
+						//	out << static_cast<unsigned>(hashBuffer[i]) << ",";
+						//out << sycl::endl;
+
 						// Shift register: Query buffer
 						#pragma unroll
 						for (unsigned char i = 0; i < MIN_IBF_K - 1; ++i)
@@ -52,6 +64,9 @@
 							MinimizerToIBFData data;
 							data.isLastElement = lastElement;
 							data.hash = localLastMinimizer.hash;
+
+							// DEBUG
+							//out << "Found minimizer: " << static_cast<unsigned>(data.hash) << " " << data.isLastElement << sycl::endl; // DEBUG
 
 							MinimizerToIBFPipes::PipeAt<id>::write(data);
 						}
