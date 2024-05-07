@@ -102,16 +102,16 @@ int RunHost() {
     static_assert(std::is_same_v<decltype(thresholds_device_ptr), HostSizeType *>);
     q.memcpy(thresholds_device_ptr, thresholds.data(), thresholds.size() * sizeof(HostSizeType));
 
-    auto queries_device_ptr = sycl::malloc_device<char>(queries.size(), q);
-    static_assert(std::is_same_v<decltype(queries_device_ptr), char *>);
-    q.memcpy(queries_device_ptr, queries.data(), queries.size() * sizeof(char));
+    auto queries_host_ptr = sycl::malloc_host<char>(queries.size(), q);
+    static_assert(std::is_same_v<decltype(queries_host_ptr), char *>);
+    std::memcpy(queries_host_ptr, queries.data(), queries.size() * sizeof(char));
 
-    auto querySizes_device_ptr = sycl::malloc_device<HostSizeType>(querySizes.size(), q);
-    static_assert(std::is_same_v<decltype(querySizes_device_ptr), HostSizeType *>);
-    q.memcpy(querySizes_device_ptr, querySizes.data(), querySizes.size() * sizeof(HostSizeType));
+    auto querySizes_host_ptr = sycl::malloc_host<HostSizeType>(querySizes.size(), q);
+    static_assert(std::is_same_v<decltype(querySizes_host_ptr), HostSizeType *>);
+    std::memcpy(querySizes_host_ptr, querySizes.data(), querySizes.size() * sizeof(HostSizeType));
 
-    auto results_device_ptr = sycl::malloc_device<Chunk>(results.size(), q);
-    static_assert(std::is_same_v<decltype(results_device_ptr), Chunk *>);
+    auto results_host_ptr = sycl::malloc_host<Chunk>(results.size(), q);
+    static_assert(std::is_same_v<decltype(results_host_ptr), Chunk *>);
 
     std::pair<sycl::event, sycl::event> events;
 
@@ -147,9 +147,9 @@ int RunHost() {
 
     // The definition of this function is in a different compilation unit, so host and device code can be separately compiled.
     RunKernel(q,
-      queries_device_ptr,
+      queries_host_ptr,
       queriesOffset,
-      querySizes_device_ptr,
+      querySizes_host_ptr,
       querySizesOffset,
       querySizes.size(), // numberOfQueries
       ibfData_device_ptr,
@@ -158,22 +158,22 @@ int RunHost() {
       minimalNumberOfMinimizers,
       maximalNumberOfMinimizers,
       thresholds_device_ptr,
-      results_device_ptr,
+      results_host_ptr,
       &kernelDependencies,
       &events);
 
     q.wait(); // Wait for RunKernel to finish before copying back results
 
-    // Copy back results
-    q.memcpy(results.data(), results_device_ptr, results.size() * sizeof(Chunk));
+    // Copy back results (could probably skip that and use results_host_ptr directly)
+    q.memcpy(results.data(), results_host_ptr, results.size() * sizeof(Chunk));
 
     q.wait(); // Wait for results to be copied back before freeing device memory
 
-    sycl::free(queries_device_ptr, q);
-    sycl::free(querySizes_device_ptr, q);
+    sycl::free(queries_host_ptr, q);
+    sycl::free(querySizes_host_ptr, q);
     sycl::free(ibfData_device_ptr, q);
     sycl::free(thresholds_device_ptr, q);
-    sycl::free(results_device_ptr, q);
+    sycl::free(results_host_ptr, q);
 
 #ifdef DEBUG
   }
