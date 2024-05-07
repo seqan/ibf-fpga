@@ -112,6 +112,9 @@ int RunHost() {
     // Note: SYCL queues are out of order by default
     sycl::queue q(device_selector, fpga_tools::exception_handler);
 
+    // DEBUG
+    std::cout << "ibfData.size(): " << ibfData.size() << " thresholds.size(): " << thresholds.size() << " queries.size(): " << queries.size() << " querySizes.size(): " << querySizes.size()  << std::endl;
+
     // Malloc on device and transfer data
     auto ibfData_device_ptr = sycl::malloc_device<Chunk>(ibfData.size(), q);
     static_assert(std::is_same_v<decltype(ibfData_device_ptr), Chunk *>);
