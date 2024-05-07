@@ -56,7 +56,8 @@ static_assert(sizeof(seeds) / sizeof(HostHash) >= HASH_COUNT, "The number of has
 
 static_assert(sizeof(HostHash) >= sizeof(MINIMIZER_SEED), "Minimizer seed doesn't fit Hash type");
 
-static_assert(WINDOW_SIZE >= MIN_IBF_K, "Window size needs to be greater or equal K-mer size");
+static_assert(WINDOW_SIZE > MIN_IBF_K, "Window size needs to be greater than K-mer size");
+
 static_assert(sizeof(HostHash) * 8 >= 2 * MIN_IBF_K, "K-mer doesn't fit Hash type");
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
