@@ -25,8 +25,7 @@ inline Counter getThreshold(const HostSizeType numberOfHashes,
 {
 	const HostSizeType maximalIndex = maximalNumberOfMinimizers - minimalNumberOfMinimizers;
 
-	HostSizeType index = numberOfHashes < minimalNumberOfMinimizers?
-		0 : numberOfHashes - minimalNumberOfMinimizers;
+	HostSizeType index = numberOfHashes < minimalNumberOfMinimizers? 0 : numberOfHashes - minimalNumberOfMinimizers;
 	index = index < maximalIndex? index : maximalIndex;
 
 	return (thresholds[index] + 2).to_uint();

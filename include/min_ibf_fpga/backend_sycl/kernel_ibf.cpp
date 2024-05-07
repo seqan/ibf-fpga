@@ -76,9 +76,6 @@
 								counters[chunkIndex][bitOffset] = counter;
 
 								localResult[bitOffset] = counter >= threshold;
-
-								/*if (data.isLastElement)
-									printf("%d %d\n", counter, threshold);*/
 							}
 
 							if (data.isLastElement)
