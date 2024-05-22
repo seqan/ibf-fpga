@@ -1,7 +1,12 @@
 #pragma once
 
-#include <sycl/sycl.hpp>
-#include <sycl/ext/intel/ac_types/ac_int.hpp>
+#if __INTEL_LLVM_COMPILER < 20230000
+  #include <CL/sycl.hpp>
+  #include <CL/sycl/INTEL/ac_types/ac_int.hpp>
+#else
+  #include <sycl/sycl.hpp>
+  #include <sycl/ext/intel/ac_types/ac_int.hpp>
+#endif
 
 // Note: This header only contains code that can easily be shared between host and device.
 

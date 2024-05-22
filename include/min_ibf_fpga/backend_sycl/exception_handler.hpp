@@ -1,6 +1,12 @@
 #ifndef __EXCEPTIONHANDLER_HPP__
 #define __EXCEPTIONHANDLER_HPP__
-#include <sycl/sycl.hpp>
+
+#if __INTEL_LLVM_COMPILER < 20230000
+  #include <CL/sycl.hpp>
+#else
+  #include <sycl/sycl.hpp>
+#endif
+
 #include <exception>
 #include <iostream>
 
