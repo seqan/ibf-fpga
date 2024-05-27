@@ -71,9 +71,6 @@ int RunHost() {
   std::vector<Chunk> results;
   results.resize(querySizes.size()); // numberOfQueries
 
-  // Empty vector to pass to the kernel as we do not use events to specify dependencies
-  std::vector<sycl::event> kernelDependencies;
-
 #if FPGA_SIMULATOR
   auto device_selector = sycl::ext::intel::fpga_simulator_selector_v;
 #elif FPGA_HARDWARE
@@ -139,7 +136,6 @@ int RunHost() {
       const HostSizeType,
       const HostSizeType*,
       Chunk*,
-      std::vector<sycl::event>*,
       std::pair<sycl::event, sycl::event>*
       ))dlsym(kernel_lib, "RunKernel");
 
@@ -159,7 +155,6 @@ int RunHost() {
       maximalNumberOfMinimizers,
       thresholds_device_ptr,
       results_host_ptr,
-      &kernelDependencies,
       &events);
 
     q.wait(); // Wait for RunKernel to finish before copying back results
