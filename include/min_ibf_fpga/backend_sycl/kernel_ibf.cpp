@@ -1,4 +1,4 @@
-			// sycl::stream out(65536, 256, handler); // DEBUG
+			sycl::stream out(65536, 256, handler); // DEBUG
 			handler.single_task<IbfKernel<id>>([=]() [[intel::kernel_args_restrict]]
 			{
 				sycl::ext::intel::device_ptr<const HostSizeType> thresholds_ptr_casted(thresholds_ptr);
@@ -34,12 +34,12 @@
 						if (data.isLastElement)
 						{
 							threshold = getThreshold(localNumberOfHashes, minimalNumberOfMinimizers, maximalNumberOfMinimizers, thresholds);
-							// out << "threshold: " << threshold << sycl::endl; // DEBUG
+							out << "threshold: " << threshold << sycl::endl; // DEBUG
 						}
 
 						HostSizeType binOffsets[HASH_COUNT];
 
-						// out << "binOffsets: "; // DEBUG
+						out << "binOffsets: "; // DEBUG
 
 						#pragma unroll
 						for (unsigned char seedIndex = 0; seedIndex < HASH_COUNT; ++seedIndex)
@@ -48,7 +48,7 @@
 							// out << (size_t)binOffsets[seedIndex] << " "; // DEBUG
 						}
 
-						// out << sycl::endl; // DEBUG
+						out << sycl::endl; // DEBUG
 
 						for (unsigned char chunkIndex = 0; chunkIndex < CHUNKS; chunkIndex++)
 						{
@@ -66,8 +66,8 @@
 							}
 
 							// DEBUG
-							// if (data.isLastElement)
-							// 	printLocalResult((size_t*)&localResult, out);
+							if (data.isLastElement)
+								printLocalResult((size_t*)&localResult, out);
 
 							#pragma unroll
 							for (ushort bitOffset = 0; bitOffset < CHUNK_BITS; ++bitOffset)
@@ -83,19 +83,19 @@
 								localResult[bitOffset] = counter >= threshold;
 
 								// DEBUG
-								// if (data.isLastElement)
-								// {
-								// 	// out << "bitOffset: counter threshold" << sycl::endl;
-								// 	out << bitOffset << ": " << counter << " " << threshold << sycl::endl;
-								// 	printLocalResult((uint64_t*)&localResult, out);
-								// }
+								if (data.isLastElement)
+								{
+									out << "bitOffset: counter threshold" << sycl::endl;
+									out << bitOffset << ": " << counter << " " << threshold << sycl::endl;
+									printLocalResult((uint64_t*)&localResult, out);
+								}
 							}
 
 							if (data.isLastElement)
 							{
 								// DEBUG
-								// out << "Result at " << static_cast<size_t>(queryIndex * CHUNKS + chunkIndex) << ":";
-								// printLocalResult((uint64_t*)&localResult, out);
+								out << "Result at " << static_cast<size_t>(queryIndex * CHUNKS + chunkIndex) << ":";
+								printLocalResult((uint64_t*)&localResult, out);
 
 								CollectorPipes::PipeAt<id>::write(localResult);
 							}
