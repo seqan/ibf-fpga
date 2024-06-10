@@ -27,6 +27,7 @@
 					MinimizerToIBFData data;
 
 					#if II <= 1
+						#warning "Using ivdep attribute which can cause discrepancies between hardware and emulator results"
 						#pragma ivdep array(counters)
 					#endif
 					do
