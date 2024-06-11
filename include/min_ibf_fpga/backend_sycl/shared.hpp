@@ -10,11 +10,7 @@
 
 // Note: This header only contains code that can easily be shared between host and device.
 
-template<class LHS, class RHS>
-constexpr auto INTEGER_DIVISION_CEIL(const LHS lhs, const RHS rhs)
-{
-	return (lhs + rhs - 1) / rhs;
-}
+#define INTEGER_DIVISION_CEIL(lhs, rhs) (lhs + rhs - 1) / rhs
 
 namespace min_ibf_fpga::backend_sycl
 {
