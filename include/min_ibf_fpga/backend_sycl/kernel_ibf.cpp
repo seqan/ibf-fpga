@@ -36,7 +36,7 @@
 
 						const QueryIndex localNumberOfHashes = numberOfHashes++;
 
-						Counter threshold;
+						Counter threshold = 0;
 
 						if (data.isLastElement)
 						{
