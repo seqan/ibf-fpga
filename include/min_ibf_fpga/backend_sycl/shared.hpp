@@ -10,13 +10,12 @@
 
 // Note: This header only contains code that can easily be shared between host and device.
 
-#define INTEGER_DIVISION_CEIL(lhs, rhs) (lhs + rhs - 1) / rhs
+#define INTEGER_DIVISION_CEIL(lhs, rhs) ((lhs + rhs - 1) / rhs)
+#define HOST_SIZE_TYPE_BITS 64
+#define MAX_BUS_WIDTH 512
 
 namespace min_ibf_fpga::backend_sycl
 {
-
-#define HOST_SIZE_TYPE_BITS 64
-#define MAX_BUS_WIDTH 512
 
 using HostSizeType = ac_int<HOST_SIZE_TYPE_BITS, false>;
 
