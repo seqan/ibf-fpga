@@ -6,30 +6,14 @@
 
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
-					#define UNSAFELEN 9 // LD singlepump pump (7) + Arithmetic (1) + Store (1)
-					#define II (UNSAFELEN - CHUNKS)
+					Counter counters[CHUNKS][CHUNK_BITS];
 
-					#if II > 1
-						Counter counters[CHUNKS][CHUNK_BITS]; // __attribute__((register))
-					#else
-						Counter __attribute__((
-								memory,
-								numbanks(1),
-								bankwidth(CHUNK_BITS * sizeof(Counter)),
-								singlepump,//singlepump,
-								max_replicates(1)))
-							counters[CHUNKS][CHUNK_BITS];
-					#endif
 					bool countersInitialized = 0;
 
 					QueryIndex numberOfHashes = 1;
 
 					MinimizerToIBFData data;
 
-					#if II <= 1
-						#warning "Using ivdep attribute which can cause discrepancies between hardware and emulator results"
-						#pragma ivdep array(counters)
-					#endif
 					do
 					{
 						data = MinimizerToIBFPipes::PipeAt<id>::read();
