@@ -8,7 +8,7 @@
   #include <sycl/ext/intel/ac_types/ac_int.hpp>
 #endif
 
-// Note: This header only contains code that can easily be shared between host and device.
+// Note: This header contains code that is shared between host and device.
 
 #define INTEGER_DIVISION_CEIL(lhs, rhs) ((lhs + rhs - 1) / rhs)
 #define HOST_SIZE_TYPE_BITS 64

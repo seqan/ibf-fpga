@@ -1,6 +1,6 @@
-#include "shared.hpp"
+#pragma once
 
-// Note: This header only contains code that depends of WINDOW_SIZE and MIN_IBF_K. All other code is in shared.hpp.
+#include "shared.hpp"
 
 namespace min_ibf_fpga::backend_sycl
 {
