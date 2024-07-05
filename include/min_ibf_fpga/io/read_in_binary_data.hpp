@@ -4,7 +4,10 @@
 #include <iosfwd>
 #include <string>
 #include <vector>
-#include <filesystem>
+#include <experimental/filesystem>
+namespace std {
+    namespace filesystem = experimental::filesystem;
+}
 
 #include <iostream> // TODO: remove me when std::cerr is not needed anymore
 
