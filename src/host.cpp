@@ -4,7 +4,11 @@
 
 #include <dlfcn.h>
 
-#include <sycl/sycl.hpp>
+#if __INTEL_LLVM_COMPILER < 20230000
+	#include <CL/sycl.hpp>
+#else
+	#include <sycl/sycl.hpp>
+#endif
 #include <sycl/ext/intel/fpga_extensions.hpp>
 
 #include <min_ibf_fpga/fastq/fastq_parser.hpp>
@@ -71,12 +75,18 @@ int RunHost() {
   std::vector<Chunk> results;
   results.resize(querySizes.size()); // numberOfQueries
 
-#if FPGA_SIMULATOR
-  auto device_selector = sycl::ext::intel::fpga_simulator_selector_v;
-#elif FPGA_HARDWARE
-  auto device_selector = sycl::ext::intel::fpga_selector_v;
-#else  // #if FPGA_EMULATOR
+#if __INTEL_LLVM_COMPILER < 20230100
+	#ifdef FPGA_EMULATOR
+  sycl::ext::intel::fpga_emulator_selector device_selector;
+	#else
+  sycl::ext::intel::fpga_selector device_selector;
+	#endif
+#else
+	#ifdef FPGA_EMULATOR
   auto device_selector = sycl::ext::intel::fpga_emulator_selector_v;
+	#else
+  auto device_selector = sycl::ext::intel::fpga_selector_v;
+	#endif
 #endif
 
 #ifdef DEBUG
