@@ -6,7 +6,7 @@
 
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
-					Counter counters[CHUNKS][CHUNK_BITS];
+					[[intel::fpga_register]] Counter counters[CHUNKS][CHUNK_BITS];
 
 					bool countersInitialized = 0;
 
@@ -37,8 +37,8 @@
 
 						for (unsigned char chunkIndex = 0; chunkIndex < CHUNKS; chunkIndex++)
 						{
-							Chunk bitvector = ~(Chunk)0;
-							Chunk localResult = 0;
+							[[intel::fpga_register]] Chunk bitvector = ~(Chunk)0;
+							[[intel::fpga_register]] Chunk localResult = 0;
 
 							// Unroll: Burst-coalesced over chunks per seed
 							#pragma unroll
