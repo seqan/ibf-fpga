@@ -101,13 +101,13 @@ int RunHost() {
     sycl::queue q(device_selector, fpga_tools::exception_handler);
 
     // Malloc on device and transfer data
-    auto ibfData_device_ptr = sycl::malloc_device<Chunk>(ibfData.size(), q);
-    static_assert(std::is_same_v<decltype(ibfData_device_ptr), Chunk *>);
-    q.memcpy(ibfData_device_ptr, ibfData.data(), ibfData.size() * sizeof(Chunk));
+    auto ibfData_host_ptr = sycl::malloc_host<Chunk>(ibfData.size(), q);
+    static_assert(std::is_same_v<decltype(ibfData_host_ptr), Chunk *>);
+    std::memcpy(ibfData_host_ptr, ibfData.data(), ibfData.size() * sizeof(Chunk));
 
-    auto thresholds_device_ptr = sycl::malloc_device<HostSizeType>(thresholds.size(), q);
-    static_assert(std::is_same_v<decltype(thresholds_device_ptr), HostSizeType *>);
-    q.memcpy(thresholds_device_ptr, thresholds.data(), thresholds.size() * sizeof(HostSizeType));
+    auto thresholds_host_ptr = sycl::malloc_host<HostSizeType>(thresholds.size(), q);
+    static_assert(std::is_same_v<decltype(thresholds_host_ptr), HostSizeType *>);
+    std::memcpy(thresholds_host_ptr, thresholds.data(), thresholds.size() * sizeof(HostSizeType));
 
     auto queries_host_ptr = sycl::malloc_host<char>(queries.size(), q);
     static_assert(std::is_same_v<decltype(queries_host_ptr), char *>);
@@ -158,12 +158,12 @@ int RunHost() {
       querySizes_host_ptr,
       querySizesOffset,
       querySizes.size(), // numberOfQueries
-      ibfData_device_ptr,
+      ibfData_host_ptr,
       bin_size,
       hash_shift,
       minimalNumberOfMinimizers,
       maximalNumberOfMinimizers,
-      thresholds_device_ptr,
+      thresholds_host_ptr,
       results_host_ptr,
       &events);
 
@@ -176,8 +176,8 @@ int RunHost() {
 
     sycl::free(queries_host_ptr, q);
     sycl::free(querySizes_host_ptr, q);
-    sycl::free(ibfData_device_ptr, q);
-    sycl::free(thresholds_device_ptr, q);
+    sycl::free(ibfData_host_ptr, q);
+    sycl::free(thresholds_host_ptr, q);
     sycl::free(results_host_ptr, q);
 
 #ifdef DEBUG

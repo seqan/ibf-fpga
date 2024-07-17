@@ -1,7 +1,7 @@
 			handler.single_task<IbfKernel>([=]() [[intel::kernel_args_restrict]]
 			{
-				sycl::device_ptr<const HostSizeType> thresholds_ptr_casted(thresholds_ptr);
-				sycl::device_ptr<const Chunk> ibfData_ptr_casted(ibfData_ptr);
+				sycl::host_ptr<const HostSizeType> thresholds_ptr_casted(thresholds_ptr);
+				sycl::host_ptr<const Chunk> ibfData_ptr_casted(ibfData_ptr);
 				sycl::host_ptr<Chunk> result_ptr_casted(result_ptr);
 
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)

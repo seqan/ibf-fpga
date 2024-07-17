@@ -21,7 +21,7 @@ inline HostSizeType calculateBinIndex(HostHash hash,
 inline Counter getThreshold(const HostSizeType numberOfHashes,
 	const HostSizeType minimalNumberOfMinimizers,
 	const HostSizeType maximalNumberOfMinimizers,
-	const sycl::device_ptr<const HostSizeType> thresholds)
+	const sycl::host_ptr<const HostSizeType> thresholds)
 {
 	const HostSizeType maximalIndex = maximalNumberOfMinimizers - minimalNumberOfMinimizers;
 
