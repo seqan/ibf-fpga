@@ -32,12 +32,17 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURC
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/data/thresholds_0e.bin ${CMAKE_CURRENT_BINARY_DIR}/../thresholds_0e.bin)
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/data/thresholds_1e.bin ${CMAKE_CURRENT_BINARY_DIR}/../thresholds_1e.bin)
 
+# Work around oneAPI 2022 emulator segfaulting when supplying "-qactypes"
+if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 2022)
+    set(EMULATOR_AC_INT_FLAG "-qactypes")
+endif()
+
 # A SYCL ahead-of-time (AoT) compile processes the device code in two stages.
 # 1. The "compile" stage compiles the device code to an intermediate representation (SPIR-V).
 # 2. The "link" stage invokes the compiler's FPGA backend before linking.
 #    For this reason, FPGA backend flags must be passed as link flags in CMake.
-set(COMMON_COMPILE_FLAGS -fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off -Wall)
-set(COMMON_LINK_FLAGS -fsycl -fintelfpga -qactypes -Xshyper-optimized-handshaking=off)
+set(COMMON_COMPILE_FLAGS -fsycl -fintelfpga -Xshyper-optimized-handshaking=off -Wall)
+set(COMMON_LINK_FLAGS -fsycl -fintelfpga -Xshyper-optimized-handshaking=off)
 set(HARDWARE_LINK_FLAGS -Xshardware -Xstarget=${FPGA_DEVICE} ${USER_HARDWARE_FLAGS})
 # use cmake -D USER_HARDWARE_FLAGS=<flags> to set extra flags for FPGA backend compilation
 
@@ -59,8 +64,8 @@ foreach(WINDOW_SIZE ${WINDOW_SIZE_LIST})
                 add_library(${EMULATOR_DEVICE_TARGET} SHARED ${DEVICE_SOURCE_FILE})
                 target_include_directories(${EMULATOR_DEVICE_TARGET} PRIVATE ../include)
                 target_compile_definitions(${EMULATOR_DEVICE_TARGET} PRIVATE -DFPGA_EMULATOR -DWINDOW_SIZE=${WINDOW_SIZE} -DMIN_IBF_K=${MIN_IBF_K} -DBIN_COUNT=${BIN_COUNT})
-                target_compile_options(${EMULATOR_DEVICE_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS})
-                target_link_options(${EMULATOR_DEVICE_TARGET} PRIVATE ${COMMON_LINK_FLAGS})
+                target_compile_options(${EMULATOR_DEVICE_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS} ${EMULATOR_AC_INT_FLAG})
+                target_link_options(${EMULATOR_DEVICE_TARGET} PRIVATE ${COMMON_LINK_FLAGS} ${EMULATOR_AC_INT_FLAG})
             endforeach()
         else()
             message(WARNING "Deselecting w${WINDOW_SIZE}_k${MIN_IBF_K} because window size is not bigger than k-mer size.")
@@ -71,8 +76,8 @@ endforeach()
 add_executable(${EMULATOR_TARGET} ${HOST_SOURCE_FILE})
 target_include_directories(${EMULATOR_TARGET} PRIVATE ../include)
 target_compile_definitions(${EMULATOR_TARGET} PRIVATE -DFPGA_EMULATOR)
-target_compile_options(${EMULATOR_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS})
-target_link_options(${EMULATOR_TARGET} PRIVATE ${COMMON_LINK_FLAGS})
+target_compile_options(${EMULATOR_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS} ${EMULATOR_AC_INT_FLAG})
+target_link_options(${EMULATOR_TARGET} PRIVATE ${COMMON_LINK_FLAGS} ${EMULATOR_AC_INT_FLAG})
 
 ###############################################################################
 ### Generate Report
@@ -84,8 +89,8 @@ set(FPGA_EARLY_IMAGE ${TARGET_NAME}_report.a)
 add_executable(${FPGA_EARLY_IMAGE} ${HOST_SOURCE_FILE} ${DEVICE_SOURCE_FILE})
 target_include_directories(${FPGA_EARLY_IMAGE} PRIVATE ../include)
 target_compile_definitions(${FPGA_EARLY_IMAGE} PRIVATE -DFPGA_HARDWARE -DWINDOW_SIZE=23 -DMIN_IBF_K=19 -DBIN_COUNT=64)
-target_compile_options(${FPGA_EARLY_IMAGE} PRIVATE ${COMMON_COMPILE_FLAGS})
-target_link_options(${FPGA_EARLY_IMAGE} PRIVATE ${COMMON_LINK_FLAGS} ${HARDWARE_LINK_FLAGS} -fsycl-link=early)
+target_compile_options(${FPGA_EARLY_IMAGE} PRIVATE ${COMMON_COMPILE_FLAGS} -qactypes)
+target_link_options(${FPGA_EARLY_IMAGE} PRIVATE ${COMMON_LINK_FLAGS} -qactypes ${HARDWARE_LINK_FLAGS} -fsycl-link=early)
 # fsycl-link=early stops the compiler after RTL generation, before invoking Quartus®
 
 ###############################################################################
@@ -104,8 +109,8 @@ foreach(WINDOW_SIZE ${WINDOW_SIZE_LIST})
                 add_library(${FPGA_DEVICE_TARGET} SHARED EXCLUDE_FROM_ALL ${DEVICE_SOURCE_FILE})
                 target_include_directories(${FPGA_DEVICE_TARGET} PRIVATE ../include)
                 target_compile_definitions(${FPGA_DEVICE_TARGET} PRIVATE -DFPGA_HARDWARE -DWINDOW_SIZE=${WINDOW_SIZE} -DMIN_IBF_K=${MIN_IBF_K} -DBIN_COUNT=${BIN_COUNT})
-                target_compile_options(${FPGA_DEVICE_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS})
-                target_link_options(${FPGA_DEVICE_TARGET} PRIVATE ${COMMON_LINK_FLAGS} ${HARDWARE_LINK_FLAGS} -fsycl-link=image)
+                target_compile_options(${FPGA_DEVICE_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS} -qactypes)
+                target_link_options(${FPGA_DEVICE_TARGET} PRIVATE ${COMMON_LINK_FLAGS} -qactypes ${HARDWARE_LINK_FLAGS} -fsycl-link=image)
             endforeach()
         endif()
     endforeach()
@@ -114,6 +119,6 @@ endforeach()
 add_executable(${FPGA_TARGET} EXCLUDE_FROM_ALL ${HOST_SOURCE_FILE})
 target_include_directories(${FPGA_TARGET} PRIVATE ../include)
 target_compile_definitions(${FPGA_TARGET} PRIVATE -DFPGA_HARDWARE)
-target_compile_options(${FPGA_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS})
-target_link_options(${FPGA_TARGET} PRIVATE ${COMMON_LINK_FLAGS})
+target_compile_options(${FPGA_TARGET} PRIVATE ${COMMON_COMPILE_FLAGS} -qactypes)
+target_link_options(${FPGA_TARGET} PRIVATE ${COMMON_LINK_FLAGS} -qactypes)
 # target_link_libraries(${FPGA_TARGET} PRIVATE ${FPGA_DEVICE_TARGET})
