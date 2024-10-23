@@ -41,9 +41,6 @@ int RunHost() {
   size_t const maximalNumberOfMinimizers = pattern_size - window_size + 1;
   size_t const thresholds_max_index = maximalNumberOfMinimizers - minimalNumberOfMinimizers;
 
-  size_t const queriesOffset = 0;
-  size_t const querySizesOffset = 0;
-
   std::string queries_filename = "query.fq";
   std::string query, id;
   std::vector<std::string> ids;
@@ -142,9 +139,7 @@ int RunHost() {
     auto RunKernel = (void (*)(
       sycl::queue&,
       const char*,
-      const HostSizeType,
       const HostSizeType*,
-      const HostSizeType,
       const HostSizeType,
       const Chunk*,
       const HostSizeType,
@@ -161,9 +156,7 @@ int RunHost() {
     // The definition of this function is in a different compilation unit, so host and device code can be separately compiled.
     RunKernel(q,
       queries_host_ptr,
-      queriesOffset,
       querySizes_host_ptr,
-      querySizesOffset,
       querySizes.size(), // numberOfQueries
       ibfData_device_ptr,
       bin_size,

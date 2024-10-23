@@ -111,9 +111,7 @@ extern "C"
 {
 	void RunKernel(sycl::queue& queue,
 		const char* queries_ptr,
-		const HostSizeType queriesOffset,
 		const HostSizeType* querySizes_ptr,
-		const HostSizeType querySizesOffset,
 		const HostSizeType numberOfQueries,
 		const Chunk* ibfData_ptr,
 		const HostSizeType binSize,

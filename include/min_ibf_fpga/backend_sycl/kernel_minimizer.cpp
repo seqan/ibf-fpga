@@ -3,11 +3,11 @@
 				sycl::ext::intel::host_ptr<const char> queries_ptr_casted(queries_ptr);
 				sycl::ext::intel::host_ptr<const HostSizeType> querySizes_ptr_casted(querySizes_ptr);
 
-				QueryIndex queryOffset = queriesOffset;
+				QueryIndex queryOffset = 0;
 
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
-					const QueryIndex querySize = PrefetchingLSU::load(querySizes_ptr_casted + static_cast<size_t>(querySizesOffset) + static_cast<size_t>(queryIndex));
+					const QueryIndex querySize = PrefetchingLSU::load(querySizes_ptr_casted + static_cast<size_t>(queryIndex));
 
 					const QueryIndex localQueryOffset = queryOffset;
 					queryOffset += querySize;
