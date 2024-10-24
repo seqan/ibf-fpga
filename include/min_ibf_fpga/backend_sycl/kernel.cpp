@@ -28,7 +28,7 @@ void RunKernel(sycl::queue& queue,
 	const HostSizeType maximalNumberOfMinimizers,
 	const HostSizeType* thresholds_ptr,
 	Chunk* result_ptr,
-	std::pair<sycl::event, sycl::event>* kernelEvents)
+	std::vector<sycl::event>& kernelEvents)
 {
 	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
 
@@ -36,15 +36,15 @@ void RunKernel(sycl::queue& queue,
 
 	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
 	{
-		kernelEvents->first = queue.submit([&](sycl::handler &handler)
+		kernelEvents.push_back( queue.submit([&](sycl::handler &handler)
 		{
 			#include "kernel_minimizer.cpp"
-		});
+		}) );
 
-		kernelEvents->second = queue.submit([&](sycl::handler &handler)
+		kernelEvents.push_back( queue.submit([&](sycl::handler &handler)
 		{
 			#include "kernel_ibf.cpp"
-		});
+		}) );
 	});
 }
 

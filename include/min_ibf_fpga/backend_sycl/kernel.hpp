@@ -120,7 +120,7 @@ extern "C"
 		const HostSizeType maximalNumberOfMinimizers,
 		const HostSizeType* thresholds_ptr,
 		Chunk* result_ptr,
-		std::pair<sycl::event, sycl::event>* kernelEvents);
+		std::vector<sycl::event>& kernelEvents);
 }
 
 } // namespace min_ibf_fpga::backend_sycl

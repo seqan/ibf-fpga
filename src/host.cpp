@@ -124,7 +124,7 @@ int RunHost() {
     auto results_host_ptr = sycl::malloc_host<Chunk>(results.size(), q);
     static_assert(std::is_same_v<decltype(results_host_ptr), Chunk *>);
 
-    std::pair<sycl::event, sycl::event> events;
+    std::vector<sycl::event> events;
 
 #if FPGA_HARDWARE
     std::string library_suffix = ".fpga.so";
@@ -148,7 +148,7 @@ int RunHost() {
       const HostSizeType,
       const HostSizeType*,
       Chunk*,
-      std::pair<sycl::event, sycl::event>*
+      std::vector<sycl::event>&
       ))dlsym(kernel_lib, "RunKernel");
 
     q.wait(); // Wait for data transfers to finish (USM)
@@ -165,9 +165,12 @@ int RunHost() {
       maximalNumberOfMinimizers,
       thresholds_device_ptr,
       results_host_ptr,
-      &events);
+      events);
 
-    q.wait(); // Wait for RunKernel to finish before copying back results
+    std::cerr << "Waiting for " << events.size() << " events." << std::endl;
+
+    for (sycl::event e : events)
+      e.wait();
 
     // Copy back results (could probably skip that and use results_host_ptr directly)
     q.memcpy(results.data(), results_host_ptr, results.size() * sizeof(Chunk));
