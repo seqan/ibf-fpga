@@ -20,7 +20,7 @@ template <std::size_t id> class IbfKernel;
 void RunKernel(sycl::queue& queue,
 	const char* queries_ptr,
 	const HostSizeType queryLength,
-	const HostSizeType numberOfQueries,
+	const HostSizeType totalNumberOfQueries,
 	const Chunk* ibfData_ptr,
 	const HostSizeType binSize,
 	const HostSizeType hashShift,
@@ -33,6 +33,8 @@ void RunKernel(sycl::queue& queue,
 	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
 
 	using PrefetchingLSU = sycl::ext::intel::lsu<sycl::ext::intel::prefetch<true>, sycl::ext::intel::statically_coalesce<false>>;
+
+	const QueryIndex queriesPerKernel = totalNumberOfQueries / NUMBER_OF_KERNELS;
 
 	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
 	{

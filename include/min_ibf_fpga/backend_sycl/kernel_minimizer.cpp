@@ -2,10 +2,9 @@
 			{
 				sycl::ext::intel::host_ptr<const char> queries_ptr_casted(queries_ptr);
 
-				QueryIndex queriesPerKernel = numberOfQueries / NUMBER_OF_KERNELS;
-				QueryIndex queryOffset = id * queriesPerKernel;
+				QueryIndex queryOffset = id * queriesPerKernel * queryLength;
 
-				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
+				for (QueryIndex queryIndex = 0; queryIndex < queriesPerKernel; queryIndex++)
 				{
 					const QueryIndex localQueryOffset = queryOffset;
 					queryOffset += queryLength;
