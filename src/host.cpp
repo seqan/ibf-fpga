@@ -45,7 +45,6 @@ int RunHost() {
   std::string query, id;
   std::vector<std::string> ids;
   std::vector<char> queries;
-  std::vector<HostSizeType> querySizes;
   std::ifstream queries_ifs(queries_filename, std::ios::binary);
 
   if (thresholds_max_index >= THRESHOLDS_CACHE_SIZE) {
@@ -53,13 +52,15 @@ int RunHost() {
     std::terminate();
   }
 
+  size_t numberOfQueries = 0;
+
   min_ibf_fpga::fastq::fastq_parser parser{.inputStream = std::move(queries_ifs)};
   parser([&](auto && id, auto && query)
   {
     ids.push_back(id);
-
     queries.insert(queries.end(), query.begin(), query.end());
-    querySizes.push_back(query.size());
+    numberOfQueries++;
+    if(query.size() != pattern_size) {std::cerr << "WARNING: query " << numberOfQueries << " has a different length (" << query.size() << "!=" << pattern_size << ")" << std::endl;}
   });
 
   std::vector<Chunk> ibfData;
@@ -77,7 +78,7 @@ int RunHost() {
   }
 
   std::vector<Chunk> results;
-  results.resize(querySizes.size()); // numberOfQueries
+  results.resize(numberOfQueries);
 
 #if __INTEL_LLVM_COMPILER < 20230100
 	#ifdef FPGA_EMULATOR
@@ -117,10 +118,6 @@ int RunHost() {
     static_assert(std::is_same_v<decltype(queries_host_ptr), char *>);
     std::memcpy(queries_host_ptr, queries.data(), queries.size() * sizeof(char));
 
-    auto querySizes_host_ptr = sycl::malloc_host<HostSizeType>(querySizes.size(), q);
-    static_assert(std::is_same_v<decltype(querySizes_host_ptr), HostSizeType *>);
-    std::memcpy(querySizes_host_ptr, querySizes.data(), querySizes.size() * sizeof(HostSizeType));
-
     auto results_host_ptr = sycl::malloc_host<Chunk>(results.size(), q);
     static_assert(std::is_same_v<decltype(results_host_ptr), Chunk *>);
 
@@ -139,7 +136,7 @@ int RunHost() {
     auto RunKernel = (void (*)(
       sycl::queue&,
       const char*,
-      const HostSizeType*,
+      const HostSizeType,
       const HostSizeType,
       const Chunk*,
       const HostSizeType,
@@ -156,8 +153,8 @@ int RunHost() {
     // The definition of this function is in a different compilation unit, so host and device code can be separately compiled.
     RunKernel(q,
       queries_host_ptr,
-      querySizes_host_ptr,
-      querySizes.size(), // numberOfQueries
+      pattern_size,
+      numberOfQueries,
       ibfData_device_ptr,
       bin_size,
       hash_shift,
@@ -178,7 +175,6 @@ int RunHost() {
     q.wait(); // Wait for results to be copied back before freeing device memory
 
     sycl::free(queries_host_ptr, q);
-    sycl::free(querySizes_host_ptr, q);
     sycl::free(ibfData_device_ptr, q);
     sycl::free(thresholds_device_ptr, q);
     sycl::free(results_host_ptr, q);

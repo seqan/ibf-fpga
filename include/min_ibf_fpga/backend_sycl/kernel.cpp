@@ -19,7 +19,7 @@ template <std::size_t id> class IbfKernel;
 
 void RunKernel(sycl::queue& queue,
 	const char* queries_ptr,
-	const HostSizeType* querySizes_ptr,
+	const HostSizeType queryLength,
 	const HostSizeType numberOfQueries,
 	const Chunk* ibfData_ptr,
 	const HostSizeType binSize,
