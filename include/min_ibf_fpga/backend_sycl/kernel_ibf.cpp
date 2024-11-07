@@ -74,7 +74,7 @@
 
 							if (data.isLastElement)
 							{
-								result_ptr_casted[static_cast<size_t>(queryIndex * CHUNKS + chunkIndex)] = localResult;
+								result_ptr_casted[id * static_cast<size_t>(queriesPerKernel) + static_cast<size_t>(queryIndex * CHUNKS + chunkIndex)] = localResult;
 							}
 						}
 
