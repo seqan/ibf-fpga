@@ -1,7 +1,7 @@
 			handler.single_task<MinimizerKernel>([=]() [[intel::kernel_args_restrict]]
 			{
-				sycl::host_ptr<const char> queries_ptr_casted(queries_ptr);
-				sycl::host_ptr<const HostSizeType> querySizes_ptr_casted(querySizes_ptr);
+				sycl::ext::intel::host_ptr<const char> queries_ptr_casted(queries_ptr);
+				sycl::ext::intel::host_ptr<const HostSizeType> querySizes_ptr_casted(querySizes_ptr);
 
 				QueryIndex queryOffset = queriesOffset;
 
