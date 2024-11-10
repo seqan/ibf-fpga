@@ -6,9 +6,6 @@
 
 				for (QueryIndex queryIndex = 0; queryIndex < queriesPerKernel; queryIndex++)
 				{
-					const QueryIndex localQueryOffset = queryOffset;
-					queryOffset += queryLength;
-
 					const QueryIndex iterations =
 						INITIALIZATION_ITERATIONS // Fill query and hash buffer initially
 						+ queryLength - WINDOW_SIZE + 1;
@@ -28,7 +25,7 @@
 
 						// Query as long as elements are left, then only do calculations (end phase)
 						if (iteration < queryLength)
-							queryBuffer[MIN_IBF_K - 1] = PrefetchingLSU::load(queries_ptr_casted + static_cast<size_t>(localQueryOffset + iteration));
+							queryBuffer[MIN_IBF_K - 1] = PrefetchingLSU::load(queries_ptr_casted + static_cast<size_t>(queryOffset + iteration));
 
 						// Shift register: hash buffer
 						#pragma unroll
@@ -60,5 +57,6 @@
 							MinimizerToIBFPipes::PipeAt<id>::write(data);
 						}
 					}
+					queryOffset += queryLength;
 				}
 			});
