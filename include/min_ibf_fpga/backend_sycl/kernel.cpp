@@ -14,8 +14,8 @@ namespace min_ibf_fpga::backend_sycl
 {
 
 // Forward declaration of the kernel names. FPGA best practice to reduce compiler name mangling in the optimization reports.
-class MinimizerKernel;
-class IbfKernel;
+template <std::size_t id> class MinimizerKernel;
+template <std::size_t id> class IbfKernel;
 
 void RunKernel(sycl::queue& queue,
 	const char* queries_ptr,
