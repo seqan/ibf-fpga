@@ -38,12 +38,12 @@ void RunKernel(sycl::queue& queue,
 
 	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
 	{
-		kernelEvents.push_back( queue.submit([&](sycl::handler &handler)
+		kernelEvents.push_back( queue.single_task<MinimizerKernel<id>>([=]
 		{
 			#include "kernel_minimizer.cpp"
 		}) );
 
-		kernelEvents.push_back( queue.submit([&](sycl::handler &handler)
+		kernelEvents.push_back( queue.single_task<IbfKernel<id>>([=]
 		{
 			#include "kernel_ibf.cpp"
 		}) );

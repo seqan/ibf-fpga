@@ -1,5 +1,3 @@
-			handler.single_task<MinimizerKernel<id>>([=]() [[intel::kernel_args_restrict]]
-			{
 				sycl::ext::intel::host_ptr<const char> queries_ptr_casted(queries_ptr);
 
 				QueryIndex queryOffset = id * queriesPerKernel * queryLength;
@@ -59,4 +57,3 @@
 					}
 					queryOffset += queryLength;
 				}
-			});
