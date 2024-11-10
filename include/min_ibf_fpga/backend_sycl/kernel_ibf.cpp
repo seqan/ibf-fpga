@@ -4,6 +4,15 @@
 				sycl::ext::intel::device_ptr<const Chunk> ibfData_ptr_casted(ibfData_ptr);
 				sycl::ext::intel::host_ptr<Chunk> result_ptr_casted(result_ptr);
 
+				HostSizeType thresholds[THRESHOLDS_CACHE_SIZE];
+
+				const HostSizeType thresholdsMaximalIndex = maximalNumberOfMinimizers - minimalNumberOfMinimizers;
+
+				for (ushort i = 0; i <= thresholdsMaximalIndex; i++)
+				{
+					thresholds[i] = thresholds_ptr_casted[i];
+				}
+
 				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
 				{
 					[[intel::fpga_register]] Counter counters[CHUNKS][CHUNK_BITS];
@@ -24,7 +33,7 @@
 
 						if (data.isLastElement)
 						{
-							threshold = getThreshold(localNumberOfHashes, minimalNumberOfMinimizers, maximalNumberOfMinimizers, thresholds_ptr_casted);
+							threshold = getThreshold(localNumberOfHashes, minimalNumberOfMinimizers, maximalNumberOfMinimizers, thresholds);
 						}
 
 						HostSizeType binOffsets[HASH_COUNT];

@@ -39,6 +39,7 @@ int RunHost() {
   size_t const hash_shift = 53; // The number of bits to shift the hash value before doing multiplicative hashing.
   size_t const minimalNumberOfMinimizers = kmers_per_window == 1 ? kmers_per_pattern : std::ceil(static_cast<double>(kmers_per_pattern) / static_cast<double>(kmers_per_window));
   size_t const maximalNumberOfMinimizers = pattern_size - window_size + 1;
+  size_t const thresholds_max_index = maximalNumberOfMinimizers - minimalNumberOfMinimizers;
 
   size_t const queriesOffset = 0;
   size_t const querySizesOffset = 0;
@@ -49,6 +50,11 @@ int RunHost() {
   std::vector<char> queries;
   std::vector<HostSizeType> querySizes;
   std::ifstream queries_ifs(queries_filename, std::ios::binary);
+
+  if (thresholds_max_index >= THRESHOLDS_CACHE_SIZE) {
+    std::cerr << "Error: THRESHOLDS_CACHE_SIZE too low" << std::endl;
+    std::terminate();
+  }
 
   min_ibf_fpga::fastq::fastq_parser parser{.inputStream = std::move(queries_ifs)};
   parser([&](auto && id, auto && query)

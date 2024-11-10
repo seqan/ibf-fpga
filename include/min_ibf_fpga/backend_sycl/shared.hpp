@@ -11,6 +11,7 @@
 // Note: This header contains code that is shared between host and device.
 
 #define INTEGER_DIVISION_CEIL(lhs, rhs) ((lhs + rhs - 1) / rhs)
+#define THRESHOLDS_CACHE_SIZE 250
 #define HOST_SIZE_TYPE_BITS 64
 #define MAX_BUS_WIDTH 512
 
