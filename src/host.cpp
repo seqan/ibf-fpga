@@ -164,10 +164,7 @@ int RunHost() {
       results_host_ptr,
       events);
 
-    std::cerr << "Waiting for " << events.size() << " events." << std::endl;
-
-    for (sycl::event e : events)
-      e.wait();
+    q.wait(); // Wait for RunKernel to finish before copying back results
 
     // Copy back results (could probably skip that and use results_host_ptr directly)
     q.memcpy(results.data(), results_host_ptr, results.size() * sizeof(Chunk));

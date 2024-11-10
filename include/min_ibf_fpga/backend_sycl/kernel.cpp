@@ -1,8 +1,8 @@
 #include <sycl/ext/intel/fpga_extensions.hpp>
 
 // Utilities
+#include "compute_units.hpp"
 #include "pipe_utils.hpp"
-#include "unrolled_loop.hpp"
 
 // Kernel includes
 #include "kernel.hpp"
@@ -36,17 +36,12 @@ void RunKernel(sycl::queue& queue,
 
 	const QueryIndex queriesPerKernel = totalNumberOfQueries / NUMBER_OF_KERNELS;
 
-	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
-	{
-		kernelEvents.push_back( queue.single_task<MinimizerKernel<id>>([=]
-		{
-			#include "kernel_minimizer.cpp"
-		}) );
+	SubmitComputeUnits<NUMBER_OF_KERNELS, MinimizerKernel>(queue, [=](auto id) [[intel::kernel_args_restrict]] {
+		#include "kernel_minimizer.cpp"
+	});
 
-		kernelEvents.push_back( queue.single_task<IbfKernel<id>>([=]
-		{
-			#include "kernel_ibf.cpp"
-		}) );
+	SubmitComputeUnits<NUMBER_OF_KERNELS, IbfKernel>(queue, [=](auto id) [[intel::kernel_args_restrict]] {
+		#include "kernel_ibf.cpp"
 	});
 }
 
