@@ -80,21 +80,6 @@ void RunKernel(sycl::queue& queue,
 #endif
 				}
 			}
-
-			// Signal "no more queries" by writing an empty query to all pipes
-			DistributorToMinimizerData data;
-			data.size = 0;
-
-			DistributorPipes::PipeAt<0>::write(data);
-#if NUMBER_OF_KERNELS > 1
-			DistributorPipes::PipeAt<1>::write(data);
-#endif
-#if NUMBER_OF_KERNELS > 2
-			DistributorPipes::PipeAt<2>::write(data);
-#endif
-#if NUMBER_OF_KERNELS > 3
-			DistributorPipes::PipeAt<3>::write(data);
-#endif
 		});
 	}) );
 

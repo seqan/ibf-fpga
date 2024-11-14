@@ -1,10 +1,15 @@
 			handler.single_task<MinimizerKernel<id>>([=]() [[intel::kernel_args_restrict]]
 			{
-				DistributorToMinimizerData query;
-				query = DistributorPipes::PipeAt<id>::read();
+				QueryIndex localNumberOfQueries = numberOfQueries / NUMBER_OF_KERNELS;
+				QueryIndex remainder = numberOfQueries % NUMBER_OF_KERNELS;
 
-				while (query.size != 0)
+				if (remainder > id) localNumberOfQueries++;
+
+				for (QueryIndex queryIndex = 0; queryIndex < localNumberOfQueries; queryIndex++)
 				{
+					DistributorToMinimizerData query;
+					query = DistributorPipes::PipeAt<id>::read();
+
 					const QueryIndex iterations =
 						INITIALIZATION_ITERATIONS // Fill query and hash buffer initially
 						+ query.size - WINDOW_SIZE + 1;
@@ -56,6 +61,5 @@
 							MinimizerToIBFPipes::PipeAt<id>::write(data);
 						}
 					}
-					query = DistributorPipes::PipeAt<id>::read();
 				}
 			});
