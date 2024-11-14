@@ -12,7 +12,12 @@
 					thresholds[i] = thresholds_ptr_casted[i];
 				}
 
-				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
+				QueryIndex localNumberOfQueries = numberOfQueries / NUMBER_OF_KERNELS;
+				QueryIndex remainder = numberOfQueries % NUMBER_OF_KERNELS;
+
+				if (remainder > id) localNumberOfQueries++;
+
+				for (QueryIndex queryIndex = 0; queryIndex < localNumberOfQueries; queryIndex++)
 				{
 					[[intel::fpga_register]] Counter counters[CHUNKS][CHUNK_BITS];
 
@@ -73,11 +78,7 @@
 
 							if (data.isLastElement)
 							{
-								IBFToCollectorData chunk;
-								chunk.address = static_cast<size_t>(queryIndex * CHUNKS + chunkIndex);
-								chunk.result = localResult;
-
-								CollectorPipes::PipeAt<id>::write(chunk);
+								CollectorPipes::PipeAt<id>::write(localResult);
 							}
 						}
 

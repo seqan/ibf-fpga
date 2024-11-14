@@ -34,7 +34,7 @@ void RunKernel(sycl::queue& queue,
 {
 	using DistributorPipes = fpga_tools::PipeArray<class DistributorPipe, DistributorToMinimizerData, 2, NUMBER_OF_KERNELS>;
 	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
-	using CollectorPipes = fpga_tools::PipeArray<class CollectorPipe, IBFToCollectorData, 25, NUMBER_OF_KERNELS>;
+	using CollectorPipes = fpga_tools::PipeArray<class CollectorPipe, Chunk, 25, NUMBER_OF_KERNELS>;
 
 	using PrefetchingLSU = sycl::ext::intel::lsu<sycl::ext::intel::prefetch<true>, sycl::ext::intel::statically_coalesce<false>>;
 
@@ -117,38 +117,38 @@ void RunKernel(sycl::queue& queue,
 		{
 			sycl::ext::intel::host_ptr<Chunk> result_ptr_casted(result_ptr);
 
-			size_t chunksProcessed = 0;
-			size_t numberOfChunks = static_cast<size_t>(numberOfQueries) * CHUNKS;
-
-			while (chunksProcessed < numberOfChunks)
+			for (QueryIndex queryIndex = 0; queryIndex < static_cast<QueryIndex>(numberOfQueries); queryIndex++)
 			{
-				IBFToCollectorData data;
-				unsigned char nextPipe = chunksProcessed % NUMBER_OF_KERNELS;
+				unsigned char pipeIndex = queryIndex % NUMBER_OF_KERNELS;
 
-				switch (nextPipe)
+				for (unsigned char chunkIndex = 0; chunkIndex < CHUNKS; chunkIndex++)
 				{
-				case 0:
-					data = CollectorPipes::PipeAt<0>::read();
-					break;
+					Chunk chunk;
+
+					switch (pipeIndex)
+					{
+					case 0:
+						chunk = CollectorPipes::PipeAt<0>::read();
+						break;
 #if NUMBER_OF_KERNELS > 1
-				case 1:
-					data = CollectorPipes::PipeAt<1>::read();
-					break;
+					case 1:
+						chunk = CollectorPipes::PipeAt<1>::read();
+						break;
 #endif
 #if NUMBER_OF_KERNELS > 2
-				case 2:
-					data = CollectorPipes::PipeAt<2>::read();
-					break;
+					case 2:
+						chunk = CollectorPipes::PipeAt<2>::read();
+						break;
 #endif
 #if NUMBER_OF_KERNELS > 3
-				case 3:
-					data = CollectorPipes::PipeAt<3>::read();
-					break;
+					case 3:
+						chunk = CollectorPipes::PipeAt<3>::read();
+						break;
 #endif
-				}
+					}
 
-				result_ptr_casted[data.address] = data.result;
-				chunksProcessed++;
+					result_ptr_casted[static_cast<size_t>(queryIndex * CHUNKS + chunkIndex)] = chunk;
+				}
 			}
 		});
 	}) );
