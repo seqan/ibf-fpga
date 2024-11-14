@@ -56,6 +56,9 @@ int RunHost() {
   min_ibf_fpga::fastq::fastq_parser parser{.inputStream = std::move(queries_ifs)};
   parser([&](auto && id, auto && query)
   {
+    if (query.size() < 0) { std::cerr << "Warning: Empty query detected" << std::endl; }
+    if (query.size() > MAX_QUERY_LENGTH) { std::cerr << "Error: Query length exceeds MAX_QUERY_LENGTH" << std::endl; std::terminate(); }
+
     ids.push_back(id);
 
     queries.insert(queries.end(), query.begin(), query.end());
