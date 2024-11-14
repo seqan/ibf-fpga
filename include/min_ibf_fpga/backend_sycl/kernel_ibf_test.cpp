@@ -26,9 +26,9 @@ void RunIBFKernel(sycl::queue& queue,
 	const HostSizeType* thresholds_ptr,
 	Chunk* result_ptr)
 {
-	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
+	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, KERNEL_COPYS>;
 
-	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
+	fpga_tools::UnrolledLoop<KERNEL_COPYS>([&](auto id)
 	{
 		queue.submit([&](sycl::handler &handler)
 		{

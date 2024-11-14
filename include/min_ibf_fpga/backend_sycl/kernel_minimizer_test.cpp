@@ -23,11 +23,11 @@ void RunMinimizerKernel(sycl::queue& queue,
 	const HostSizeType numberOfQueries,
 	sycl::buffer<MinimizerToIBFData, 1>& minimizerToIbf_buffer)
 {
-	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
+	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, KERNEL_COPYS>;
 
 	using PrefetchingLSU = sycl::ext::intel::lsu<sycl::ext::intel::prefetch<true>, sycl::ext::intel::statically_coalesce<false>>;
 
-	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
+	fpga_tools::UnrolledLoop<KERNEL_COPYS>([&](auto id)
 	{
 		queue.submit([&](sycl::handler &handler)
 		{

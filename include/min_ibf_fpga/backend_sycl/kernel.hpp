@@ -35,12 +35,12 @@ typedef ushort Counter;
 	#define HASH_COUNT 2
 #endif
 
-#ifndef NUMBER_OF_KERNELS
-	#define NUMBER_OF_KERNELS 1
+#ifndef KERNEL_COPYS
+	#define KERNEL_COPYS 1
 #endif
 
-#if NUMBER_OF_KERNELS > 4
-	#error "NUMBER_OF_KERNELS > 4 not supported"
+#if KERNEL_COPYS > 4
+	#error "KERNEL_COPYS > 4 not supported"
 #endif
 
 #define MINIMIZER_SEED 0x8F3F73B5CF1C9ADE

@@ -31,6 +31,7 @@ int RunHost() {
   size_t const kmer_size = 19;
   size_t const number_of_bins = 64;
   size_t const pattern_size = 65;
+  size_t const kernel_copys = 2;
 
   size_t const kmers_per_window = window_size - kmer_size + 1;
   size_t const kmers_per_pattern = pattern_size - kmer_size + 1;
@@ -135,7 +136,7 @@ int RunHost() {
     std::string library_suffix = ".fpga_emu.so";
 #endif
 
-    std::string name = "libmin-ibf-fpga-oneapi_kernel_w" + std::to_string(window_size) + "_k" + std::to_string(kmer_size) + "_b" + std::to_string(number_of_bins) + library_suffix;
+    std::string name = "libmin-ibf-fpga-oneapi_kernel_w" + std::to_string(window_size) + "_k" + std::to_string(kmer_size) + "_b" + std::to_string(number_of_bins) + "_kernels" + std::to_string(kernel_copys) + library_suffix;
     std::filesystem::path library_path = std::filesystem::current_path() / name;
 
     auto kernel_lib = dlopen(library_path.c_str(), RTLD_NOW);

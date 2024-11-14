@@ -32,9 +32,9 @@ void RunKernel(sycl::queue& queue,
 	Chunk* result_ptr,
 	std::vector<sycl::event>& kernelEvents)
 {
-	using DistributorPipes = fpga_tools::PipeArray<class DistributorPipe, DistributorToMinimizerData, 2, NUMBER_OF_KERNELS>;
-	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, NUMBER_OF_KERNELS>;
-	using CollectorPipes = fpga_tools::PipeArray<class CollectorPipe, Chunk, 25, NUMBER_OF_KERNELS>;
+	using DistributorPipes = fpga_tools::PipeArray<class DistributorPipe, DistributorToMinimizerData, 2, KERNEL_COPYS>;
+	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, KERNEL_COPYS>;
+	using CollectorPipes = fpga_tools::PipeArray<class CollectorPipe, Chunk, 25, KERNEL_COPYS>;
 
 	using PrefetchingLSU = sycl::ext::intel::lsu<sycl::ext::intel::prefetch<true>, sycl::ext::intel::statically_coalesce<false>>;
 
@@ -58,22 +58,22 @@ void RunKernel(sycl::queue& queue,
 					queries_ptr_index++;
 				}
 
-				switch (i % NUMBER_OF_KERNELS)
+				switch (i % KERNEL_COPYS)
 				{
 				case 0:
 					DistributorPipes::PipeAt<0>::write(data);
 					break;
-#if NUMBER_OF_KERNELS > 1
+#if KERNEL_COPYS > 1
 				case 1:
 					DistributorPipes::PipeAt<1>::write(data);
 					break;
 #endif
-#if NUMBER_OF_KERNELS > 2
+#if KERNEL_COPYS > 2
 				case 2:
 					DistributorPipes::PipeAt<2>::write(data);
 					break;
 #endif
-#if NUMBER_OF_KERNELS > 3
+#if KERNEL_COPYS > 3
 				case 3:
 					DistributorPipes::PipeAt<3>::write(data);
 					break;
@@ -83,10 +83,10 @@ void RunKernel(sycl::queue& queue,
 		});
 	}) );
 
-	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
+	fpga_tools::UnrolledLoop<KERNEL_COPYS>([&](auto id)
 	{
-		QueryIndex localNumberOfQueries = numberOfQueries / NUMBER_OF_KERNELS;
-		QueryIndex remainder = numberOfQueries % NUMBER_OF_KERNELS;
+		QueryIndex localNumberOfQueries = numberOfQueries / KERNEL_COPYS;
+		QueryIndex remainder = numberOfQueries % KERNEL_COPYS;
 
 		if (remainder > id) localNumberOfQueries++;
 
@@ -109,7 +109,7 @@ void RunKernel(sycl::queue& queue,
 
 			for (QueryIndex queryIndex = 0; queryIndex < static_cast<QueryIndex>(numberOfQueries); queryIndex++)
 			{
-				unsigned char pipeIndex = queryIndex % NUMBER_OF_KERNELS;
+				unsigned char pipeIndex = queryIndex % KERNEL_COPYS;
 
 				for (unsigned char chunkIndex = 0; chunkIndex < CHUNKS; chunkIndex++)
 				{
@@ -120,17 +120,17 @@ void RunKernel(sycl::queue& queue,
 					case 0:
 						chunk = CollectorPipes::PipeAt<0>::read();
 						break;
-#if NUMBER_OF_KERNELS > 1
+#if KERNEL_COPYS > 1
 					case 1:
 						chunk = CollectorPipes::PipeAt<1>::read();
 						break;
 #endif
-#if NUMBER_OF_KERNELS > 2
+#if KERNEL_COPYS > 2
 					case 2:
 						chunk = CollectorPipes::PipeAt<2>::read();
 						break;
 #endif
-#if NUMBER_OF_KERNELS > 3
+#if KERNEL_COPYS > 3
 					case 3:
 						chunk = CollectorPipes::PipeAt<3>::read();
 						break;
