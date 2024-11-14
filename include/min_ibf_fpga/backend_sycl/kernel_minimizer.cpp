@@ -1,10 +1,5 @@
 			handler.single_task<MinimizerKernel<id>>([=]() [[intel::kernel_args_restrict]]
 			{
-				QueryIndex localNumberOfQueries = numberOfQueries / NUMBER_OF_KERNELS;
-				QueryIndex remainder = numberOfQueries % NUMBER_OF_KERNELS;
-
-				if (remainder > id) localNumberOfQueries++;
-
 				for (QueryIndex queryIndex = 0; queryIndex < localNumberOfQueries; queryIndex++)
 				{
 					DistributorToMinimizerData query;

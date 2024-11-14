@@ -12,11 +12,6 @@
 					thresholds[i] = thresholds_ptr_casted[i];
 				}
 
-				QueryIndex localNumberOfQueries = numberOfQueries / NUMBER_OF_KERNELS;
-				QueryIndex remainder = numberOfQueries % NUMBER_OF_KERNELS;
-
-				if (remainder > id) localNumberOfQueries++;
-
 				for (QueryIndex queryIndex = 0; queryIndex < localNumberOfQueries; queryIndex++)
 				{
 					[[intel::fpga_register]] Counter counters[CHUNKS][CHUNK_BITS];

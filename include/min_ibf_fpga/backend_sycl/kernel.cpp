@@ -85,6 +85,11 @@ void RunKernel(sycl::queue& queue,
 
 	fpga_tools::UnrolledLoop<NUMBER_OF_KERNELS>([&](auto id)
 	{
+		QueryIndex localNumberOfQueries = numberOfQueries / NUMBER_OF_KERNELS;
+		QueryIndex remainder = numberOfQueries % NUMBER_OF_KERNELS;
+
+		if (remainder > id) localNumberOfQueries++;
+
 		kernelEvents.push_back( queue.submit([&](sycl::handler &handler)
 		{
 			#include "kernel_minimizer.cpp"
