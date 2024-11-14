@@ -39,6 +39,10 @@ typedef ushort Counter;
 	#define NUMBER_OF_KERNELS 1
 #endif
 
+#if NUMBER_OF_KERNELS > 4
+	#error "NUMBER_OF_KERNELS > 4 not supported"
+#endif
+
 #define MINIMIZER_SEED 0x8F3F73B5CF1C9ADE
 
 static const HostHash seeds[5] = {
@@ -97,10 +101,22 @@ using Minimizer = struct
 	unsigned char position;
 };
 
+using DistributorToMinimizerData = struct
+{
+	unsigned char size;
+	char query[MAX_QUERY_LENGTH];
+};
+
 using MinimizerToIBFData = struct //__attribute__((__packed__))
 {
 	bool isLastElement;
 	Hash hash;
+};
+
+using  IBFToCollectorData = struct
+{
+	size_t address;
+	Chunk result;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -11,7 +11,9 @@
 // Note: This header contains code that is shared between host and device.
 
 #define INTEGER_DIVISION_CEIL(lhs, rhs) ((lhs + rhs - 1) / rhs)
-#define THRESHOLDS_CACHE_SIZE 250
+#define MAX_QUERY_LENGTH 250
+// Note: MAX_QUERY_LENGTH is an upper bound for THRESHOLDS_CACHE_SIZE
+#define THRESHOLDS_CACHE_SIZE MAX_QUERY_LENGTH
 #define HOST_SIZE_TYPE_BITS 64
 #define MAX_BUS_WIDTH 512
 

@@ -2,7 +2,6 @@
 			{
 				sycl::ext::intel::device_ptr<const HostSizeType> thresholds_ptr_casted(thresholds_ptr);
 				sycl::ext::intel::device_ptr<const Chunk> ibfData_ptr_casted(ibfData_ptr);
-				sycl::ext::intel::host_ptr<Chunk> result_ptr_casted(result_ptr);
 
 				HostSizeType thresholds[THRESHOLDS_CACHE_SIZE];
 
@@ -74,7 +73,11 @@
 
 							if (data.isLastElement)
 							{
-								result_ptr_casted[static_cast<size_t>(queryIndex * CHUNKS + chunkIndex)] = localResult;
+								IBFToCollectorData chunk;
+								chunk.address = static_cast<size_t>(queryIndex * CHUNKS + chunkIndex);
+								chunk.result = localResult;
+
+								CollectorPipes::PipeAt<id>::write(chunk);
 							}
 						}
 

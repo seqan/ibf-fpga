@@ -1,20 +1,13 @@
 			handler.single_task<MinimizerKernel<id>>([=]() [[intel::kernel_args_restrict]]
 			{
-				sycl::ext::intel::host_ptr<const char> queries_ptr_casted(queries_ptr);
-				sycl::ext::intel::host_ptr<const HostSizeType> querySizes_ptr_casted(querySizes_ptr);
+				DistributorToMinimizerData query;
+				query = DistributorPipes::PipeAt<id>::read();
 
-				QueryIndex queryOffset = 0;
-
-				for (QueryIndex queryIndex = 0; queryIndex < (QueryIndex)numberOfQueries; queryIndex++)
+				while (query.size != 0)
 				{
-					const QueryIndex querySize = PrefetchingLSU::load(querySizes_ptr_casted + static_cast<size_t>(queryIndex));
-
-					const QueryIndex localQueryOffset = queryOffset;
-					queryOffset += querySize;
-
 					const QueryIndex iterations =
 						INITIALIZATION_ITERATIONS // Fill query and hash buffer initially
-						+ querySize - WINDOW_SIZE + 1;
+						+ query.size - WINDOW_SIZE + 1;
 
 					char queryBuffer[MIN_IBF_K] = {0};
 					Hash hashBuffer[NUMBER_OF_KMERS_PER_WINDOW] = {0};
@@ -30,8 +23,8 @@
 							queryBuffer[i] = queryBuffer[i + 1];
 
 						// Query as long as elements are left, then only do calculations (end phase)
-						if (iteration < querySize)
-							queryBuffer[MIN_IBF_K - 1] = PrefetchingLSU::load(queries_ptr_casted + static_cast<size_t>(localQueryOffset + iteration));
+						if (iteration < query.size)
+							queryBuffer[MIN_IBF_K - 1] = query.query[iteration];
 
 						// Shift register: hash buffer
 						#pragma unroll
@@ -63,5 +56,6 @@
 							MinimizerToIBFPipes::PipeAt<id>::write(data);
 						}
 					}
+					query = DistributorPipes::PipeAt<id>::read();
 				}
 			});
