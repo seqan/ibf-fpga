@@ -86,14 +86,25 @@ target_link_options(${EMULATOR_TARGET} PRIVATE ${COMMON_LINK_FLAGS})
 ###############################################################################
 # To compile manually:
 #   icpx -fsycl -fintelfpga -qactypes -Xshardware -Xstarget=<FPGA_DEVICE> -fsycl-link=early host.cpp kernel/kernel.cpp -o fast_compile_report.a
-set(FPGA_EARLY_IMAGE ${TARGET_NAME}_report.a)
-# The compile output is not an executable, but an intermediate compilation result unique to SYCL.
-add_executable(${FPGA_EARLY_IMAGE} ${HOST_SOURCE_FILE} ${DEVICE_SOURCE_FILE})
-target_include_directories(${FPGA_EARLY_IMAGE} PRIVATE ../include)
-target_compile_definitions(${FPGA_EARLY_IMAGE} PRIVATE -DFPGA_HARDWARE -DWINDOW_SIZE=23 -DMIN_IBF_K=19 -DBIN_COUNT=64)
-target_compile_options(${FPGA_EARLY_IMAGE} PRIVATE ${COMMON_COMPILE_FLAGS})
-target_link_options(${FPGA_EARLY_IMAGE} PRIVATE ${COMMON_LINK_FLAGS} ${HARDWARE_LINK_FLAGS} -fsycl-link=early)
-# fsycl-link=early stops the compiler after RTL generation, before invoking Quartus®
+
+foreach(WINDOW_SIZE ${WINDOW_SIZE_LIST})
+    foreach(MIN_IBF_K ${MIN_IBF_K_LIST})
+        if(${WINDOW_SIZE} GREATER ${MIN_IBF_K})
+            foreach(BIN_COUNT ${BIN_COUNT_LIST})
+                foreach(KERNEL_COPYS ${KERNEL_COPYS_LIST})
+                    set(FPGA_EARLY_IMAGE  ${TARGET_NAME}_kernel_w${WINDOW_SIZE}_k${MIN_IBF_K}_b${BIN_COUNT}_kernels${KERNEL_COPYS}_report.a)
+                    # The compile output is not an executable, but an intermediate compilation result unique to SYCL.
+                    add_executable(${FPGA_EARLY_IMAGE} ${HOST_SOURCE_FILE} ${DEVICE_SOURCE_FILE})
+                    target_include_directories(${FPGA_EARLY_IMAGE} PRIVATE ../include)
+                    target_compile_definitions(${FPGA_EARLY_IMAGE} PRIVATE -DFPGA_HARDWARE  -DWINDOW_SIZE=${WINDOW_SIZE} -DMIN_IBF_K=${MIN_IBF_K} -DBIN_COUNT=${BIN_COUNT} -DKERNEL_COPYS=${KERNEL_COPYS})
+                    target_compile_options(${FPGA_EARLY_IMAGE} PRIVATE ${COMMON_COMPILE_FLAGS})
+                    target_link_options(${FPGA_EARLY_IMAGE} PRIVATE ${COMMON_LINK_FLAGS} ${HARDWARE_LINK_FLAGS} -fsycl-link=early)
+                    # fsycl-link=early stops the compiler after RTL generation, before invoking Quartus®
+                endforeach()
+            endforeach()
+        endif()
+    endforeach()
+endforeach()
 
 ###############################################################################
 ### FPGA Hardware
