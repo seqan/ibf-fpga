@@ -24,15 +24,16 @@ stages:          # List of stages for jobs, and their order of execution
 .install_clang: &install_clang |-
   apt -y install clang # clang-10
 
+
 #############################################################
-# ---------------------- ICC 23.1 --------------------------#
+# -------------------- oneAPI 2024.1.1 ---------------------#
 #############################################################
 
-build:icc:23.1:
+build:oneapi:2024.1.1:
   stage: build
-  image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
+  image: intel/oneapi-basekit:2024.1.1-devel-ubuntu22.04
   variables:
-    BUILD_DIR: '${CI_PROJECT_DIR}/build-icc-23.1'
+    BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2024.1.1'
   before_script:
     - *update_submodule
     - *install_packages
@@ -50,12 +51,12 @@ build:icc:23.1:
       #     - "*.o"
 
 # run tests using the binary built before
-test:icc:23.1:
+test:oneapi:2024.1.1:
   stage: test
-  needs: [build:icc:23.1]
-  image: intel/oneapi-basekit:2023.1.0-devel-ubuntu20.04
+  needs: [build:oneapi:2024.1.1]
+  image: intel/oneapi-basekit:2024.1.1-devel-ubuntu22.04
   variables:
-    BUILD_DIR: '${CI_PROJECT_DIR}/build-icc-23.1'
+    BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2024.1.1'
   before_script:
     - *install_packages
     - cd ${BUILD_DIR}
