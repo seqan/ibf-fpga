@@ -14,7 +14,7 @@
 
 				for (QueryIndex queryIndex = 0; queryIndex < localNumberOfQueries; queryIndex++)
 				{
-					[[intel::fpga_register]] Counter counters[CHUNKS][CHUNK_BITS];
+					Counter counters[CHUNKS][CHUNK_BITS];
 
 					bool countersInitialized = 0;
 
