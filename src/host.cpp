@@ -1,3 +1,7 @@
+#if defined(FPGA_EMULATOR) == defined(FPGA_HARDWARE)
+  #error "Either FPGA_EMULATOR or FPGA_HARDWARE have to be defined."
+#endif
+
 #include <cmath>
 #include <filesystem>
 #include <iostream>
