@@ -12,7 +12,8 @@ namespace min_ibf_fpga::backend_sycl
 {
 
 // Forward declaration of the kernel names. FPGA best practice to reduce compiler name mangling in the optimization reports.
-class MinimizerKernel;
+class Distributor;
+template <std::size_t id> class MinimizerKernel;
 class PipeToHostKernel;
 
 void RunMinimizerKernel(sycl::queue& queue,
@@ -23,12 +24,20 @@ void RunMinimizerKernel(sycl::queue& queue,
 	const HostSizeType numberOfQueries,
 	sycl::buffer<MinimizerToIBFData, 1>& minimizerToIbf_buffer)
 {
+	using DistributorPipes = fpga_tools::PipeArray<class DistributorPipe, DistributorToMinimizerData, 2, KERNEL_COPYS>;
 	using MinimizerToIBFPipes = fpga_tools::PipeArray<class MinimizerToIBFPipe, MinimizerToIBFData, 25, KERNEL_COPYS>;
 
 	using PrefetchingLSU = sycl::ext::intel::lsu<sycl::ext::intel::prefetch<true>, sycl::ext::intel::statically_coalesce<false>>;
 
+	queue.submit([&](sycl::handler &handler)
+	{
+		#include "distributor.cpp"
+	});
+
 	fpga_tools::UnrolledLoop<KERNEL_COPYS>([&](auto id)
 	{
+		const HostSizeType localNumberOfQueries = numberOfQueries;
+
 		queue.submit([&](sycl::handler &handler)
 		{
 			#include "kernel_minimizer.cpp"
