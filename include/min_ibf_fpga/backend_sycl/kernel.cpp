@@ -78,6 +78,26 @@ void RunKernel(sycl::queue& queue,
 					DistributorPipes::PipeAt<3>::write(data);
 					break;
 #endif
+#if KERNEL_COPYS > 4
+				case 4:
+					DistributorPipes::PipeAt<4>::write(data);
+					break;
+#endif
+#if KERNEL_COPYS > 5
+				case 5:
+					DistributorPipes::PipeAt<5>::write(data);
+					break;
+#endif
+#if KERNEL_COPYS > 6
+				case 6:
+					DistributorPipes::PipeAt<6>::write(data);
+					break;
+#endif
+#if KERNEL_COPYS > 7
+				case 7:
+					DistributorPipes::PipeAt<7>::write(data);
+					break;
+#endif
 				}
 			}
 		});
@@ -133,6 +153,26 @@ void RunKernel(sycl::queue& queue,
 #if KERNEL_COPYS > 3
 					case 3:
 						chunk = CollectorPipes::PipeAt<3>::read();
+						break;
+#endif
+#if KERNEL_COPYS > 4
+					case 4:
+						chunk = CollectorPipes::PipeAt<4>::read();
+						break;
+#endif
+#if KERNEL_COPYS > 5
+					case 5:
+						chunk = CollectorPipes::PipeAt<5>::read();
+						break;
+#endif
+#if KERNEL_COPYS > 6
+					case 6:
+						chunk = CollectorPipes::PipeAt<6>::read();
+						break;
+#endif
+#if KERNEL_COPYS > 7
+					case 7:
+						chunk = CollectorPipes::PipeAt<7>::read();
 						break;
 #endif
 					}

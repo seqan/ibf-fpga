@@ -39,8 +39,8 @@ typedef ushort Counter;
 	#define KERNEL_COPYS 1
 #endif
 
-#if KERNEL_COPYS > 4
-	#error "KERNEL_COPYS > 4 not supported"
+#if KERNEL_COPYS > 8
+	#error "KERNEL_COPYS > 8 not supported"
 #endif
 
 #define MINIMIZER_SEED 0x8F3F73B5CF1C9ADE
