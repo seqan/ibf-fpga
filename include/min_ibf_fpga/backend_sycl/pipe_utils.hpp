@@ -6,7 +6,12 @@
 #ifndef __PIPE_UTILS_HPP__
 #define __PIPE_UTILS_HPP__
 
-#include <sycl/sycl.hpp>
+#if __INTEL_LLVM_COMPILER < 20230000
+  #include <CL/sycl.hpp>
+#else
+  #include <sycl/sycl.hpp>
+#endif
+
 #include <sycl/ext/intel/fpga_extensions.hpp>
 #include <utility>
 

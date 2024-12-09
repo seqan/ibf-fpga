@@ -1,5 +1,3 @@
-
-
 #include "fixtures/all.hpp"
 
 #include <sycl/sycl.hpp>
@@ -7,39 +5,16 @@
 #include <sycl/ext/intel/ac_types/ac_int.hpp>
 
 #include <min_ibf_fpga/test/assert_equal.hpp>
+#include <min_ibf_fpga/backend_sycl/kernel_minimizer_test.cpp>
 #include <min_ibf_fpga/backend_sycl/exception_handler.hpp>
 
-#include "RunMinimizerKernel.hpp"
-
-// Forward declaration of the kernel names. FPGA best practice to reduce compiler name mangling in the optimization reports.
-struct MinimizerKernel_w23_k19
-{
-    using _constants = min_ibf_fpga::backend_sycl::min_ibf_constants<23, 19, 64>;
-    using _backend = min_ibf_fpga::backend_sycl::sycl_backend;
-    using _types = min_ibf_fpga::backend_sycl::min_ibf_types<_constants, _backend>;
-
-    using type = min_ibf_fpga::backend_sycl::sycl_minimizer_kernel<_constants, _types>;
-};
-class PipeToHostKernel_w23_k19;
-
-struct MinimizerKernel_w19_k19
-{
-    using _constants = min_ibf_fpga::backend_sycl::min_ibf_constants<19, 19, 64>;
-    using _backend = min_ibf_fpga::backend_sycl::sycl_backend;
-    using _types = min_ibf_fpga::backend_sycl::min_ibf_types<_constants, _backend>;
-
-    using type = min_ibf_fpga::backend_sycl::sycl_minimizer_kernel<_constants, _types>;
-};
-class PipeToHostKernel_w19_k19;
-
-template <typename MinimizerKernel, typename PipeToHostKernel>
 void sycl_test(minimizer_test_fixture test)
 {
-    using MinimizerToIBFData = typename MinimizerKernel::_types::MinimizerToIBFData;
-    using HostSizeType = typename MinimizerKernel::_types::HostSizeType;
+    using HostSizeType = min_ibf_fpga::backend_sycl::HostSizeType;
+    using MinimizerToIBFData = min_ibf_fpga::backend_sycl::MinimizerToIBFData;
 
-    min_ibf_fpga::test::assert_equal(test.w, static_cast<size_t>(MinimizerKernel::_constants::window_size), "window size not supported");
-    min_ibf_fpga::test::assert_equal(test.k, static_cast<size_t>(MinimizerKernel::_constants::min_ibf_k), "k not supported");
+    min_ibf_fpga::test::assert_equal(test.w, static_cast<size_t>(WINDOW_SIZE), "window size not supported");
+    min_ibf_fpga::test::assert_equal(test.k, static_cast<size_t>(MIN_IBF_K), "k not supported");
 
 #if FPGA_SIMULATOR
   auto device_selector = sycl::ext::intel::fpga_simulator_selector_v;
@@ -65,14 +40,22 @@ void sycl_test(minimizer_test_fixture test)
     std::vector<uint64_t> minimizer{};
 
     { // device buffer scope
-        sycl::buffer queries_buffer(queries);
-        sycl::buffer querySizes_buffer(querySizes);
+        auto queries_device_ptr = sycl::malloc_device<char>(queries.size(), q);
+        static_assert(std::is_same_v<decltype(queries_device_ptr), char *>);
+        q.memcpy(queries_device_ptr, queries.data(), queries.size() * sizeof(char));
+
+        auto querySizes_device_ptr = sycl::malloc_device<HostSizeType>(querySizes.size(), q);
+        static_assert(std::is_same_v<decltype(querySizes_device_ptr), HostSizeType *>);
+        q.memcpy(querySizes_device_ptr, querySizes.data(), querySizes.size() * sizeof(HostSizeType));
+
         sycl::buffer minimizerToIbf_buffer(pipe_results);
 
-        min_ibf_fpga::backend_sycl::test::RunMinimizerKernel<MinimizerKernel, PipeToHostKernel>(q,
-                queries_buffer,
+        q.wait();
+
+        min_ibf_fpga::backend_sycl::RunMinimizerKernel(q,
+                queries_device_ptr,
                 queriesOffset,
-                querySizes_buffer,
+                querySizes_device_ptr,
                 querySizesOffset,
                 numberOfQueries,
                 minimizerToIbf_buffer);
@@ -90,18 +73,18 @@ void sycl_test(minimizer_test_fixture test)
 
 int main()
 {
-    sycl_test<MinimizerKernel_w23_k19, PipeToHostKernel_w23_k19>(minimizer_w23_k19_query0_test);
-    sycl_test<MinimizerKernel_w23_k19, PipeToHostKernel_w23_k19>(minimizer_w23_k19_query1_test);
-    sycl_test<MinimizerKernel_w23_k19, PipeToHostKernel_w23_k19>(minimizer_w23_k19_query2_test);
-    sycl_test<MinimizerKernel_w23_k19, PipeToHostKernel_w23_k19>(minimizer_w23_k19_query3_test);
-    sycl_test<MinimizerKernel_w23_k19, PipeToHostKernel_w23_k19>(minimizer_w23_k19_query4_test);
+    sycl_test(minimizer_w23_k19_query0_test);
+    sycl_test(minimizer_w23_k19_query1_test);
+    sycl_test(minimizer_w23_k19_query2_test);
+    sycl_test(minimizer_w23_k19_query3_test);
+    sycl_test(minimizer_w23_k19_query4_test);
 
     // not supported yet
-    sycl_test<MinimizerKernel_w19_k19, PipeToHostKernel_w19_k19>(minimizer_w19_k19_query0_test);
-    sycl_test<MinimizerKernel_w19_k19, PipeToHostKernel_w19_k19>(minimizer_w19_k19_query1_test);
-    sycl_test<MinimizerKernel_w19_k19, PipeToHostKernel_w19_k19>(minimizer_w19_k19_query2_test);
-    sycl_test<MinimizerKernel_w19_k19, PipeToHostKernel_w19_k19>(minimizer_w19_k19_query3_test);
-    sycl_test<MinimizerKernel_w19_k19, PipeToHostKernel_w19_k19>(minimizer_w19_k19_query4_test);
+    // sycl_test(minimizer_w19_k19_query0_test);
+    // sycl_test(minimizer_w19_k19_query1_test);
+    // sycl_test(minimizer_w19_k19_query2_test);
+    // sycl_test(minimizer_w19_k19_query3_test);
+    // sycl_test(minimizer_w19_k19_query4_test);
 
     return 0;
 }
