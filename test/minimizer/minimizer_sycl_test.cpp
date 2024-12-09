@@ -17,11 +17,11 @@ void sycl_test(minimizer_test_fixture test)
     min_ibf_fpga::test::assert_equal(test.k, static_cast<size_t>(MIN_IBF_K), "k not supported");
 
 #if FPGA_SIMULATOR
-  auto device_selector = sycl::ext::intel::fpga_simulator_selector_v;
+    auto device_selector = sycl::ext::intel::fpga_simulator_selector_v;
 #elif FPGA_HARDWARE
-  auto device_selector = sycl::ext::intel::fpga_selector_v;
+    auto device_selector = sycl::ext::intel::fpga_selector_v;
 #else  // #if FPGA_EMULATOR
-  auto device_selector = sycl::ext::intel::fpga_emulator_selector_v;
+    auto device_selector = sycl::ext::intel::fpga_emulator_selector_v;
 #endif
 
     sycl::queue q(device_selector, fpga_tools::exception_handler);
@@ -79,7 +79,7 @@ int main()
     sycl_test(minimizer_w23_k19_query3_test);
     sycl_test(minimizer_w23_k19_query4_test);
 
-    // not supported yet
+    // not supported
     // sycl_test(minimizer_w19_k19_query0_test);
     // sycl_test(minimizer_w19_k19_query1_test);
     // sycl_test(minimizer_w19_k19_query2_test);

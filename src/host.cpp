@@ -10,9 +10,9 @@
 #include <dlfcn.h>
 
 #if __INTEL_LLVM_COMPILER < 20230000
-	#include <CL/sycl.hpp>
+  #include <CL/sycl.hpp>
 #else
-	#include <sycl/sycl.hpp>
+  #include <sycl/sycl.hpp>
 #endif
 #include <sycl/ext/intel/fpga_extensions.hpp>
 
@@ -88,17 +88,17 @@ int RunHost() {
   results.resize(querySizes.size()); // numberOfQueries
 
 #if __INTEL_LLVM_COMPILER < 20230100
-	#ifdef FPGA_EMULATOR
+  #ifdef FPGA_EMULATOR
   sycl::ext::intel::fpga_emulator_selector device_selector;
-	#else
+  #else
   sycl::ext::intel::fpga_selector device_selector;
-	#endif
+  #endif
 #else
-	#ifdef FPGA_EMULATOR
+  #ifdef FPGA_EMULATOR
   auto device_selector = sycl::ext::intel::fpga_emulator_selector_v;
-	#else
+  #else
   auto device_selector = sycl::ext::intel::fpga_selector_v;
-	#endif
+  #endif
 #endif
 
 #ifdef DEBUG
@@ -220,6 +220,6 @@ int RunHost() {
 }
 
 int main() {
-    size_t const chunk_bits = 64;
-    RunHost<chunk_bits>();
+  size_t const chunk_bits = 64;
+  RunHost<chunk_bits>();
 }
