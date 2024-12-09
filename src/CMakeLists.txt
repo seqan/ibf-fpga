@@ -26,8 +26,8 @@ if(NOT DEFINED BIN_COUNT_LIST)
 endif()
 
 if(NOT DEFINED KERNEL_COPYS_LIST)
-    message("No KERNEL_COPYS_LIST supplied. Defaulting to '1;2;4'.")
-    set(KERNEL_COPYS_LIST "1;2;4")
+    message("No KERNEL_COPYS_LIST supplied. Defaulting to '1;2'.")
+    set(KERNEL_COPYS_LIST "1;2")
 endif()
 
 # Create symlinks to the required binary files and query file
