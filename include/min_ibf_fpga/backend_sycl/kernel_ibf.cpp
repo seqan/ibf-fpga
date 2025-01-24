@@ -5,9 +5,9 @@
 
 				HostSizeType thresholds[THRESHOLDS_CACHE_SIZE];
 
-				const HostSizeType thresholdsMaximalIndex = maximalNumberOfMinimizers - minimalNumberOfMinimizers;
+				const HostSizeType thresholdsMaxIndex = maximalNumberOfMinimizers - minimalNumberOfMinimizers;
 
-				for (ushort i = 0; i <= thresholdsMaximalIndex; i++)
+				for (ushort i = 0; i <= thresholdsMaxIndex; i++)
 				{
 					thresholds[i] = thresholds_ptr_casted[i];
 				}
