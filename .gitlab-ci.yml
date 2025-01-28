@@ -65,6 +65,47 @@ test:oneapi:2024.1.1:
 
 
 #############################################################
+# -------------------- oneAPI 2025.0.2 ---------------------#
+#############################################################
+
+build:oneapi:2025.0.2:
+  stage: build
+  image: intel/oneapi-basekit:2025.0.2-0-devel-ubuntu24.04
+  variables:
+    BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2025.0.2'
+  before_script:
+    - *update_submodule
+    - *install_packages
+    - apt -y install intel-oneapi-compiler-fpga
+    - mkdir -p ${BUILD_DIR}
+    - cd ${BUILD_DIR}
+  script:
+    - CC=icx CXX=icpx cmake -G Ninja -DIBF_USE_IOC64=1 ${CI_PROJECT_DIR}
+    - cmake --build . -j 1
+  artifacts:
+    paths:
+      - ${BUILD_DIR}
+      # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
+      # cache:
+      #   paths:
+      #     - "*.o"
+
+# run tests using the binary built before
+test:oneapi:2025.0.2:
+  stage: test
+  needs: [build:oneapi:2025.0.2]
+  image: intel/oneapi-basekit:2025.0.2-0-devel-ubuntu24.04
+  variables:
+    BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2025.0.2'
+  before_script:
+    - *install_packages
+    - apt -y install intel-oneapi-compiler-fpga
+    - cd ${BUILD_DIR}
+  script:
+    - ctest --output-on-failure --test-dir ./test
+
+
+#############################################################
 # ----------------------- GCC 9 ----------------------------#
 #############################################################
 
