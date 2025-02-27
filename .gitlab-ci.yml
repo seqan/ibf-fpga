@@ -70,17 +70,16 @@ test:oneapi:2024.1.1:
 
 build:oneapi:2025.0.2:
   stage: build
-  image: intel/oneapi-basekit:2025.0.2-0-devel-ubuntu24.04
+  image: panau/oneapi-fpga-bsp:2025.0.2-ia840f-rockylinux8
   variables:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2025.0.2'
   before_script:
     - *update_submodule
     - *install_packages
-    - apt -y install intel-oneapi-compiler-fpga
     - mkdir -p ${BUILD_DIR}
     - cd ${BUILD_DIR}
   script:
-    - CC=icx CXX=icpx cmake -G Ninja -DIBF_USE_IOC64=1 ${CI_PROJECT_DIR}
+    - CC=icx CXX=icpx cmake -G Ninja -DIBF_USE_IOC64=1 -DFPGA_DEVICE=ofs_ia840f_usm ${CI_PROJECT_DIR}
     - cmake --build . -j 1
   artifacts:
     paths:
@@ -94,12 +93,11 @@ build:oneapi:2025.0.2:
 test:oneapi:2025.0.2:
   stage: test
   needs: [build:oneapi:2025.0.2]
-  image: intel/oneapi-basekit:2025.0.2-0-devel-ubuntu24.04
+  image: panau/oneapi-fpga-bsp:2025.0.2-ia840f-rockylinux8
   variables:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2025.0.2'
   before_script:
     - *install_packages
-    - apt -y install intel-oneapi-compiler-fpga
     - cd ${BUILD_DIR}
   script:
     - ctest --output-on-failure --test-dir ./test
