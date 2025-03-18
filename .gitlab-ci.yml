@@ -93,7 +93,7 @@ build:oneapi:2025.0.2:
     - mkdir -p ${BUILD_DIR}
     - cd ${BUILD_DIR}
   script:
-    - CC=icx CXX=icpx cmake -G Ninja -DIBF_USE_IOC64=1 -DFPGA_DEVICE=ofs_ia840f_usm ${CI_PROJECT_DIR}
+    - CC=icx CXX=icpx cmake -G Ninja -DIBF_USE_IOC64=1 -DFPGA_DEVICE=/opt/intel/oneapi/compiler/2025.0/opt/oclfpga/board/ia840f:ofs_ia840f_usm ${CI_PROJECT_DIR}
     - cmake --build . -j 1
   artifacts:
     paths:
