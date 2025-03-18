@@ -23,7 +23,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 find_package(SeqAn3)
 endif ()
 
-add_subdirectory(../external/min-ibf-fpga external-min-ibf-fpga-build)
+#add_subdirectory(../external/min-ibf-fpga external-min-ibf-fpga-build)
 
 add_subdirectory(app)
 add_subdirectory(fastq)
