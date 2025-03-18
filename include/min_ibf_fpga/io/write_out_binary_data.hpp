@@ -2,6 +2,7 @@
 
 #include <iosfwd>
 #include <vector>
+#include <cstdint>
 
 namespace min_ibf_fpga::io
 {
