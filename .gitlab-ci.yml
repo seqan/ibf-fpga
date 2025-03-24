@@ -21,6 +21,20 @@ stages:          # List of stages for jobs, and their order of execution
   apt -y install cmake # cmake
   # apt -y install opencl-headers opencl-clhpp-headers ocl-icd-opencl-dev # opencl-lib
 
+# Rocky Linux 8 has ninja in a separate repository called powertools
+.install_packages_rl8: &install_packages_rl8 |-
+  dnf -y install cmake # cmake
+  dnf -y install dnf-plugins-core
+  dnf config-manager --set-enabled powertools
+  dnf -y install ninja-build # ninja
+
+# Rocky Linux 9 has ninja in a separate repository called crb
+.install_packages_rl9: &install_packages_rl9 |-
+  dnf -y install cmake # cmake
+  dnf -y install dnf-plugins-core
+  dnf config-manager --set-enabled crb
+  dnf -y install ninja-build # ninja
+
 .install_clang: &install_clang |-
   apt -y install clang # clang-10
 
@@ -59,6 +73,45 @@ test:oneapi:2024.1.1:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2024.1.1'
   before_script:
     - *install_packages
+    - cd ${BUILD_DIR}
+  script:
+    - ctest --output-on-failure --test-dir ./test
+
+
+#############################################################
+# -------------------- oneAPI 2025.0.2 ---------------------#
+#############################################################
+
+build:oneapi:2025.0.2:
+  stage: build
+  image: panau/oneapi-fpga-bsp:2025.0.2-ia840f-rockylinux8
+  variables:
+    BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2025.0.2'
+  before_script:
+    - *update_submodule
+    - *install_packages_rl8
+    - mkdir -p ${BUILD_DIR}
+    - cd ${BUILD_DIR}
+  script:
+    - CC=icx CXX=icpx cmake -G Ninja -DIBF_USE_IOC64=1 -DFPGA_DEVICE=/opt/intel/oneapi/compiler/2025.0/opt/oclfpga/board/ia840f:ofs_ia840f_usm ${CI_PROJECT_DIR}
+    - cmake --build . -j 1
+  artifacts:
+    paths:
+      - ${BUILD_DIR}
+      # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
+      # cache:
+      #   paths:
+      #     - "*.o"
+
+# run tests using the binary built before
+test:oneapi:2025.0.2:
+  stage: test
+  needs: [build:oneapi:2025.0.2]
+  image: panau/oneapi-fpga-bsp:2025.0.2-ia840f-rockylinux8
+  variables:
+    BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2025.0.2'
+  before_script:
+    - *install_packages_rl8
     - cd ${BUILD_DIR}
   script:
     - ctest --output-on-failure --test-dir ./test
