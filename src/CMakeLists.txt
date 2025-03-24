@@ -2,12 +2,12 @@ include("../cmake/cxx17_filesystem.cmake")
 include("../cmake/sycl_fpga_set_default_variables.cmake")
 include("../cmake/sycl_fpga_build_kernels.cmake")
 
-set_default_variables()
-
 set(HOST_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/host.cpp)
 set(DEVICE_SOURCE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/fpga_device.cpp)
 set(TARGET_NAME min-ibf-fpga-oneapi)
 set(INCLUDE_PATH ../include)
+
+set_default_variables()
 
 # Create symlinks to the required binary files and query file
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/query.fq ${CMAKE_CURRENT_BINARY_DIR}/../query.fq)
