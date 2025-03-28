@@ -38,6 +38,11 @@ stages:          # List of stages for jobs, and their order of execution
 .install_clang: &install_clang |-
   apt -y install clang # clang-10
 
+.print_info: &print_info |-
+  cat /proc/cpuinfo
+  free -h
+  hostname
+
 
 #############################################################
 # -------------------- oneAPI 2024.1.1 ---------------------#
@@ -49,6 +54,7 @@ build:oneapi:2024.1.1:
   variables:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2024.1.1'
   before_script:
+    - *print_info
     - *update_submodule
     - *install_packages
     - mkdir -p ${BUILD_DIR}
@@ -72,6 +78,7 @@ test:oneapi:2024.1.1:
   variables:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2024.1.1'
   before_script:
+    - *print_info
     - *install_packages
     - cd ${BUILD_DIR}
   script:
@@ -88,6 +95,7 @@ build:oneapi:2025.0.2:
   variables:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2025.0.2'
   before_script:
+    - *print_info
     - *update_submodule
     - *install_packages_rl8
     - mkdir -p ${BUILD_DIR}
@@ -111,6 +119,7 @@ test:oneapi:2025.0.2:
   variables:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-oneapi-2025.0.2'
   before_script:
+    - *print_info
     - *install_packages_rl8
     - cd ${BUILD_DIR}
   script:
@@ -127,6 +136,7 @@ build:gcc:9:
   variables:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-gcc-9-test'
   before_script:
+    - *print_info
     - *update_submodule
     - *install_packages
     - git -C ${CI_PROJECT_DIR}/external clone https://github.com/eseiler/seqan3
@@ -157,6 +167,7 @@ test:gcc:9:
   variables:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-gcc-9-test'
   before_script:
+    - *print_info
     - *install_packages
     - cd ${BUILD_DIR}
   script:
@@ -173,6 +184,7 @@ build:clang:10:
   variables:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-clang-10-test'
   before_script:
+    - *print_info
     - *update_submodule
     - *install_packages
     - *install_clang
@@ -200,6 +212,7 @@ test:clang:10:
   variables:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-clang-10-test'
   before_script:
+    - *print_info
     - *install_packages
     - *install_clang
     - cd ${BUILD_DIR}
@@ -217,6 +230,7 @@ build:clang:10:sanitizer-address:
   variables:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-clang-10-test-sanitizer-address'
   before_script:
+    - *print_info
     - *update_submodule
     - *install_packages
     - *install_clang
@@ -244,6 +258,7 @@ test:clang:10:sanitizer-address:
   variables:
     BUILD_DIR: '${CI_PROJECT_DIR}/build-clang-10-test-sanitizer-address'
   before_script:
+    - *print_info
     - *install_packages
     - *install_clang
     - cd ${BUILD_DIR}
