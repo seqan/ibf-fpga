@@ -28,7 +28,7 @@ inline Counter getThreshold(const HostSizeType numberOfHashes,
 	HostSizeType index = numberOfHashes < minimalNumberOfMinimizers? 0 : numberOfHashes - minimalNumberOfMinimizers;
 	index = index < maximalIndex? index : maximalIndex;
 
-	return (thresholds[index] + 2).to_uint();
+	return thresholds[index].to_uint();
 }
 
 } // namespace min_ibf_fpga::backend_sycl
