@@ -5,9 +5,7 @@
 					DistributorToMinimizerData query;
 					query = DistributorPipes::PipeAt<id>::read();
 
-					const QueryIndex iterations =
-						INITIALIZATION_ITERATIONS // Fill query and hash buffer initially
-						+ query.size - WINDOW_SIZE + 1;
+					const QueryIndex iterations = query.size;
 
 					char queryBuffer[MIN_IBF_K] = {0};
 					Hash hashBuffer[NUMBER_OF_KMERS_PER_WINDOW] = {0};
@@ -34,27 +32,30 @@
 						hashBuffer[NUMBER_OF_KMERS_PER_WINDOW - 1] = extractHash(queryBuffer); // , out); // DEBUG
 
 						const Minimizer minimizer = findMinimizer(hashBuffer);
-						const Minimizer localLastMinimizer = lastMinimizer;
 
-						if (iteration >= INITIALIZATION_ITERATIONS)
-							// Update the lastMinimizer every time, because it is either new or the same anyways
+						// After WINDOW_SIZE many iterations, we have to write the first minimizer.
+						// Initialise lastMinimizer here such that skipMinimizer will be false for the next iteration.
+						if (iteration == WINDOW_SIZE - 1)
+						{
 							lastMinimizer = minimizer;
+						}
 
-						const bool skipMinimizer = localLastMinimizer.position != 0
-							&& localLastMinimizer.hash == minimizer.hash;
+						// If false, a new minimizer was found
+						const bool skipMinimizer = lastMinimizer.position != 0 && lastMinimizer.hash == minimizer.hash;
+						// If true, we are at the last element
 						const bool lastElement = iteration > iterations - 1;
-
-						if (// Skip the first element (> instead of >=), as lastMinimizer is not initialized yet
-							iteration > INITIALIZATION_ITERATIONS
-							// Send the lastMinimizer when a new one is found or the last element is reached
-							&& (!skipMinimizer || lastElement))
+						
+						if (iteration >= WINDOW_SIZE && (!skipMinimizer || lastElement))
 						{
 							MinimizerToIBFData data;
 							data.isLastElement = lastElement;
-							data.hash = localLastMinimizer.hash;
+							data.hash = lastMinimizer.hash;
 
 							MinimizerToIBFPipes::PipeAt<id>::write(data);
+							lastMinimizer = minimizer;
 						}
+						if (lastMinimizer.position != 0)
+							--lastMinimizer.position;
 					}
 				}
 			});

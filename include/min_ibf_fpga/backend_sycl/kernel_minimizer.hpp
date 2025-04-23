@@ -56,9 +56,12 @@ Minimizer inline findMinimizer(const Hash* hashBuffer)
 	#pragma unroll
 	for (unsigned char kmerIndex = 0; kmerIndex < NUMBER_OF_KMERS_PER_WINDOW; ++kmerIndex)
 	{
-		const Minimizer current = {hashBuffer[kmerIndex], kmerIndex};
+		// Position 0 indicates leaving the window, so we add 1.
+		// A new minimizer cannot leave the window in the same iteration as it is found.
+		const Minimizer current = {hashBuffer[kmerIndex], kmerIndex + 1};
 
-		if (current.hash < minimizer.hash)
+		// Prefer right most minimizer
+		if (current.hash <= minimizer.hash)
 			minimizer = current;
 	}
 

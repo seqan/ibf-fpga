@@ -18,7 +18,7 @@
 
 					bool countersInitialized = 0;
 
-					QueryIndex numberOfHashes = 1;
+					QueryIndex numberOfHashes = 0;
 
 					MinimizerToIBFData data;
 
@@ -26,7 +26,7 @@
 					{
 						data = MinimizerToIBFPipes::PipeAt<id>::read();
 
-						const QueryIndex localNumberOfHashes = numberOfHashes++;
+						const QueryIndex localNumberOfHashes = ++numberOfHashes;
 
 						Counter threshold = 0;
 

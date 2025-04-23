@@ -70,7 +70,7 @@ static_assert(sizeof(HostHash) * 8 >= 2 * MIN_IBF_K, "K-mer doesn't fit Hash typ
 
 constexpr auto NUMBER_OF_KMERS_PER_WINDOW = WINDOW_SIZE - MIN_IBF_K + 1;
 
-constexpr auto INITIALIZATION_ITERATIONS = (MIN_IBF_K - 1) + (NUMBER_OF_KMERS_PER_WINDOW - 1);
+// constexpr auto INITIALIZATION_ITERATIONS = WINDOW_SIZE - 1;
 
 constexpr auto MINIMIZER_SEED_ADJUSTED = MINIMIZER_SEED >> (64 - 2 * MIN_IBF_K);
 
