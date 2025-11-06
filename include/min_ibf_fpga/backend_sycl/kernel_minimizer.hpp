@@ -58,7 +58,7 @@ Minimizer inline findMinimizer(const Hash* hashBuffer)
 	{
 		// Position 0 indicates leaving the window, so we add 1.
 		// A new minimizer cannot leave the window in the same iteration as it is found.
-		const Minimizer current = {hashBuffer[kmerIndex], kmerIndex + 1};
+		const Minimizer current = {hashBuffer[kmerIndex], static_cast<unsigned char>(kmerIndex + 1)};
 
 		// Prefer right most minimizer
 		if (current.hash <= minimizer.hash)
